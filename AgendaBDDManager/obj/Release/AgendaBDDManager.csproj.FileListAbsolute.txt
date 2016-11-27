@@ -3,3 +3,8 @@ C:\Agenda - 2.0\bin\Release\AgendaBDDManager.pdb
 C:\Agenda - 2.0\AgendaBDDManager\obj\Release\AgendaBDDManager.csprojResolveAssemblyReference.cache
 C:\Agenda - 2.0\AgendaBDDManager\obj\Release\AgendaBDDManager.dll
 C:\Agenda - 2.0\AgendaBDDManager\obj\Release\AgendaBDDManager.pdb
+C:\Agenda\bin\Release\AgendaBDDManager.dll
+C:\Agenda\bin\Release\AgendaBDDManager.pdb
+C:\Agenda\AgendaBDDManager\obj\Release\AgendaBDDManager.csprojResolveAssemblyReference.cache
+C:\Agenda\AgendaBDDManager\obj\Release\AgendaBDDManager.dll
+C:\Agenda\AgendaBDDManager\obj\Release\AgendaBDDManager.pdb

@@ -3,3 +3,8 @@ C:\Agenda - 2.0\bin\Release\AgendaCore.pdb
 C:\Agenda - 2.0\AgendaCore\obj\Release\AgendaCore.dll
 C:\Agenda - 2.0\AgendaCore\obj\Release\AgendaCore.pdb
 C:\Agenda - 2.0\AgendaCore\obj\Release\AgendaCore.csprojResolveAssemblyReference.cache
+C:\Agenda\bin\Release\AgendaCore.dll
+C:\Agenda\bin\Release\AgendaCore.pdb
+C:\Agenda\AgendaCore\obj\Release\AgendaCore.dll
+C:\Agenda\AgendaCore\obj\Release\AgendaCore.pdb
+C:\Agenda\AgendaCore\obj\Release\AgendaCore.csprojResolveAssemblyReference.cache

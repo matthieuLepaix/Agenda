@@ -27,7 +27,7 @@
             </WrapPanel>
         </DockPanel>
         <!-- WindowStyle="None"-->
-        <TabControl DockPanel.Dock="Bottom" TabStripPlacement="Top" Background="#0048ac" Margin="0"  
+        <TabControl Name="Tabs" DockPanel.Dock="Bottom" TabStripPlacement="Top" Background="#0048ac" Margin="0"  
                     BorderThickness="0" Foreground="Black" Padding="0" VerticalContentAlignment="Stretch">
             <TabItem Header="Agenda" HorizontalAlignment="Center" HorizontalContentAlignment="Stretch" UseLayoutRounding="True" Padding="0">
                 <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Background="#E0ECFD">
@@ -130,33 +130,37 @@
                 </DockPanel>
             </TabItem>
             <TabItem Header="Facturation" HorizontalAlignment="Center" HorizontalContentAlignment="Stretch" UseLayoutRounding="True" Padding="0">
-                <DockPanel Width="Auto" Height="Auto">
-                    <DockPanel DockPanel.Dock="Right" Width="Auto" Height="Auto" Margin="5">
-                        <GroupBox Header="Travaux à effectuer" Margin="0 15 0 0" Style="{StaticResource ResourceKey=GroupBoxBasic}">
-                            <ScrollViewer Name="sb_Works" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
-                              VerticalScrollBarVisibility="Visible">
-                                <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Center" Margin="5">
-                                    <StackPanel Name="AllWorks" >
-                                        <Button Name="Btn_AddWork" Cursor="Hand" VerticalAlignment="Center"
-                                Margin="2" Height="30"  Style="{StaticResource ResourceKey=Btn_Add}"/>
-                                    </StackPanel>
+                <DockPanel Name="Facture" Width="Auto" Height="Auto" Visibility="Collapsed" Background="#E0ECFD">
+                    <DockPanel DockPanel.Dock="Right" Width="Auto" Height="Auto" Margin="5 5 5 5">
+                        <GroupBox Header="Travaux à effectuer" Style="{StaticResource ResourceKey=GroupBoxBasic}">
+                            <ScrollViewer Name="Facture_sb_Works" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                              VerticalScrollBarVisibility="Visible" Foreground="Black">
+                                <StackPanel Name="Facture_AllWorks" DockPanel.Dock="Right" HorizontalAlignment="Center" Margin="5">
+                                    <Button Name="Facture_Btn_AddWork" Cursor="Hand" VerticalAlignment="Center"
+                                Margin="2" Height="30" Click="Add_Work" Style="{StaticResource ResourceKey=Btn_Add}"/>
                                 </StackPanel>
                             </ScrollViewer>
                         </GroupBox>
                     </DockPanel>
-                    <DockPanel DockPanel.Dock="Left" Height="Auto" Width="Auto" Margin="10 5 0 0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <DockPanel DockPanel.Dock="Left" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Margin="5 5 0 5">
                         <StackPanel Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                            <WrapPanel Name="BtnNewClientPanel" HorizontalAlignment="Center">
-                                <Button Name="BtnNewClient" Style="{StaticResource ResourceKey=Btn_LittleWindow}"
-                                    Content="Nouveau Client" Padding="30 10" Margin="0 0 0 10"/>
-                            </WrapPanel>
-                            <DockPanel Name="Le_Client" Width="Auto" Height="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <DockPanel Name="Facture_Le_Client" Width="Auto" Height="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                            <DockPanel>
+                                <WrapPanel DockPanel.Dock="Left" HorizontalAlignment="Stretch">
+                                    <TextBlock Text="Imprimer la facture :"/>
+                                    <Button Name="Facture_ToExcel" Style="{StaticResource Btn_Options}" Content="Fichier Excel" Click="Facture_Click"/>
+                                    <Button Name="Facture_ToPdf" Style="{StaticResource Btn_Options}" Content="Fichier PDF" Click="Facture_Click"/>
+                                </WrapPanel>
+
                             </DockPanel>
                         </StackPanel>
                     </DockPanel>
                 </DockPanel>
             </TabItem>
-            <TabItem Header="Devis" HorizontalAlignment="Center" HorizontalContentAlignment="Stretch" UseLayoutRounding="True" Padding="0"/>
+            <TabItem Header="Devis" HorizontalAlignment="Center" HorizontalContentAlignment="Stretch" UseLayoutRounding="True" Padding="0">
+                <DockPanel Name="Devis" Width="Auto" Height="Auto" Visibility="Collapsed" Background="#E0ECFD">
+                </DockPanel>
+            </TabItem>
         </TabControl>
     </DockPanel>
 

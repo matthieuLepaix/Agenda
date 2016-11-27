@@ -40,19 +40,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MigraDoc.DocumentObjectModel-WPF">
-      <HintPath>..\bin\MigraDoc.DocumentObjectModel-WPF.dll</HintPath>
+      <HintPath>..\references\MigraDoc.DocumentObjectModel-WPF.dll</HintPath>
     </Reference>
     <Reference Include="MigraDoc.Rendering-WPF">
-      <HintPath>..\bin\MigraDoc.Rendering-WPF.dll</HintPath>
+      <HintPath>..\references\MigraDoc.Rendering-WPF.dll</HintPath>
     </Reference>
     <Reference Include="MigraDoc.RtfRendering-WPF">
-      <HintPath>..\bin\MigraDoc.RtfRendering-WPF.dll</HintPath>
+      <HintPath>..\references\MigraDoc.RtfRendering-WPF.dll</HintPath>
     </Reference>
     <Reference Include="PdfSharp-WPF">
-      <HintPath>..\bin\PdfSharp-WPF.dll</HintPath>
+      <HintPath>..\references\PdfSharp-WPF.dll</HintPath>
     </Reference>
     <Reference Include="PdfSharp.Charting-WPF">
-      <HintPath>..\bin\PdfSharp.Charting-WPF.dll</HintPath>
+      <HintPath>..\references\PdfSharp.Charting-WPF.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

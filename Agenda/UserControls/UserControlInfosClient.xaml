@@ -4,7 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             Width="Auto" Height="Auto">
+             Width="Auto" Height="Auto"
+             Foreground="Black"
+             FontSize="12">
     <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0">
         <GroupBox DockPanel.Dock="Top" Header="Client" Style="{StaticResource ResourceKey=GroupBoxBasic}">
             <StackPanel Margin="5">

@@ -222,7 +222,7 @@ namespace Agenda.Consultation
                 XFont fontHeader = new XFont("Verdana", 12, XFontStyle.Regular);
                 XTextFormatter tf = new XTextFormatter(graph);
 
-                tf.DrawString("Rendez de M. ou Mme "+mesRDVs.ElementAt(0).pClient.pNom, fontTitle, XBrushes.Black, new XRect(margin, currentLine, pageWidth, pageHeight), XStringFormats.TopLeft);
+                tf.DrawString("Rendez-vous de M. ou Mme "+mesRDVs.ElementAt(0).pClient.pNom, fontTitle, XBrushes.Black, new XRect(margin, currentLine, pageWidth, pageHeight), XStringFormats.TopLeft);
                 currentLine += 30;
                 graph.DrawLine(XPens.Black, new XPoint(margin, currentLine), new XPoint(pageWidth-margin, currentLine));
                 currentLine += lineHeight;

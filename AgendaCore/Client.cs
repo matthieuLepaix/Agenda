@@ -267,7 +267,7 @@ namespace AgendaCore
 
         public override string ToString()
         {
-            return string.Format("M. {0} {1}", pNom, pPrenom);
+            return string.Format("M. ou Mme {0} {1}", string.IsNullOrEmpty(pNom) ? string.Empty : pNom.ToUpper(), string.IsNullOrEmpty(pPrenom) ? string.Empty : string.Format("{0}{1}", pPrenom.Substring(0, 1), pPrenom.Substring(1, pPrenom.Length - 1)));
         }
 
         public void AddVehicule(Vehicule v)

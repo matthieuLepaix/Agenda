@@ -296,6 +296,12 @@ namespace Agenda.Gestion
             DragMove();
         }
 
+        private void ButtonFacture_Click(object sender, RoutedEventArgs e)
+        {
+            mOwner.initFacture(mRdv);
+            mOwner.selectTabIndex(MainWindow.TabOptions.FACTURE);
+            this.Close();
+        }
 
 
         private void ButtonAnnuler_Click(object sender, RoutedEventArgs e)

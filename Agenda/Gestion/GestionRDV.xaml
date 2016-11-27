@@ -30,6 +30,9 @@
             <Button Content="Valider" Click="ButtonValider_Click"
                     Padding="30 10" Style="{StaticResource ResourceKey=Btn_Options}"
                     Margin="10" HorizontalAlignment="Center"/>
+            <Button Content="Facture" Click="ButtonFacture_Click"
+                    Padding="30 10" Style="{StaticResource ResourceKey=Btn_Options}"
+                    Margin="10" HorizontalAlignment="Center"/>
             <Button Content="Annuler" Click="ButtonAnnuler_Click"
                     Padding="30 10" Style="{StaticResource ResourceKey=Btn_Options}"
                     Margin="10" HorizontalAlignment="Center"/>

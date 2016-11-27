@@ -18,6 +18,7 @@ using Agenda.Gestion;
 using AgendaBDDManager;
 using Agenda.Consultation;
 using System.Threading;
+using Agenda.UserControls;
 
 namespace Agenda
 {
@@ -26,6 +27,13 @@ namespace Agenda
     /// </summary>
     public partial class MainWindow : Window
     {
+        public enum TabOptions
+        {
+            AGENDA = 0,
+            FACTURE = 1,
+            DEVIS = 2
+        }
+
         #region Attributes
 
         private string[] horaires = new string[] { "8h", "9h", "10h", "11h", "12h", "13h", "14h", "15h", "16h", "17h", "18h" };
@@ -61,6 +69,21 @@ namespace Agenda
         private List<UserControlRDV> listeUC = new List<UserControlRDV>();
 
         private RendezVous selectedRDV = null; 
+
+        #region Facture
+
+        private UserControlInfosClient mUCFactureClient;
+
+        private int nbWorks = 0;
+
+        private List<UserControlWork> myWorks = new List<UserControlWork>();
+
+        // useful to get the parent of the btn add work
+        private StackPanel st_LastWork;
+
+        private RendezVous mFactureRDV;
+
+        #endregion
 
         #endregion
 
@@ -360,6 +383,79 @@ namespace Agenda
             return days.Keys.ToList().IndexOf(day);
         }
 
+        public void initFacture(RendezVous rdv)
+        {
+            mFactureRDV = rdv;
+            nbWorks = 0;
+            st_LastWork = Facture_AllWorks;
+
+            if (rdv != null)
+            {
+                mUCFactureClient = new UserControlInfosClient(this, mFactureRDV.pVehicule);
+                Facture_Le_Client.Children.Clear();
+                Facture_Le_Client.Children.Add(mUCFactureClient);
+
+                foreach (ReparationRDV rep in mFactureRDV.pTravaux)
+                {
+                    StackPanel st_work = new StackPanel();
+                    nbWorks++;
+                    st_work.Orientation = Orientation.Horizontal;
+                    UserControlWork work = new UserControlWork(nbWorks, rep);
+                    myWorks.Add(work);
+                    st_work.Children.Add(work);
+                    st_LastWork.Children.Remove(Facture_Btn_AddWork);
+                    st_work.Children.Add(Facture_Btn_AddWork);
+                    st_LastWork = st_work;
+                    Facture_AllWorks.Children.Add(st_work);
+                }
+            }
+            Add_Work(null, null);
+            
+            Facture.Visibility = System.Windows.Visibility.Visible;
+        }
+
+        /// <summary>
+        /// TODO : Remmettre à zéro la facture
+        /// </summary>
+        private void resetFacture()
+        {
+            //<Button Name="Facture_Btn_AddWork" Cursor="Hand" VerticalAlignment="Center"
+            //                    Margin="2" Height="30" Click="Add_Work" Style="{StaticResource ResourceKey=Btn_Add}"/>
+
+        }
+
+        private StackPanel createWork()
+        {
+            StackPanel st_work = new StackPanel();
+            nbWorks++;
+            st_work.Orientation = Orientation.Horizontal;
+            foreach (UserControlWork uc in myWorks)
+            {
+                uc.setDeleteBtn();
+            }
+
+            UserControlWork work = new UserControlWork(nbWorks, mFactureRDV);
+            myWorks.Add(work);
+            st_work.Children.Add(work);
+            st_LastWork.Children.Remove(Facture_Btn_AddWork);
+            st_work.Children.Add(Facture_Btn_AddWork);
+            st_LastWork = st_work;
+
+            return st_work;
+
+        }
+
+        private void Add_Work(object sender, RoutedEventArgs e)
+        {
+            Facture_AllWorks.Children.Add(createWork());
+        }
+
+        public void selectTabIndex(TabOptions index)
+        {
+            Tabs.SelectedIndex = (int)index;
+        }
+
+
         #endregion
 
         #region events
@@ -452,6 +548,24 @@ namespace Agenda
                 else if (bp.Name == "Refresh")
                 {
                     Raffraichir();
+                }
+            }
+        }
+
+
+
+        private void Facture_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button)
+            {
+                Button bp = sender as Button;
+                if (bp.Name == "Facture_ToExcel")
+                {
+                    MessageBox.Show("Export Excel", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else if (bp.Name == "Facture_ToPdf")
+                {
+                    MessageBox.Show("Export Pdf", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
         }

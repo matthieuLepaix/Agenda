@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             Width="Auto" Height="Auto" d:DesignWidth="710">
+             Width="Auto" Height="Auto" d:DesignWidth="710"
+             FontSize="12">
     <StackPanel Orientation="Horizontal">
         <TextBlock Name="noWork" FontWeight="ExtraBold" VerticalAlignment="Top" FontSize="20" Text="-  "/>
         <ComboBox Style="{StaticResource ResourceKey=ComboBoxFlatStyle}" Name="Work" Width="200" Height="28" 
