@@ -1,0 +1,37 @@
+C:\Users\Matthieu\Documents\Agenda\AgendaCore\bin\Debug\AgendaCore.dll
+C:\Users\Matthieu\Documents\Agenda\AgendaCore\bin\Debug\AgendaCore.pdb
+C:\Users\Matthieu\Documents\Agenda\AgendaCore\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Matthieu\Documents\Agenda\AgendaCore\obj\Debug\AgendaCore.dll
+C:\Users\Matthieu\Documents\Agenda\AgendaCore\obj\Debug\AgendaCore.pdb
+C:\Users\Matthieu\Documents\Agenda\bin\AgendaCore.dll
+C:\Users\Matthieu\Documents\Agenda\bin\AgendaCore.pdb
+C:\Users\Matthieu\Documents\Agenda_Serveur\bin\AgendaCore.dll
+C:\Users\Matthieu\Documents\Agenda_Serveur\bin\AgendaCore.pdb
+C:\Users\Matthieu\Documents\Agenda_Serveur\AgendaCore\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Matthieu\Documents\Agenda_Serveur\AgendaCore\obj\Debug\AgendaCore.dll
+C:\Users\Matthieu\Documents\Agenda_Serveur\AgendaCore\obj\Debug\AgendaCore.pdb
+D:\Agenda_Serveur_2\bin\AgendaCore.dll
+D:\Agenda_Serveur_2\bin\AgendaCore.pdb
+D:\Agenda_Serveur_2\AgendaCore\obj\Debug\AgendaCore.dll
+D:\Agenda_Serveur_2\AgendaCore\obj\Debug\AgendaCore.pdb
+C:\Users\Matthieu\Documents\Agenda_Serveur_2\bin\AgendaCore.dll
+C:\Users\Matthieu\Documents\Agenda_Serveur_2\bin\AgendaCore.pdb
+C:\Users\Matthieu\Documents\Agenda_Serveur_2\AgendaCore\obj\Debug\AgendaCore.dll
+C:\Users\Matthieu\Documents\Agenda_Serveur_2\AgendaCore\obj\Debug\AgendaCore.pdb
+C:\Users\Matthieu\Documents\Agenda_Serveur_2\AgendaCore\obj\Debug\AgendaCore.csprojResolveAssemblyReference.cache
+C:\Users\Matthieu\Desktop\Agenda_Serveur_2\bin\AgendaCore.dll
+C:\Users\Matthieu\Desktop\Agenda_Serveur_2\bin\AgendaCore.pdb
+C:\Users\Matthieu\Desktop\Agenda_Serveur_2\AgendaCore\obj\Debug\AgendaCore.csprojResolveAssemblyReference.cache
+C:\Users\Matthieu\Desktop\Agenda_Serveur_2\AgendaCore\obj\Debug\AgendaCore.dll
+C:\Users\Matthieu\Desktop\Agenda_Serveur_2\AgendaCore\obj\Debug\AgendaCore.pdb
+C:\Users\Matthieu\Desktop\Agenda\bin\AgendaCore.dll
+C:\Users\Matthieu\Desktop\Agenda\bin\AgendaCore.pdb
+C:\Users\Matthieu\Desktop\Agenda\AgendaCore\obj\Debug\AgendaCore.csprojResolveAssemblyReference.cache
+C:\Users\Matthieu\Desktop\Agenda\AgendaCore\obj\Debug\AgendaCore.dll
+C:\Users\Matthieu\Desktop\Agenda\AgendaCore\obj\Debug\AgendaCore.pdb
+C:\Agenda - 2.0\bin\AgendaCore.dll
+C:\Agenda - 2.0\bin\AgendaCore.pdb
+C:\Agenda - 2.0\AgendaCore\obj\Debug\AgendaCore.dll
+C:\Agenda - 2.0\AgendaCore\obj\Debug\AgendaCore.pdb
+C:\Agenda - 2.0\bin\Debug\AgendaCore.dll
+C:\Agenda - 2.0\bin\Debug\AgendaCore.pdb

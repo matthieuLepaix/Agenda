@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="Agenda.UserControls.UserControlWork"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             Width="Auto" Height="Auto" d:DesignWidth="710">
+    <StackPanel Orientation="Horizontal">
+        <TextBlock Name="noWork" FontWeight="ExtraBold" VerticalAlignment="Top" FontSize="20" Text="-  "/>
+        <ComboBox Style="{StaticResource ResourceKey=ComboBoxFlatStyle}" Name="Work" Width="200" Height="28" 
+                  VerticalAlignment="Top" Margin="0 0 5 0" IsEditable="True">
+        </ComboBox>
+        <WrapPanel Margin="0 0 10 0">
+            <TextBlock Text="Quantité" FontWeight="SemiBold"  TextAlignment="Left" VerticalAlignment="Center" Width="60"/>
+            <TextBox Name="qte" Width="30"/>
+        </WrapPanel>
+        <WrapPanel Margin="0 0 10 0">
+            <TextBlock Text="Prix" FontWeight="SemiBold"  TextAlignment="Left" VerticalAlignment="Center" Width="30"/>
+            <TextBox Name="prix" Width="50"/>
+        </WrapPanel>
+        <TextBox Name="Comment" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Width="200" Height="50"/>
+        <Button Name="Btn_Delete" Cursor="Hand" VerticalAlignment="Center" Height="30" Width="30" Margin="2" 
+                Style="{StaticResource ResourceKey=Btn_Delete}"
+                Click="Button_Click"/>
+    </StackPanel>
+</UserControl>

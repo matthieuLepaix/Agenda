@@ -1,0 +1,164 @@
+﻿<Window x:Class="Agenda.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Name="Principale"
+        Title="MainWindow" 
+        WindowState="Maximized"
+        WindowStyle="None"
+        Foreground="Black"
+        WindowStartupLocation="CenterScreen" 
+        Background="#0064ef"
+        FontSize="13"
+        BorderBrush="#AACEFF"
+        BorderThickness="0"
+        >
+    <DockPanel Background="#0064ef">
+        <DockPanel Name="myWindowHeadBar" DockPanel.Dock="Top" Background="#002860" Margin="0">
+            <TextBlock Name="WindowTitle" Margin="4" DockPanel.Dock="Left" HorizontalAlignment="Left" Foreground="WhiteSmoke" FontSize="15" FontWeight="Bold"></TextBlock>
+            <WrapPanel DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="0,0,10,0">
+                <Border Name="Btn_MinimizePrincipale" BorderBrush="WhiteSmoke" BorderThickness="1,0,1,1" CornerRadius="0,0,0,5">
+                    <TextBlock Margin="10,0,10,0" Foreground="WhiteSmoke" 
+                               HorizontalAlignment="Right" FontSize="15" FontWeight="ExtraBold">_</TextBlock>
+                </Border>
+                <Border Name="Btn_ClosePrincipale" BorderBrush="WhiteSmoke" BorderThickness="1,0,1,1" CornerRadius="0,0,5,0" Margin="-1,0,0,0" Background="#FF5050">
+                    <TextBlock  Margin="12,0,12,0" Foreground="WhiteSmoke" 
+                           HorizontalAlignment="Right" FontSize="15" FontWeight="ExtraBold">X</TextBlock>
+                </Border>
+            </WrapPanel>
+        </DockPanel>
+        <!-- WindowStyle="None"-->
+        <TabControl DockPanel.Dock="Bottom" TabStripPlacement="Top" Background="#0048ac" Margin="0"  
+                    BorderThickness="0" Foreground="Black" Padding="0" VerticalContentAlignment="Stretch">
+            <TabItem Header="Agenda" HorizontalAlignment="Center" HorizontalContentAlignment="Stretch" UseLayoutRounding="True" Padding="0">
+                <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Background="#E0ECFD">
+                    <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Margin="15 5" >
+                        <DockPanel>
+                            <WrapPanel DockPanel.Dock="Left" HorizontalAlignment="Stretch">
+                                <Button Name="AjoutRDV" Style="{StaticResource Btn_Options}" Content="Ajouter un RDV" Click="Button_Click"/>
+                                <Button Name="LesClients" Style="{StaticResource Btn_Options}" Content="Les clients" Click="Button_Click" />
+                                <Button Name="Save" Style="{StaticResource Btn_Options}" Content="Sauvegarde" Click="Button_Click"/>
+                                <Button Name="Works" Style="{StaticResource Btn_Options}" Content="Travaux" Click="Button_Click"/>
+                            </WrapPanel>
+                            <WrapPanel DockPanel.Dock="Right" HorizontalAlignment="Right">
+                                <Button Name="Refresh" Style="{StaticResource Btn_Options}" Click="Button_Click">
+                                    <StackPanel>
+                                        <Image Source="images/refresh.png" Height="50"/>
+                                    </StackPanel>
+                                </Button>
+                            </WrapPanel>
+                        </DockPanel>
+
+                    </StackPanel>
+
+                    <StackPanel Margin="5" DockPanel.Dock="Left" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" >
+                        <Viewbox  HorizontalAlignment="Stretch" Width="280" Height="Auto">
+                            <Calendar Name="CalendarToChoice" SelectedDatesChanged="CalendarToChoice_SelectedDatesChanged"/>
+                        </Viewbox>
+
+                        <GroupBox Header="Rendez-vous" Style="{StaticResource ResourceKey=GroupBoxBasic}"
+                                  Width="280" Margin="5" FontSize="15" Foreground="Black" FontWeight="DemiBold">
+
+                            <DockPanel Margin="0 15">
+                                <TextBlock DockPanel.Dock="Top" Name="noRDVselected" Text="Aucun rendez-vous sélectionné" Margin="5"/>
+                                <ScrollViewer DockPanel.Dock="Top" Name="RDVselected" VerticalScrollBarVisibility="Auto" Height="200" Visibility="Collapsed">
+                                    <StackPanel Width="260" DockPanel.Dock="Top">
+                                        <WrapPanel Width="Auto" Margin="3">
+                                            <TextBlock Text="Client : " TextAlignment="Right" Width="60" FontSize="11" FontWeight="Bold"/>
+                                            <TextBlock Name="Details_Client" FontSize="11"/>
+                                        </WrapPanel>
+                                        <WrapPanel Margin="3">
+                                            <TextBlock Text="Jour : " TextAlignment="Right" Width="60" FontSize="11" FontWeight="Bold"/>
+                                            <TextBlock Name="Details_Jour" FontSize="11"/>
+                                        </WrapPanel>
+                                        <WrapPanel Margin="3">
+                                            <TextBlock Text="Heure : " TextAlignment="Right" Width="60" FontSize="11" FontWeight="Bold"/>
+                                            <TextBlock Name="Details_Heure" FontSize="11"/>
+                                        </WrapPanel>
+                                        <WrapPanel Margin="3">
+                                            <TextBlock Text="Véhicule : " TextAlignment="Right" Width="60" FontSize="11" FontWeight="Bold"/>
+                                            <TextBlock Name="Details_Vehicule" FontSize="11"/>
+                                        </WrapPanel>
+                                        <WrapPanel Margin="3" MinHeight="60">
+                                            <TextBlock Text="Travaux : " TextAlignment="Right" Width="60" FontSize="11" FontWeight="Bold"/>
+                                            <TextBlock Name="Details_Travaux" TextWrapping="Wrap" FontSize="11"/>
+                                        </WrapPanel>
+                                    </StackPanel>
+                                </ScrollViewer>
+                                <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="10 0">
+                                    <Image Name="Btn_DeleteRDV" Source="images/DeleteRed.png" Height="30" 
+                                           Cursor="Hand" MouseDown="Btn_DeleteRDV_MouseDown"/>
+                                </WrapPanel>
+                            </DockPanel>
+                        </GroupBox>
+                        <!--<WrapPanel HorizontalAlignment="Center" Margin="0 20">
+                    <Button Name="Save" Content="Sauvegarde" Padding="30 10" Click="Button_Click"/>
+                </WrapPanel>-->
+                    </StackPanel>
+
+                    <DockPanel DockPanel.Dock="Right" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                           Height="Auto" Width="Auto">
+                        <Border DockPanel.Dock="Top" BorderBrush="Black" BorderThickness="1" 
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                            Height="Auto" Width="Auto" Background="WhiteSmoke" Margin="5">
+                            <Grid Name="Agenda" Margin="2" ShowGridLines="True">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="4*"/>
+                                    <ColumnDefinition Width="4*"/>
+                                    <ColumnDefinition Width="4*"/>
+                                    <ColumnDefinition Width="4*"/>
+                                    <ColumnDefinition Width="4*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="2*"/>
+                                    <RowDefinition Height="6*"/>
+                                    <RowDefinition Height="6*"/>
+                                    <RowDefinition Height="6*"/>
+                                    <RowDefinition Height="6*"/>
+                                    <RowDefinition Height="6*"/>
+                                    <RowDefinition Height="6*"/>
+                                    <RowDefinition Height="6*"/>
+                                    <RowDefinition Height="6*"/>
+                                    <RowDefinition Height="6*"/>
+                                    <RowDefinition Height="6*"/>
+                                    <RowDefinition Height="6*"/>
+                                </Grid.RowDefinitions>
+                            </Grid>
+                        </Border>
+
+                    </DockPanel>
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="Facturation" HorizontalAlignment="Center" HorizontalContentAlignment="Stretch" UseLayoutRounding="True" Padding="0">
+                <DockPanel Width="Auto" Height="Auto">
+                    <DockPanel DockPanel.Dock="Right" Width="Auto" Height="Auto" Margin="5">
+                        <GroupBox Header="Travaux à effectuer" Margin="0 15 0 0" Style="{StaticResource ResourceKey=GroupBoxBasic}">
+                            <ScrollViewer Name="sb_Works" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                              VerticalScrollBarVisibility="Visible">
+                                <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Center" Margin="5">
+                                    <StackPanel Name="AllWorks" >
+                                        <Button Name="Btn_AddWork" Cursor="Hand" VerticalAlignment="Center"
+                                Margin="2" Height="30"  Style="{StaticResource ResourceKey=Btn_Add}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </GroupBox>
+                    </DockPanel>
+                    <DockPanel DockPanel.Dock="Left" Height="Auto" Width="Auto" Margin="10 5 0 0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <StackPanel Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <WrapPanel Name="BtnNewClientPanel" HorizontalAlignment="Center">
+                                <Button Name="BtnNewClient" Style="{StaticResource ResourceKey=Btn_LittleWindow}"
+                                    Content="Nouveau Client" Padding="30 10" Margin="0 0 0 10"/>
+                            </WrapPanel>
+                            <DockPanel Name="Le_Client" Width="Auto" Height="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            </DockPanel>
+                        </StackPanel>
+                    </DockPanel>
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="Devis" HorizontalAlignment="Center" HorizontalContentAlignment="Stretch" UseLayoutRounding="True" Padding="0"/>
+        </TabControl>
+    </DockPanel>
+
+
+</Window>

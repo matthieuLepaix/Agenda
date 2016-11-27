@@ -1,0 +1,53 @@
+﻿<Window x:Class="Agenda.Consultation.Travaux_Vehicule"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Les travaux par véhicule"
+        WindowStyle="None"
+        WindowState="Normal"
+        Closed="Window_Closed"
+        WindowStartupLocation="CenterScreen"
+        AllowsTransparency="True"
+        FontSize="13"
+        Width="1000" Height="600" 
+        Background="#E0ECFD"
+        >
+    <DockPanel Background="#E0ECFD">
+        <DockPanel Name="myWindowHeadBar" DockPanel.Dock="Top" Background="#002860" Margin="0">
+            <TextBlock Name="WindowTitle" Margin="4" DockPanel.Dock="Left" HorizontalAlignment="Left" Foreground="WhiteSmoke" FontSize="15" FontWeight="Bold"></TextBlock>
+            <WrapPanel DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="0,0,10,0">
+                <Border Name="Btn_MinimizePrincipale" BorderBrush="WhiteSmoke" BorderThickness="1,0,1,1" CornerRadius="0,0,0,5">
+                    <TextBlock Margin="10,0,10,0" Foreground="WhiteSmoke" 
+                               HorizontalAlignment="Right" FontSize="15" FontWeight="ExtraBold">_</TextBlock>
+                </Border>
+                <Border Name="Btn_ClosePrincipale" BorderBrush="WhiteSmoke" BorderThickness="1,0,1,1" CornerRadius="0,0,5,0" Margin="-1,0,0,0" Background="#FF5050">
+                    <TextBlock  Margin="12,0,12,0" Foreground="WhiteSmoke" 
+                           HorizontalAlignment="Right" FontSize="15" FontWeight="ExtraBold">X</TextBlock>
+                </Border>
+            </WrapPanel>
+        </DockPanel>
+        <DockPanel DockPanel.Dock="Left">
+            <StackPanel DockPanel.Dock="Left" Margin="10">
+                <WrapPanel DockPanel.Dock="Top" Margin="0 15" HorizontalAlignment="Center">
+                    <TextBlock TextAlignment="Right" Foreground="Black" FontWeight="Bold">Immatriculation</TextBlock>
+                    <TextBox Name="rech_immat" Width="150" Margin="5 5" GotFocus="rech_immat_GotFocus"></TextBox>
+                    <Button Name="btn_recherche" Content="OK" Style="{StaticResource ResourceKey=Btn_LittleWindow}"
+                    Padding="10 2" Margin="0" 
+                    Click="btn_recherche_Click" />
+                </WrapPanel>
+                <DockPanel Name="ClientResearch" Margin="0 20 0 0">
+
+                </DockPanel>
+                    <Button Name="btn_imprimer" Content="Imprimer l'historique des réparations" Style="{StaticResource ResourceKey=Btn_Options}"
+                        Padding="10 2" Margin="20" FontSize="20"
+                        Click="btn_imprimer_Click"/>
+            </StackPanel>
+                <DockPanel DockPanel.Dock="Right" >
+                    <ScrollViewer BorderBrush="Black" BorderThickness="10" Background="White">
+                        <StackPanel Name="Les_travaux" >
+
+                        </StackPanel>
+                    </ScrollViewer>
+                </DockPanel>
+        </DockPanel>
+    </DockPanel>
+</Window>

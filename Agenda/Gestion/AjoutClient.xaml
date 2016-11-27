@@ -1,0 +1,36 @@
+﻿<Window x:Class="Agenda.Gestion.AjoutClient"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Ajout d'un client" Height="512" Width="750"
+        WindowStyle="None"
+        WindowState="Normal"
+        WindowStartupLocation="CenterScreen"
+        AllowsTransparency="True"
+        SizeToContent="WidthAndHeight"
+        FontSize="15"
+        Background="#E0ECFD">
+    <DockPanel LastChildFill="False">
+        <DockPanel Name="myWindowHeadBar" DockPanel.Dock="Top" Background="#002860" Margin="0">
+            <TextBlock Name="WindowTitle" Margin="4" DockPanel.Dock="Left" HorizontalAlignment="Left" Foreground="WhiteSmoke" FontSize="15" FontWeight="Bold"></TextBlock>
+            <WrapPanel DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="0,0,10,0">
+                <Border Name="Btn_MinimizePrincipale" BorderBrush="WhiteSmoke" BorderThickness="1,0,1,1" CornerRadius="0,0,0,5">
+                    <TextBlock Margin="10,0,10,0" Foreground="WhiteSmoke" 
+                               HorizontalAlignment="Right" FontSize="15" FontWeight="ExtraBold">_</TextBlock>
+                </Border>
+                <Border Name="Btn_ClosePrincipale" BorderBrush="WhiteSmoke" BorderThickness="1,0,1,1" CornerRadius="0,0,5,0" Margin="-1,0,0,0" Background="#FF5050">
+                    <TextBlock  Margin="12,0,12,0" Foreground="WhiteSmoke" 
+                           HorizontalAlignment="Right" FontSize="15" FontWeight="ExtraBold">X</TextBlock>
+                </Border>
+            </WrapPanel>
+        </DockPanel>
+        <DockPanel DockPanel.Dock="Left" Margin="5">
+            <DockPanel DockPanel.Dock="Top" Name="ChampsClient">
+                
+            </DockPanel>
+            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Name="BpAjouter" Content="Ajouter" Style="{StaticResource Btn_Options}" Click="Bp_Click"/>
+                <Button Name="BpAnnuler" Content="Annuler" Style="{StaticResource Btn_Options}" Click="Bp_Click"/>
+            </StackPanel>
+        </DockPanel>
+    </DockPanel>
+</Window>
