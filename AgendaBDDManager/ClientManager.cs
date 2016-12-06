@@ -111,7 +111,7 @@ namespace AgendaBDDManager
             string requete = string.Format(@"INSERT INTO client(nom, prenom,telephone1,telephone2,email, adresse, codepostal, ville) 
                                             VALUES('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}')",
                                                     bdd.DeleteInjectionSQL(client.pNom), bdd.DeleteInjectionSQL(client.pPrenom),
-                                                    bdd.DeleteInjectionSQL(client.pTelephone1).Substring(0, 30), bdd.DeleteInjectionSQL(client.pTelephone2).Substring(0, 30),
+                                                    bdd.DeleteInjectionSQL(client.pTelephone1), bdd.DeleteInjectionSQL(client.pTelephone2),
                                                     bdd.DeleteInjectionSQL(client.pEmail), bdd.DeleteInjectionSQL(client.pAdresse),
                                                     bdd.DeleteInjectionSQL(client.pCodePostal), bdd.DeleteInjectionSQL(client.pVille));
             bdd.OpenConnection();

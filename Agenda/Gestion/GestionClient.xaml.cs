@@ -96,26 +96,32 @@ namespace Agenda.Gestion
                 {
                     Vehicule v = mUcSelectClients.GetVehicule();
 
-                    if (v != null)
+                    if (v != null && v.pClient != null)
                     {
                         MessageBoxResult result = MessageBox.Show(string.Format(@"Êtes-vous sûr de supprimer ce véhicule ?
                         Client : {0} {1}
                         Véhicule : {2} {3}", v.pClient.pNom, v.pClient.pPrenom, v.pMarque, v.pModele), "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                         if (result.Equals(MessageBoxResult.Yes))
                         {
-                            VehiculeManager.DeleteVehicule(v.pId);
-                            v.pClient.RemoveVehicule(v);
+                            VehiculeManager.DesaffecterClient(v);
+                            Client client = mUcSelectClients.GetClient();
+                            client.RemoveVehicule(v);
                             RefreshClients();
                             RefreshChampsClient();
+                            mUcSelectClients.setClient(client);
                             mOwner.RefreshAgenda();
                         }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Le véhicule n'a pas pu être supprimé.", "Attention", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }else if (bp.Name == "AjouterVehicule")
                 {
                     Client c = null;
                     if ((c = mUcSelectClients.GetClient()) != null)
                     {
-                        new GestionVehicule(this, c).Show();
+                        new GestionVehicule(this, c, false).Show();
                     }
                 }
                 else if (bp.Name == "AjouterRDV")

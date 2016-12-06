@@ -20,17 +20,21 @@ namespace Agenda.Gestion
     /// </summary>
     public partial class GestionVehicule : Window
     {
-
         #region Attributes
 
-        private Client mClient;
+        private GestionClient mOwnerClient = null;
 
-        private GestionClient mOwner;
+        private GestionRDV mOwnerRDV = null;
 
         #endregion
 
         #region Properties
 
+        public Client pClient
+        {
+            get;
+            set;
+        }
         #endregion
 
 
@@ -41,21 +45,42 @@ namespace Agenda.Gestion
             InitializeComponent();
         }
 
-        public GestionVehicule(GestionClient owner, Client c)
+        public GestionVehicule(Window owner, Client c, bool change)
         {
             InitializeComponent();
             InitializeTitle();
-            mOwner = owner;
-            mOwner.IsEnabled = false;
-            mOwner.Opacity = 0.3;
-            mClient = c;
-            ChampsVehicule.Header = string.Format("Véhicule de M. {0} {1}", mClient.pNom, mClient.pPrenom);
+            if (owner is GestionClient)
+            {
+                mOwnerClient = owner as GestionClient;
+                mOwnerClient.IsEnabled = false;
+                mOwnerClient.Opacity = 0.3;
+            }
+            else if (owner is GestionRDV)
+            {
+                mOwnerRDV = owner as GestionRDV;
+                mOwnerRDV.IsEnabled = false;
+                mOwnerRDV.Opacity = 0.3;
+            }
+            pClient = c;
             Closed += new EventHandler(GestionVehicule_Closed);
+            if (change)
+            {
+                ChangeVehicule.ItemsSource = pClient.pVehicules;
+                DPAjoutVehicule.Visibility = System.Windows.Visibility.Collapsed;
+                DPChangerVehicule.Visibility = System.Windows.Visibility.Visible;
+            }
+            else
+            {
+                DPChangerVehicule.Visibility = System.Windows.Visibility.Collapsed;
+                DPAjoutVehicule.Visibility = System.Windows.Visibility.Visible;
+            }
         }
+
+
 
         private void InitializeTitle()
         {
-            WindowTitle.Text = "Gestion d'un véhicle";
+            WindowTitle.Text = string.Format("Véhicules de {0}", pClient);
             Btn_ClosePrincipale.MouseDown += new MouseButtonEventHandler(Btn_ClosePrincipale_MouseDown);
             Btn_MinimizePrincipale.MouseDown += new MouseButtonEventHandler(Btn_MinimizePrincipale_MouseDown);
             myWindowHeadBar.MouseLeftButtonDown += new MouseButtonEventHandler(myWindowHeadBar_MouseLeftButtonDown);
@@ -78,19 +103,34 @@ namespace Agenda.Gestion
 
         void GestionVehicule_Closed(object sender, EventArgs e)
         {
-            mOwner.IsEnabled = true;
-            mOwner.Opacity = 1;
-            //if (mOwner is MainWindow)
-            //{
-            //    mOwner.WindowState = System.Windows.WindowState.Maximized;
-            //}
-            //else
-            //{
-                mOwner.WindowState = System.Windows.WindowState.Normal;
-            //}
+            if (mOwnerClient != null)
+            {
+                mOwnerClient.IsEnabled = true;
+                mOwnerClient.Opacity = 1;
+                mOwnerClient.WindowState = System.Windows.WindowState.Normal;
+            }
+            else if (mOwnerRDV != null)
+            {
+                mOwnerRDV.IsEnabled = true;
+                mOwnerRDV.Opacity = 1;
+                mOwnerRDV.WindowState = System.Windows.WindowState.Normal;
+            }
         }
 
         #endregion
+
+        private void BpChange_Click(object sender, RoutedEventArgs e)
+        {
+            if (ChangeVehicule.SelectedItem != null)
+            {
+                mOwnerRDV.refreshVehicule(ChangeVehicule.SelectedItem as Vehicule);
+                base.Close();
+            }
+            else
+            {
+                MessageBox.Show("Veuillez sélectionner un véhicule.", "Attention", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+        }
 
         private void BpAjouter_Click(object sender, RoutedEventArgs e)
         {
@@ -109,9 +149,8 @@ namespace Agenda.Gestion
                 if ((vehicules = VehiculeManager.VEHICULES.FindAll(v => v.pImmatriculation.Equals(Immat.Text.Trim()))).Count > 0)
                 {
                     MessageBoxResult result = MessageBox.Show(string.Format(@"L'immatriculation du véhicule existe déjà !
-                        Ce véhicule appartient à M. {0} {1}
-                        Voulez-vous attribuer ce véhicule à M. {2} {3}?", vehicules.First().pClient.pNom, vehicules.First().pClient.pPrenom,  
-                                                                        mClient.pNom, mClient.pPrenom), "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                        Ce véhicule appartient à {0} 
+                        Voulez-vous attribuer ce véhicule à {1}?", vehicules.First().pClient, pClient), "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                     if (result.Equals(MessageBoxResult.Yes))
                     {
                         UpdateVehiculeToDB(vehicules.First());
@@ -127,29 +166,43 @@ namespace Agenda.Gestion
 
         private void FormatImmat()
         {
-            string nom = mClient.pNom;
+            string nom = pClient.pNom;
             int longNom = nom.Length;
-            int nbVehicule = mClient.pVehicules.Count();
-            Immat.Text = string.Format("{0}{1}_{2}", mClient.pPrenom.Substring(0, 2), nom.Substring(0, longNom > 19 ? 19 : longNom), nbVehicule);
+            int nbVehicule = pClient.pVehicules.Count();
+            Immat.Text = string.Format("{0}{1}_{2}", pClient.pPrenom.Substring(0, 2), nom.Substring(0, longNom > 19 ? 19 : longNom), nbVehicule);
         }
 
         private void AddVehiculeToDB()
         {
-            VehiculeManager.AddVehicule(Marque.Text.Trim(), Modele.Text.Trim(), Immat.Text.Trim(), Annee.Text.Trim(), Int32.Parse(km.Text.Trim()), mClient);
-            mOwner.RefreshClients();
+            Vehicule v = new Vehicule(Marque.Text.Trim(), Modele.Text.Trim(), Immat.Text.Trim(), Annee.Text.Trim(), Int32.Parse(km.Text.Trim()), pClient);
+            VehiculeManager.AddVehicule(v);
+            if(mOwnerClient != null)
+            {
+                mOwnerClient.RefreshClients();
+            }else if(mOwnerRDV != null)
+            {
+                mOwnerRDV.refreshVehicule(v);
+            }
             base.Close();
         }
 
         private void UpdateVehiculeToDB(Vehicule v)
         {
             v.pClient.RemoveVehicule(v);
-            v.pClient = mClient;
+            v.pClient = pClient;
             v.pClient.AddVehicule(v);
             v.pMarque = Marque.Text.Trim();
             v.pModele = Modele.Text.Trim();
             v.pImmatriculation = Immat.Text.Trim();
             VehiculeManager.UpdateVehicule(v);
-            mOwner.RefreshClients();
+            if (mOwnerClient != null)
+            {
+                mOwnerClient.RefreshClients();
+            }
+            else if (mOwnerRDV != null)
+            {
+                mOwnerRDV.refreshVehicule(v);
+            }
             base.Close();
         }
 

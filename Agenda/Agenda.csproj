@@ -38,6 +38,9 @@
   <PropertyGroup>
     <StartupObject>Agenda.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icone.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MigraDoc.DocumentObjectModel-WPF">
       <HintPath>..\references\MigraDoc.DocumentObjectModel-WPF.dll</HintPath>
@@ -78,6 +81,7 @@
       <DependentUpon>Travaux_Vehicule.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converter\TabSizeConverter.cs" />
+    <Compile Include="Factures\ExcelManager.cs" />
     <Compile Include="Gestion\AjoutClient.xaml.cs">
       <DependentUpon>AjoutClient.xaml</DependentUpon>
     </Compile>
@@ -190,6 +194,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Factures\modele_facture.xlsx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -245,6 +250,12 @@
   <ItemGroup>
     <Resource Include="images\recycle-bin.png" />
     <Resource Include="images\refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icone.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\facture.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

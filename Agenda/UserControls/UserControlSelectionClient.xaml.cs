@@ -72,6 +72,8 @@ namespace Agenda.UserControls
             mOwnerTravaux.SetClientSelected(GetClient());
         }
 
+
+
         /// <summary>
         /// Permet de raffraichir la liste des clients
         /// </summary>
@@ -98,9 +100,10 @@ namespace Agenda.UserControls
         private void Champs_Nom_KeyUp(object sender, KeyEventArgs e)
         {
             listeTriee.Clear();
-            if (Champs_Nom.Text.Length > 0)
+            string valeur = Champs_Nom.Text.Trim();
+            if (valeur.Length > 0)
             {
-                AddListIntoListeTriee(listeClients.Where(c => c.pNom.ToUpper().StartsWith(Champs_Nom.Text.ToUpper())).ToList());
+                AddListIntoListeTriee(listeClients.Where(c => c.pNom.ToUpper().StartsWith(valeur.ToUpper())).ToList());
             }
             else
             {
@@ -116,6 +119,11 @@ namespace Agenda.UserControls
         public Client GetClient()
         {
             return Clients.SelectedItem as Client;
+        }
+
+        public void setClient(Client c)
+        {
+            Clients.SelectedItem = c;
         }
 
         public void unselect()

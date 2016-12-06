@@ -24,35 +24,72 @@
                 </Border>
             </WrapPanel>
         </DockPanel>
-        <DockPanel DockPanel.Dock="Bottom" Margin="10 10" >
-            <GroupBox DockPanel.Dock="Top" Name="ChampsVehicule" Header="Véhicule" Margin="0" Style="{StaticResource ResourceKey=GroupBoxBasic}">
+        <DockPanel Name="DPAjoutVehicule" DockPanel.Dock="Bottom" Margin="10 10" >
+            <StackPanel>
                 <StackPanel Margin="5">
                     <WrapPanel Margin="0 0 0 10">
-                        <TextBlock Text="Marque" FontWeight="SemiBold"  TextAlignment="Left" VerticalAlignment="Center" Width="130"/>
-                        <TextBox Name="Marque" Width="200"/>
+                        <TextBlock Text="Marque" FontWeight="SemiBold"  TextAlignment="Right" VerticalAlignment="Center" Width="130"/>
+                        <TextBox Name="Marque" Width="200" Margin="10 0 0 0"/>
                     </WrapPanel>
                     <WrapPanel Margin="0 0 0 10">
-                        <TextBlock Text="Modèle" FontWeight="SemiBold"  TextAlignment="Left" VerticalAlignment="Center" Width="130"/>
-                        <TextBox Name="Modele" Width="200"/>
+                        <TextBlock Text="Modèle" FontWeight="SemiBold"  TextAlignment="Right" VerticalAlignment="Center" Width="130"/>
+                        <TextBox Name="Modele" Width="200" Margin="10 0 0 0"/>
                     </WrapPanel>
                     <WrapPanel Margin="0 0 0 10">
-                        <TextBlock Text="Immatriculation" FontWeight="SemiBold"  TextAlignment="Left" VerticalAlignment="Center" Width="130"/>
-                        <TextBox Name="Immat" Width="200"/>
+                        <TextBlock Text="Immatriculation" FontWeight="SemiBold"  TextAlignment="Right" VerticalAlignment="Center" Width="130"/>
+                        <TextBox Name="Immat" Width="200" Margin="10 0 0 0"/>
                     </WrapPanel>
                     <WrapPanel Margin="0 0 0 10">
-                        <TextBlock Text="Année" FontWeight="SemiBold"  TextAlignment="Left" VerticalAlignment="Center" Width="130"/>
-                        <TextBox Name="Annee" Width="200"/>
+                        <TextBlock Text="Année" FontWeight="SemiBold"  TextAlignment="Right" VerticalAlignment="Center" Width="130"/>
+                        <TextBox Name="Annee" Width="200" Margin="10 0 0 0"/>
                     </WrapPanel>
                     <WrapPanel Margin="0 0 0 10">
-                        <TextBlock Text="Kilométrage" FontWeight="SemiBold"  TextAlignment="Left" VerticalAlignment="Center" Width="130"/>
-                        <TextBox Name="km" Width="200"/>
+                        <TextBlock Text="Kilométrage" FontWeight="SemiBold"  TextAlignment="Right" VerticalAlignment="Center" Width="130"/>
+                        <TextBox Name="km" Width="200" Margin="10 0 0 0"/>
                     </WrapPanel>
                 </StackPanel>
-            </GroupBox>
 
-            <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center" VerticalAlignment="Top">
-                <Button Name="BpAjouter" Style="{StaticResource ResourceKey=Btn_Options}" Content="Ajouter" Click="BpAjouter_Click"/>
-            </WrapPanel>
+                <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center" VerticalAlignment="Top">
+                    <Button Name="BpAjouter" Style="{StaticResource ResourceKey=Btn_Options}" Content="Ajouter" Click="BpAjouter_Click"/>
+                </WrapPanel>
+
+            </StackPanel>
+        </DockPanel>
+        <DockPanel Name="DPChangerVehicule" DockPanel.Dock="Bottom" Margin="10 10">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                    <TextBlock Text="Véhicule :" FontWeight="SemiBold"  TextAlignment="Right" VerticalAlignment="Center" Width="130"/>
+                    <ComboBox Style="{StaticResource ResourceKey=ComboBoxFlatStyle}" Name="ChangeVehicule" Width="300" Height="35" 
+                                    VerticalAlignment="Top" Margin="10 0 0 0" IsEditable="False"/>
+                </StackPanel>
+                <StackPanel Margin="5">
+                    <WrapPanel Margin="0 0 0 10">
+                        <TextBlock Text="Marque" FontWeight="SemiBold"  TextAlignment="Right" VerticalAlignment="Center" Width="130"/>
+                        <TextBlock Name="ChangeMarque" Width="200" Margin="10 0 0 0" Text="{Binding SelectedItems, Path=SelectedItem.pMarque, ElementName=ChangeVehicule}"/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0 0 0 10">
+                        <TextBlock Text="Modèle" FontWeight="SemiBold"  TextAlignment="Right" VerticalAlignment="Center" Width="130"/>
+                        <TextBlock Name="ChangeModele" Width="200" Margin="10 0 0 0" Text="{Binding SelectedItems, Path=SelectedItem.pModele, ElementName=ChangeVehicule}"/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0 0 0 10">
+                        <TextBlock Text="Immatriculation" FontWeight="SemiBold"  TextAlignment="Right" VerticalAlignment="Center" Width="130"/>
+                        <TextBlock Name="ChangeImmat" Width="200" Margin="10 0 0 0" Text="{Binding SelectedItems, Path=SelectedItem.pImmatriculation, ElementName=ChangeVehicule}"/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0 0 0 10">
+                        <TextBlock Text="Année" FontWeight="SemiBold"  TextAlignment="Right" VerticalAlignment="Center" Width="130"/>
+                        <TextBlock Name="ChangeAnnee" Width="200" Margin="10 0 0 0" Text="{Binding SelectedItems, Path=SelectedItem.pAnnee, ElementName=ChangeVehicule}"/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0 0 0 10">
+                        <TextBlock Text="Kilométrage" FontWeight="SemiBold"  TextAlignment="Right" VerticalAlignment="Center" Width="130"/>
+                        <TextBlock Name="ChangeKM" Width="200" Margin="10 0 0 0" Text="{Binding SelectedItems, Path=SelectedItem.pKilometrage, ElementName=ChangeVehicule}"/>
+                    </WrapPanel>
+                </StackPanel>
+
+                <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center" VerticalAlignment="Top">
+                    <Button Name="BpChange" Style="{StaticResource ResourceKey=Btn_Options}" Content="Changer" Click="BpChange_Click"/>
+                </WrapPanel>
+
+            </StackPanel>
         </DockPanel>
     </DockPanel>
 </Window>

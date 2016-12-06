@@ -38,6 +38,8 @@ C:\Agenda - 2.0\Agenda\obj\x86\Release\Agenda.Properties.Resources.resources
 C:\Agenda - 2.0\Agenda\obj\x86\Release\Agenda.csproj.GenerateResource.Cache
 C:\Agenda - 2.0\Agenda\obj\x86\Release\Agenda.exe
 C:\Agenda - 2.0\Agenda\obj\x86\Release\Agenda.pdb
+C:\Agenda\bin\Release\Agenda.exe
+C:\Agenda\bin\Release\Agenda.pdb
 C:\Agenda\Agenda\obj\x86\Release\Agenda.csprojResolveAssemblyReference.cache
 C:\Agenda\Agenda\obj\x86\Release\Agenda.csproj.ResolveComReference.cache
 C:\Agenda\Agenda\obj\x86\Release\Consultation\Travaux_Vehicule.baml
@@ -70,8 +72,6 @@ C:\Agenda\Agenda\obj\x86\Release\App.g.cs
 C:\Agenda\Agenda\obj\x86\Release\GeneratedInternalTypeHelper.g.cs
 C:\Agenda\Agenda\obj\x86\Release\Agenda_MarkupCompile.cache
 C:\Agenda\Agenda\obj\x86\Release\Agenda_MarkupCompile.lref
-C:\Agenda\bin\Release\Agenda.exe
-C:\Agenda\bin\Release\Agenda.pdb
 C:\Agenda\Agenda\obj\x86\Release\App.baml
 C:\Agenda\Agenda\obj\x86\Release\Agenda.g.resources
 C:\Agenda\Agenda\obj\x86\Release\Agenda.Properties.Resources.resources

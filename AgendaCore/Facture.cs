@@ -11,17 +11,19 @@ namespace AgendaCore
 
         public static float TVA = 0.20f;
 
-        public enum Reglement{
-            Especes,
+        public enum Reglement
+        {
             CB,
-            Cheque
+            Cheque,
+            Especes,
+            NA
         };
 
         private int mId;
         
         private float mTotalPieceHT;
 
-        private string mReglement;
+        private Reglement mReglement;
 
         private List<float> mMainOeuvres;
 
@@ -66,7 +68,7 @@ namespace AgendaCore
         /// <summary>
         /// Le mode de réglement
         /// </summary>
-        public string pReglement
+        public Reglement pReglement
         {
             get
             {
@@ -124,7 +126,7 @@ namespace AgendaCore
 
         #region constructors
 
-        public Facture(int id, float totP, string reg, List<float> mo, float tot, RendezVous rdv)
+        public Facture(int id, float totP, Reglement reg, List<float> mo, float tot, RendezVous rdv)
         {
             pId = id;
             pTotalPieceHT = totP;
@@ -134,7 +136,7 @@ namespace AgendaCore
             pRdv = rdv;
         }
 
-        public Facture(float totP, string reg, List<float> mo, float tot, RendezVous rdv)
+        public Facture(float totP, Reglement reg, List<float> mo, float tot, RendezVous rdv)
         {
             pTotalPieceHT = totP;
             pReglement = reg;
@@ -162,7 +164,7 @@ namespace AgendaCore
             return ok;
         }
 
-        public string getReglementFromEnum(Reglement reg)
+        public static string getReglementFromEnum(Reglement reg)
         {
             string reglement = "";
 
@@ -179,6 +181,28 @@ namespace AgendaCore
                     break;
                 default:
                     reglement = "Non spécifié";
+                    break;
+            }
+
+            return reglement;
+        }
+
+        public static Reglement getReglementFromString(string reg)
+        {
+            Reglement reglement;
+            switch (reg)
+            {
+                case "Espèces":
+                    reglement = Reglement.Especes;
+                    break;
+                case "Carte bancaire":
+                    reglement = Reglement.CB;
+                    break;
+                case "Chèque":
+                    reglement = Reglement.Cheque;
+                    break;
+                default:
+                    reglement = Reglement.NA;
                     break;
             }
 

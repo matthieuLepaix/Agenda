@@ -14,10 +14,9 @@ namespace AgendaBDDManager
 
         public static List<RendezVous> RDVS = new List<RendezVous>();
 
-        private static string maxID_request = "SELECT MAX(id) FROM rendezvous";
+        private static string SELECT_MAXID_RDV = "SELECT MAX(id) FROM rendezvous";
 
-        private static string insertRDV = @"INSERT INTO rendezvous (id,date_rdv,duree,client,vehicule) 
-                                     VALUES ({0},to_date('{1}','DD/MM/RR hh24:mi:ss'),{2},{3},{4});";
+        private static string INSERTRDV = @"INSERT INTO rendezvous (id,date_rdv,duree,client,vehicule) VALUES ({0},to_date('{1} {2}','DD/MM/RR hh24:mi:ss'),{3},{4},{5})";
 
         #endregion
 
@@ -101,6 +100,8 @@ namespace AgendaBDDManager
                 liste.Add(rdv);
             }
             bdd.CloseConnection();
+
+            liste.ForEach(rdv => rdv.pClient.AddVehicules(VehiculeManager.GetVehiculesByClient(rdv.pClient)));
             return liste;
         }
 
@@ -142,6 +143,9 @@ namespace AgendaBDDManager
                 rdv.addReparations(ReparationRDVManager.getReparationRDVByRDV(rdv));
             }
             bdd.CloseConnection();
+
+            rdv.pClient.AddVehicules(VehiculeManager.GetVehiculesByClient(rdv.pClient));
+
             return rdv;
         }
 
@@ -185,6 +189,7 @@ namespace AgendaBDDManager
             }
             bdd.CloseConnection();
 
+            liste.ForEach(rdv => rdv.pClient.AddVehicules(VehiculeManager.GetVehiculesByClient(rdv.pClient)));
             return liste;
         }
 
@@ -227,6 +232,8 @@ namespace AgendaBDDManager
                 liste.Add(rdv);
             }
             bdd.CloseConnection();
+
+            liste.ForEach(rdv => rdv.pClient.AddVehicules(VehiculeManager.GetVehiculesByClient(rdv.pClient)));
             return liste;
         }
 
@@ -274,6 +281,8 @@ namespace AgendaBDDManager
                 liste.Add(rdv);
             }
             bdd.CloseConnection();
+
+            liste.ForEach(rdv => rdv.pClient.AddVehicules(VehiculeManager.GetVehiculesByClient(rdv.pClient)));
 
             return liste;
         }
@@ -325,18 +334,17 @@ namespace AgendaBDDManager
                 }
             }
 
-            string requete = string.Format("INSERT INTO rendezvous(date_rdv, duree, vehicule, client) VALUES(to_date('{0} {1}','dd/mm/yyyy hh24:mi:ss'),{2},'{3}',{4})",
-                                                    rdv.pDate.ToShortDateString(), rdv.pDate.ToShortTimeString(), getEntierForDuree(rdv.pDuree), rdv.pVehicule.pId, rdv.pClient.pId);
-            bdd.ExecuteNonQuery(requete);
-            
-            odr = bdd.ExecuteSelect(maxID_request);
+            odr = bdd.ExecuteSelect(SELECT_MAXID_RDV);
             int maxID = 0;
             if (odr.Read())
             {
                 maxID = int.Parse(odr.GetDecimal(0).ToString());
             }
-            rdv.pId = maxID;
+            rdv.pId = maxID + 1;
 
+            string requete = string.Format(INSERTRDV, rdv.pId, rdv.pDate.ToShortDateString(), rdv.pDate.ToShortTimeString(), getEntierForDuree(rdv.pDuree), rdv.pClient.pId, rdv.pVehicule.pId);
+            bdd.ExecuteNonQuery(requete);
+            
             foreach(ReparationRDV rep in rdv.pTravaux)
             {
                 rep.pRdv = rdv;
@@ -408,6 +416,8 @@ namespace AgendaBDDManager
 
             bdd.CloseConnection();
 
+            rdv.pClient.AddVehicules(VehiculeManager.GetVehiculesByClient(rdv.pClient));
+
             RDVS.Remove(RDVS.Find(r => r.pId == rdv.pId));
             RDVS.Add(rdv);
         }
@@ -433,13 +443,13 @@ namespace AgendaBDDManager
             foreach (RendezVous r in getAll())
             {
                 string date = string.Format("{0:00}/{1:00}/{2} {3:00}:{4:00}:00", r.pDate.Day, r.pDate.Month, r.pDate.Year, r.pDate.Hour, r.pDate.Minute);
-                sw.WriteLine(insertRDV, r.pId, date, r.getDuree(), r.pClient.pId, r.pVehicule.pId);
+                sw.WriteLine(INSERTRDV, r.pId, date, r.getDuree(), r.pClient.pId, r.pVehicule.pId);
             }
         }
 
         internal static void SaveRDV(System.IO.StreamWriter sw, RendezVous rdv)
         {
-            sw.WriteLine(insertRDV, rdv.pId, rdv.pDate,getEntierForDuree(rdv.pDuree), rdv.pClient.pId, rdv.pVehicule.pId);
+            sw.WriteLine(INSERTRDV, rdv.pId, rdv.pDate,getEntierForDuree(rdv.pDuree), rdv.pClient.pId, rdv.pVehicule.pId);
         }
     }
 }

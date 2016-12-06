@@ -7,4 +7,3 @@ C:\Agenda\bin\Release\AgendaCore.dll
 C:\Agenda\bin\Release\AgendaCore.pdb
 C:\Agenda\AgendaCore\obj\Release\AgendaCore.dll
 C:\Agenda\AgendaCore\obj\Release\AgendaCore.pdb
-C:\Agenda\AgendaCore\obj\Release\AgendaCore.csprojResolveAssemblyReference.cache

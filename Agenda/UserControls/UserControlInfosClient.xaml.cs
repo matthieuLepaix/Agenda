@@ -56,12 +56,17 @@ namespace Agenda.UserControls
 
         public UserControlInfosClient(Window owner, Vehicule vehicule)
         {
+            
             mOwner = owner;
             InitializeComponent();
             DataContext = this;
             pVehicule = vehicule;
         }
 
+        /// <summary>
+        /// Met à jour le client et son véhicule
+        /// </summary>
+        /// <returns></returns>
         public Vehicule GetVehicule()
         {
             Vehicule v = mVehicule;

@@ -7,7 +7,7 @@ using Oracle.DataAccess.Client;
 
 namespace AgendaBDDManager
 {
-    class FactureManager
+    public class FactureManager
     {
         #region Attributes
 
@@ -33,17 +33,64 @@ namespace AgendaBDDManager
 
         public static void initialize()
         {
-            FACTURE.AddRange(getAll());
+            FACTURE.AddRange(GetAll());
         }
 
-        public static Facture getFactureById(int id)
+        public static Facture GetFactureById(int id)
         {
-            //TODO
-            return null;
-
+            Facture facture = null;
+            string requete = string.Format(@"SELECT id,totalpieceht,reglement,mo1,mo2,mo3,mo4,mo5,totalht,rdv FROM facture f WHERE f.id={0}", id);
+            Connexion bdd = new Connexion();
+            bdd.OpenConnection();
+            OracleDataReader odr = bdd.ExecuteSelect(requete);
+            if (odr.Read())
+            {
+                List<float> mos = new List<float>();
+                mos.Add(float.Parse(odr.GetDecimal(3).ToString()));
+                mos.Add(float.Parse(odr.GetDecimal(4).ToString()));
+                mos.Add(float.Parse(odr.GetDecimal(5).ToString()));
+                mos.Add(float.Parse(odr.GetDecimal(6).ToString()));
+                mos.Add(float.Parse(odr.GetDecimal(7).ToString()));
+                facture = new Facture(int.Parse(odr.GetDecimal(0).ToString()),
+                                    float.Parse(odr.GetDecimal(1).ToString()),
+                                    odr.IsDBNull(2) ? Facture.Reglement.NA : Facture.getReglementFromString(odr.GetString(2)),
+                                    mos,
+                                    float.Parse(odr.GetDecimal(8).ToString()),
+                                    RdvManager.getRDVById(int.Parse(odr.GetDecimal(9).ToString()))
+                                    );
+            }
+            bdd.CloseConnection();
+            return facture;
         }
 
-        public static List<Facture> getAll()
+        public static Facture GetFactureByRdv(int idRDV)
+        {
+            Facture facture = null;
+            string requete = string.Format(@"SELECT id,totalpieceht,reglement,mo1,mo2,mo3,mo4,mo5,totalht,rdv FROM facture f WHERE rdv={0}", idRDV);
+            Connexion bdd = new Connexion();
+            bdd.OpenConnection();
+            OracleDataReader odr = bdd.ExecuteSelect(requete);
+            if (odr.Read())
+            {
+                List<float> mos = new List<float>();
+                mos.Add(float.Parse(odr.GetDecimal(3).ToString()));
+                mos.Add(float.Parse(odr.GetDecimal(4).ToString()));
+                mos.Add(float.Parse(odr.GetDecimal(5).ToString()));
+                mos.Add(float.Parse(odr.GetDecimal(6).ToString()));
+                mos.Add(float.Parse(odr.GetDecimal(7).ToString()));
+                facture = new Facture(int.Parse(odr.GetDecimal(0).ToString()),
+                                    float.Parse(odr.GetDecimal(1).ToString()),
+                                    odr.IsDBNull(2) ? Facture.Reglement.NA : Facture.getReglementFromString(odr.GetString(2)),
+                                    mos,
+                                    float.Parse(odr.GetDecimal(8).ToString()),
+                                    RdvManager.getRDVById(int.Parse(odr.GetDecimal(9).ToString()))
+                                    );
+            }
+            bdd.CloseConnection();
+            return facture;
+        }
+
+        public static List<Facture> GetAll()
         {
             List<Facture> liste = new List<Facture>();
             string requete = string.Format("SELECT id,totalpieceht,reglement,mo1,mo2,mo3,mo4,mo5,totalht,rdv FROM facture");
@@ -60,7 +107,7 @@ namespace AgendaBDDManager
                 mos.Add(float.Parse(odr.GetDecimal(7).ToString()));
                 liste.Add(new Facture(int.Parse(odr.GetDecimal(0).ToString()),
                                     float.Parse(odr.GetDecimal(1).ToString()),
-                                    odr.IsDBNull(2) ? "" : odr.GetString(2),
+                                    odr.IsDBNull(2) ? Facture.Reglement.NA : Facture.getReglementFromString(odr.GetString(2)),
                                     mos,
                                     float.Parse(odr.GetDecimal(8).ToString()),
                                     RdvManager.getRDVById(int.Parse(odr.GetDecimal(9).ToString())))
@@ -71,7 +118,7 @@ namespace AgendaBDDManager
             return liste;
         }
 
-        public static void AddFacture(float totP, string reg, List<float> mo, float tot, RendezVous rdv)
+        public static void AddFacture(float totP, Facture.Reglement reg, List<float> mo, float tot, RendezVous rdv)
         {
             Facture c = new Facture(totP, reg, mo, tot, rdv);
             AddFacture(c);
@@ -81,10 +128,14 @@ namespace AgendaBDDManager
         {
 
             Connexion bdd = new Connexion();
-            string requete = string.Format(@"INSERT INTO facture(totalpieceht,reglement,mo1,mo2,mo3,mo4,mo5,totalht,rdv FROM facture) 
+            string requete = string.Format(@"INSERT INTO facture(totalpieceht,reglement,mo1,mo2,mo3,mo4,mo5,totalht,rdv) 
                                             VALUES({0},'{1}',{2},{3},{4},{5},{6},{7},{8})",
-                                                    facture.pTotalPieceHT, bdd.DeleteInjectionSQL(facture.pReglement),
-                                                    facture.pMainOeuvres[0], facture.pMainOeuvres[1], facture.pMainOeuvres[2], facture.pMainOeuvres[3], facture.pMainOeuvres[4],
+                                                    facture.pTotalPieceHT, bdd.DeleteInjectionSQL(Facture.getReglementFromEnum(facture.pReglement)),
+                                                    facture.pMainOeuvres.Count > 0 ? facture.pMainOeuvres[0].ToString() : "0",
+                                                    facture.pMainOeuvres.Count > 1 ? facture.pMainOeuvres[1].ToString() : "0",
+                                                    facture.pMainOeuvres.Count > 2 ? facture.pMainOeuvres[2].ToString() : "0",
+                                                    facture.pMainOeuvres.Count > 3 ? facture.pMainOeuvres[3].ToString() : "0",
+                                                    facture.pMainOeuvres.Count > 4 ? facture.pMainOeuvres[4].ToString() : "0", 
                                                     facture.pTotalHT, facture.pRdv.pId);
             bdd.OpenConnection();
             bdd.ExecuteNonQuery(requete);
@@ -107,7 +158,7 @@ namespace AgendaBDDManager
             string requete = string.Format(@"UPDATE facture 
                                             SET 
                                                 totalpieceht = {0},
-                                                reglement + '{1}',
+                                                reglement = '{1}',
                                                 mo1 = {2},
                                                 mo2 = {3},
                                                 mo3 = {4},
@@ -117,8 +168,12 @@ namespace AgendaBDDManager
                                                 rdv = {8}
                                             WHERE 
                                                 id = {9}",
-                                                    facture.pTotalPieceHT, bdd.DeleteInjectionSQL(facture.pReglement),
-                                                    facture.pMainOeuvres[0], facture.pMainOeuvres[1], facture.pMainOeuvres[2], facture.pMainOeuvres[3], facture.pMainOeuvres[4],
+                                                    facture.pTotalPieceHT, bdd.DeleteInjectionSQL(Facture.getReglementFromEnum(facture.pReglement)),
+                                                    facture.pMainOeuvres.Count > 0 ? facture.pMainOeuvres[0].ToString() : "0",
+                                                    facture.pMainOeuvres.Count > 1 ? facture.pMainOeuvres[1].ToString() : "0",
+                                                    facture.pMainOeuvres.Count > 2 ? facture.pMainOeuvres[2].ToString() : "0",
+                                                    facture.pMainOeuvres.Count > 3 ? facture.pMainOeuvres[3].ToString() : "0",
+                                                    facture.pMainOeuvres.Count > 4 ? facture.pMainOeuvres[4].ToString() : "0", 
                                                     facture.pTotalHT, facture.pRdv.pId,
                                                     facture.pId.ToString());
             bdd.OpenConnection();

@@ -230,6 +230,33 @@ namespace AgendaBDDManager
             VEHICULES.Add(vehicule);
         }
 
+        public static void DesaffecterClient(Vehicule vehicule)
+        {
+            Connexion bdd = new Connexion();
+            string requete = string.Format(@"UPDATE vehicule 
+                                            SET 
+                                                marque = '{0}', 
+                                                modele = '{1}', 
+                                                immatriculation = '{2}', 
+                                                annee = '{3}',
+                                                kilometrage= '{4}',
+                                                client = {5} 
+                                            WHERE id = {6}",
+                                                       bdd.DeleteInjectionSQL(vehicule.pMarque),
+                                                       bdd.DeleteInjectionSQL(vehicule.pModele),
+                                                       bdd.DeleteInjectionSQL(vehicule.pImmatriculation),
+                                                       bdd.DeleteInjectionSQL(vehicule.pAnnee),
+                                                       vehicule.pKilometrage,
+                                                       "null",
+                                                       vehicule.pId.ToString());
+            bdd.OpenConnection();
+            bdd.ExecuteNonQuery(requete);
+            bdd.CloseConnection();
+            vehicule.pClient = null;
+            VEHICULES.Remove(VEHICULES.Find(v => v.pId == vehicule.pId));
+            VEHICULES.Add(vehicule);
+        }
+
         public static void DeleteVehicule(int id)
         {
             string requete = string.Format("DELETE vehicule WHERE id = {0} ", id);

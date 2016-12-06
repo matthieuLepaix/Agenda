@@ -38,6 +38,8 @@ namespace Agenda.Gestion
 
         private UserControlSelectionClient mUcSelectClient;
 
+        private UserControlInfosClient mUcInfosClient;
+
         private bool mIsNewClient;
 
         private List<UserControlWork> myWorks = new List<UserControlWork>();
@@ -73,6 +75,7 @@ namespace Agenda.Gestion
 
             mUcSelectClient = new UserControlSelectionClient();
             mUcNewClient = null;
+            mUcInfosClient = null;
             Le_Client.Children.Clear();
             Le_Client.Children.Add(mUcSelectClient);
 
@@ -80,6 +83,7 @@ namespace Agenda.Gestion
             st_LastWork = AllWorks;
             initWorks();
             sb_Works.Height = 300;
+            ActionVehicule.Visibility = System.Windows.Visibility.Collapsed;
         }
 
         public GestionRDV(MainWindow owner, RendezVous rdv)
@@ -100,14 +104,19 @@ namespace Agenda.Gestion
             {
                 BtnNewClientPanel.Children.Clear();
                 Le_Client.Children.Clear();
-                Le_Client.Children.Add(new UserControlInfosClient(this, mRdv.pVehicule));
+                mUcInfosClient = new UserControlInfosClient(this, mRdv.pVehicule);
+                mUcNewClient = null;
+                mUcSelectClient = null;
+                Le_Client.Children.Add(mUcInfosClient);
+                ActionVehicule.Visibility = System.Windows.Visibility.Visible;
             }
             else {
                 mUcSelectClient = new UserControlSelectionClient();
                 mUcNewClient = null;
-
+                mUcInfosClient = null;
                 Le_Client.Children.Clear();
                 Le_Client.Children.Add(mUcSelectClient);
+                ActionVehicule.Visibility = System.Windows.Visibility.Collapsed;
             }
             st_LastWork = AllWorks;
             initWorks();
@@ -147,11 +156,41 @@ namespace Agenda.Gestion
             DurationRDV.SelectedIndex = 1;
 
         }
+        
+        private void ButtonVehicule_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button)
+            {
+                Button bp = sender as Button;
+                if (bp.Name == "AjouterVehicule")
+                {
+                    Client c = null;
+                    if ((c = mRdv.pClient) != null)
+                    {
+                        new GestionVehicule(this, c, false).Show();
+                    }
+                }
+                else if (bp.Name == "ChangerVehicule")
+                {
 
+                    Client c = null;
+                    if ((c = mRdv.pClient) != null)
+                    {
+                        new GestionVehicule(this, c, true).Show();
+                    }
+                }
+                
+            }
+        }
+
+        public void refreshVehicule(Vehicule v)
+        {
+            mRdv.pVehicule = v;
+            mUcInfosClient.SetVehicule(v);
+        }
+        
         private void ButtonValider_Click(object sender, RoutedEventArgs e)
         {
-            
-
             if (HourRDV.SelectedValue == null)
             {
                 MessageBox.Show("Veuillez entrer l'heure à laquelle vous souhaitez enregistrer le rendez-vous.", "Attention", MessageBoxButton.OK, MessageBoxImage.Exclamation);
@@ -178,60 +217,74 @@ namespace Agenda.Gestion
                     }
                     else
                     {
-
-                        DateTime dt = (DateTime)DatePickerRDV.SelectedDate;
-                        dt = dt.AddHours(double.Parse((HourRDV.SelectedValue as ComboBoxItem).Content.ToString().Substring(0, 2)));
-                        if (mRdv != null)
-                        {
-                            mRdv.pDate = dt;
-                            mRdv.pDuree = getDureeType(DurationRDV.SelectedIndex);
-                            if (mRdv.pVehicule == null)
-                            {
-                                if (!mIsNewClient)
-                                {
-                                    mRdv.pVehicule = mUcSelectClient.GetVehicule();
-                                }
-                                else
-                                {
-                                    mRdv.pVehicule = mUcNewClient.GetVehicule();
-                                }
-                            }
-                        }
-                        else
-                        {
-                            mRdv = new RendezVous(dt, getDureeType(DurationRDV.SelectedIndex),
-                                mIsNewClient ? mUcNewClient.GetVehicule() : mUcSelectClient.GetVehicule(),
-                                mIsNewClient ? mUcNewClient.GetVehicule().pClient : mUcSelectClient.GetVehicule().pClient);
-                        }
-
-                        ReparationRDV work = null;
-                        mRdv.RemoveAllWorks();
-                        foreach (UserControlWork uc in myWorks)
-                        {
-                            if ((work = uc.getWork()) != null)
-                            {
-                                mRdv.addReparation(work);
-                            }
-                        }
-
-                        mRdv.pClient = mRdv.pVehicule.pClient;
-
-                        if (mRdv.pId != -1)
-                        {
-                            RdvManager.UpdateRdv(mRdv);
-                        }
-                        else
-                        {
-                            RdvManager.AddRdv(mRdv);
-                        }
-
-                        ClientManager.UpdateClient(mRdv.pClient);
-                        VehiculeManager.UpdateVehicule(mRdv.pVehicule);
-
-                        mOwner.RefreshAgenda();
-                        this.Close();
+                        CreateOrUpdateRDV();
                     }
                 }
+            }
+        }
+
+        private void CreateOrUpdateRDV()
+        {
+            try
+            {
+                DateTime dt = (DateTime)DatePickerRDV.SelectedDate;
+                dt = dt.AddHours(double.Parse((HourRDV.SelectedValue as ComboBoxItem).Content.ToString().Substring(0, 2)));
+                if (mRdv != null)
+                {
+                    mRdv.pDate = dt;
+                    mRdv.pDuree = getDureeType(DurationRDV.SelectedIndex);
+                    if (mRdv.pVehicule == null)
+                    {
+                        if (!mIsNewClient)
+                        {
+                            mRdv.pVehicule = mUcSelectClient.GetVehicule();
+                        }
+                        else
+                        {
+                            mRdv.pVehicule = mUcNewClient.GetVehicule();
+                        }
+                    }
+                }
+                else
+                {
+                    mRdv = new RendezVous(dt, getDureeType(DurationRDV.SelectedIndex),
+                        mIsNewClient ? mUcNewClient.GetVehicule() : mUcSelectClient.GetVehicule(),
+                        mIsNewClient ? mUcNewClient.GetVehicule().pClient : mUcSelectClient.GetVehicule().pClient);
+                }
+
+                ReparationRDV work = null;
+                mRdv.RemoveAllWorks();
+                foreach (UserControlWork uc in myWorks)
+                {
+                    if ((work = uc.getWork()) != null)
+                    {
+                        mRdv.addReparation(work);
+                    }
+                }
+
+                mRdv.pClient = mRdv.pVehicule.pClient;
+
+                if (mRdv.pId != -1)
+                {
+                    RdvManager.UpdateRdv(mRdv);
+                }
+                else
+                {
+                    RdvManager.AddRdv(mRdv);
+                }
+
+                ClientManager.UpdateClient(mRdv.pClient);
+                VehiculeManager.UpdateVehicule(mRdv.pVehicule);
+
+                mOwner.RefreshAgenda();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Le rendez-vous n'a pas pu être enregistrer.\nErreur :" + ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                this.Close();
             }
         }
 
@@ -298,7 +351,8 @@ namespace Agenda.Gestion
 
         private void ButtonFacture_Click(object sender, RoutedEventArgs e)
         {
-            mOwner.initFacture(mRdv);
+            CreateOrUpdateRDV();
+            mOwner.InitFacture(mRdv);
             mOwner.selectTabIndex(MainWindow.TabOptions.FACTURE);
             this.Close();
         }
@@ -311,6 +365,7 @@ namespace Agenda.Gestion
 
         private void Window_Closed(object sender, EventArgs e)
         {
+            UserControlRDV.IsMouseDownOnRdv = false;
             mOwner.IsEnabled = true;
             mOwner.Opacity = 1;
             mOwner.WindowState = System.Windows.WindowState.Maximized;

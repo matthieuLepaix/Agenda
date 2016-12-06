@@ -91,8 +91,11 @@
                 </WrapPanel>
                 <DockPanel Name="Le_Client" Width="Auto" Height="Auto" 
                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-
                 </DockPanel>
+                <WrapPanel Name="ActionVehicule" HorizontalAlignment="Center" Visibility="Collapsed">
+                    <Button Name="AjouterVehicule" Style="{StaticResource ResourceKey=Btn_LittleWindow}" Content="Ajouter un véhicule" Click="ButtonVehicule_Click" Margin="10"/>
+                    <Button Name="ChangerVehicule" Style="{StaticResource ResourceKey=Btn_LittleWindow}" Content="Changer le véhicule" Click="ButtonVehicule_Click" Margin="10"/>
+                </WrapPanel>
             </StackPanel>
         </DockPanel>
     </DockPanel>

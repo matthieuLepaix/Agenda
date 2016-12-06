@@ -64,12 +64,16 @@ namespace Agenda
 
         void UserControlRDV_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            IsMouseDownOnRdv = true;
+            if (e.ClickCount != 2)
+            {
+                IsMouseDownOnRdv = true;
+            }
         }
 
         void UserControlRDV_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             new GestionRDV(mOwner, Rdv).Show();
+            IsMouseDownOnRdv = true;
         }
     }
 }

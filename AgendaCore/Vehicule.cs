@@ -189,12 +189,17 @@ namespace AgendaCore
         public Vehicule(int id, string marque, string modele, string immat, string annee, int km, Client client)
         {
             mId = id;
-            mImmatriculation = immat;
+            mImmatriculation = CleanImmat(immat);
             mMarque = marque;
             mModele = modele;
             pAnnee = annee;
             pKilometrage = km;
             mClient = client;
+        }
+
+        private string CleanImmat(string immat)
+        {
+            return string.IsNullOrEmpty(immat) ? string.Empty : immat.Trim().Replace('-',' ').Replace('_',' ').Replace(" ","").ToUpper();
         }
 
         /// <summary>
@@ -206,7 +211,7 @@ namespace AgendaCore
         public Vehicule(string marque, string modele, string immat, string annee, int km, Client client)
         {
             mId = -1;
-            mImmatriculation = immat;
+            mImmatriculation = CleanImmat(immat);
             mMarque = marque;
             mModele = modele;
             pAnnee = annee;
@@ -220,7 +225,7 @@ namespace AgendaCore
 
         public override string ToString()
         {
-            return string.Format("{0} {1} | {2}", mMarque, mModele, mImmatriculation);
+            return string.Format("{0} {1} [{2}]", mMarque, mModele, mImmatriculation);
         }
 
         public void AddRendezVous(RendezVous rdv)
