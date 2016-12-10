@@ -52,16 +52,6 @@ namespace Agenda
             RDVText.Children.Add(t);
         }
 
-        void textDelete_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            MessageBoxResult result = MessageBox.Show("Êtes-vous sûr de supprimer ce rendez-vous ?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-            if (result.Equals(MessageBoxResult.Yes))
-            {
-                RdvManager.DeleteRdv(Rdv.pId);
-                mOwner.RefreshAgenda();
-            }
-        }
-
         void UserControlRDV_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ClickCount != 2)
@@ -72,7 +62,8 @@ namespace Agenda
 
         void UserControlRDV_DoubleClick(object sender, MouseButtonEventArgs e)
         {
-            new GestionRDV(mOwner, Rdv).Show();
+            mOwner.Child = new GestionRDV(mOwner, Rdv);
+            mOwner.Child.Show();
             IsMouseDownOnRdv = true;
         }
     }

@@ -40,10 +40,10 @@ C:\Agenda - 2.0\Agenda\obj\x86\Debug\Agenda.Properties.Resources.resources
 C:\Agenda - 2.0\Agenda\obj\x86\Debug\Agenda.csproj.GenerateResource.Cache
 C:\Agenda - 2.0\Agenda\obj\x86\Debug\Agenda.exe
 C:\Agenda - 2.0\Agenda\obj\x86\Debug\Agenda.pdb
-C:\Agenda\Agenda\obj\x86\Debug\Agenda.csproj.ResolveComReference.cache
 C:\Agenda\bin\Debug\Agenda.exe
 C:\Agenda\bin\Debug\Agenda.pdb
 C:\Agenda\Agenda\obj\x86\Debug\Agenda.csprojResolveAssemblyReference.cache
+C:\Agenda\Agenda\obj\x86\Debug\Agenda.csproj.ResolveComReference.cache
 C:\Agenda\Agenda\obj\x86\Debug\Consultation\Travaux_Vehicule.baml
 C:\Agenda\Agenda\obj\x86\Debug\Gestion\ChangeImmat.baml
 C:\Agenda\Agenda\obj\x86\Debug\Gestion\AjoutClient.baml

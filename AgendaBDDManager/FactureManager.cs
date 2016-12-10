@@ -16,7 +16,7 @@ namespace AgendaBDDManager
         private static string maxID_request = "SELECT MAX(id) FROM facture";
 
 
-        private static string insertClient = @"INSERT INTO FACTURE (id,totalpieceht,reglement,mo1,mo2,mo3,mo4,mo5,totalht,rdv) 
+        private static string insertFacture = @"INSERT INTO FACTURE (id,totalpieceht,reglement,mo1,mo2,mo3,mo4,mo5,totalht,rdv) 
                                         VALUES ({0},{1},'{2}',{3},{4},{5},{6},{7},{8},{9});";
 
         #endregion
@@ -205,5 +205,24 @@ namespace AgendaBDDManager
         }
 
         #endregion
+
+        public static void Sauvegarde(System.IO.StreamWriter sw)
+        {
+            foreach (Facture f in GetAll())
+            {
+                SaveFacture(sw, f);
+            }
+        }
+
+        public static void SaveFacture(System.IO.StreamWriter sw, Facture facture)
+        {
+            sw.WriteLine(string.Format(insertFacture, facture.pId, facture.pTotalPieceHT, Facture.getReglementFromEnum(facture.pReglement),
+                                                    facture.pMainOeuvres.Count > 0 ? facture.pMainOeuvres[0].ToString() : "0",
+                                                    facture.pMainOeuvres.Count > 1 ? facture.pMainOeuvres[1].ToString() : "0",
+                                                    facture.pMainOeuvres.Count > 2 ? facture.pMainOeuvres[2].ToString() : "0",
+                                                    facture.pMainOeuvres.Count > 3 ? facture.pMainOeuvres[3].ToString() : "0",
+                                                    facture.pMainOeuvres.Count > 4 ? facture.pMainOeuvres[4].ToString() : "0",
+                                                    facture.pTotalHT, facture.pRdv.pId));
+        }
     }
 }

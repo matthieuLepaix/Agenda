@@ -72,6 +72,9 @@ namespace Agenda
 
         private RendezVous selectedRDV = null;
 
+        public Window Child = null;
+
+
         #region Facture
 
         private UserControlInfosClient mUCFactureClient;
@@ -101,10 +104,10 @@ namespace Agenda
             this.DataContext = this;
             try
             {
-                Connexion.init();
                 InitializeTitle();
                 InitializeDays();
                 CalendarToChoice.SelectedDate = day;
+                this.Activated += new EventHandler(MainWindow_Activated);
             }
             catch (Exception e)
             {
@@ -113,7 +116,13 @@ namespace Agenda
             }
         }
 
-
+        void MainWindow_Activated(object sender, EventArgs e)
+        {
+            if (Child != null)
+            {
+                Child.Activate();
+            }
+        }
 
         private void InitializeTitle()
         {
@@ -336,7 +345,7 @@ namespace Agenda
 
                         RendezVous rdv = new RendezVous(date, DureeType.UneHeure, null, null);
 
-                        new GestionRDV(this, rdv).Show();
+                        (Child = new GestionRDV(this, rdv)).Show();
                     }
                 }
             }
@@ -551,11 +560,11 @@ namespace Agenda
                 Button bp = sender as Button;
                 if (bp.Name == "AjoutRDV")
                 {
-                    new GestionRDV(this).Show();
+                    (Child = new GestionRDV(this)).Show();
                 }
                 else if (bp.Name == "LesClients")
                 {
-                    new GestionClient(this).Show();
+                    (Child = new GestionClient(this)).Show();
                 }
                 else if (bp.Name == "Save")
                 {
@@ -569,7 +578,7 @@ namespace Agenda
                 }
                 else if (bp.Name == "Works")
                 {
-                    new Travaux_Vehicule(this).Show();
+                    (Child = new Travaux_Vehicule(this)).Show();
                 }
                 else if (bp.Name == "Refresh")
                 {
@@ -754,8 +763,7 @@ namespace Agenda
                 MessageBoxResult result = MessageBox.Show("Êtes-vous sûr de supprimer ce rendez-vous ?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (result.Equals(MessageBoxResult.Yes))
                 {
-                    //TODO : Delete_Reparation_Rdv
-
+                    FactureManager.DeleteFactureByRDV(selectedRDV);
                     ReparationRDVManager.DeleteReparationRDVByRDV(selectedRDV);
                     RdvManager.DeleteRdv(selectedRDV.pId);
                     RefreshAgenda();

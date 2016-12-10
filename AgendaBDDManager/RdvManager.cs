@@ -18,6 +18,9 @@ namespace AgendaBDDManager
 
         private static string INSERTRDV = @"INSERT INTO rendezvous (id,date_rdv,duree,client,vehicule) VALUES ({0},to_date('{1} {2}','DD/MM/RR hh24:mi:ss'),{3},{4},{5})";
 
+        private static string INSERTRDV_OLD = @"INSERT INTO rendezvous (id,date_rdv,duree,vehicule) VALUES ({0},to_date('{1} {2}','DD/MM/RR hh24:mi:ss'),{3},{4})";
+
+
         #endregion
 
         #region Properties
@@ -442,14 +445,17 @@ namespace AgendaBDDManager
         {
             foreach (RendezVous r in getAll())
             {
-                string date = string.Format("{0:00}/{1:00}/{2} {3:00}:{4:00}:00", r.pDate.Day, r.pDate.Month, r.pDate.Year, r.pDate.Hour, r.pDate.Minute);
-                sw.WriteLine(INSERTRDV, r.pId, date, r.getDuree(), r.pClient.pId, r.pVehicule.pId);
+                string date = string.Format("{0:00}/{1:00}/{2}", r.pDate.Day, r.pDate.Month, r.pDate.Year);
+                string time = string.Format("{0:00}:{1:00}:00", r.pDate.Hour, r.pDate.Minute);
+                sw.WriteLine(INSERTRDV+";", r.pId, date, time, r.getDuree(), r.pClient.pId, r.pVehicule.pId);
             }
         }
 
         internal static void SaveRDV(System.IO.StreamWriter sw, RendezVous rdv)
         {
-            sw.WriteLine(INSERTRDV, rdv.pId, rdv.pDate,getEntierForDuree(rdv.pDuree), rdv.pClient.pId, rdv.pVehicule.pId);
+            string date = string.Format("{0:00}/{1:00}/{2}", rdv.pDate.Day, rdv.pDate.Month, rdv.pDate.Year);
+            string time = string.Format("{0:00}:{1:00}:00", rdv.pDate.Hour, rdv.pDate.Minute);
+            sw.WriteLine(INSERTRDV+";", rdv.pId, date, time,getEntierForDuree(rdv.pDuree), rdv.pClient.pId, rdv.pVehicule.pId);
         }
     }
 }

@@ -23,6 +23,7 @@ namespace Agenda.Gestion
     public partial class GestionClient : Window
     {
         private MainWindow mOwner;
+        public Window Child;
         private UserControlSelectionClient mUcSelectClients;
         private UserControlInfosClient mUcSelectedClient;
 
@@ -40,6 +41,15 @@ namespace Agenda.Gestion
             mUcSelectedClient = new UserControlInfosClient(this, null);
             Le_Client.Children.Clear();
             Le_Client.Children.Add(mUcSelectedClient);
+            this.Activated += new EventHandler(GestionClient_Activated);
+        }
+
+        void GestionClient_Activated(object sender, EventArgs e)
+        {
+            if (Child != null)
+            {
+                Child.Activate();
+            }
         }
 
         private void InitializeTitle()
@@ -72,7 +82,7 @@ namespace Agenda.Gestion
                 Button bp = sender as Button;
                 if (bp.Name == "Ajouter")
                 {
-                    new AjoutClient(this).Show();
+                    (Child = new AjoutClient(this)).Show();
                 }
                 else if (bp.Name == "SupprimerClient")
                 {
@@ -91,6 +101,10 @@ namespace Agenda.Gestion
                             mOwner.RefreshAgenda();
                         }
                     }
+                    else
+                    {
+                        MessageBox.Show("Veuillez sélectionner un client.", "Attention", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
                 }
                 else if (bp.Name == "SupprimerVehicule")
                 {
@@ -100,7 +114,7 @@ namespace Agenda.Gestion
                     {
                         MessageBoxResult result = MessageBox.Show(string.Format(@"Êtes-vous sûr de supprimer ce véhicule ?
                         Client : {0} {1}
-                        Véhicule : {2} {3}", v.pClient.pNom, v.pClient.pPrenom, v.pMarque, v.pModele), "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                        Véhicule : {2} {3}", v.pClient.pNom, v.pClient.pPrenom, v.pMarque, v.pModele), "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
                         if (result.Equals(MessageBoxResult.Yes))
                         {
                             VehiculeManager.DesaffecterClient(v);
@@ -114,14 +128,18 @@ namespace Agenda.Gestion
                     }
                     else
                     {
-                        MessageBox.Show("Le véhicule n'a pas pu être supprimé.", "Attention", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show("Veuillez sélectionner un véhicule à supprimer.", "Attention", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }else if (bp.Name == "AjouterVehicule")
                 {
                     Client c = null;
                     if ((c = mUcSelectClients.GetClient()) != null)
                     {
-                        new GestionVehicule(this, c, false).Show();
+                        (Child = new GestionVehicule(this, c, false)).Show();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Veuillez sélectionner un client.", "Attention", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
                 else if (bp.Name == "AjouterRDV")
@@ -138,13 +156,13 @@ namespace Agenda.Gestion
                         else
                         {
                             //Pop up avertissant qu'il faut choisir un véhicule
-                            MessageBox.Show("Veuillez choisir un véhicule.", "Attention", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                            MessageBox.Show("Veuillez choisir un véhicule.", "Attention", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
                     }
                     else
                     {
                         //Pop up avertissant qu'il faut choisir un client
-                        MessageBox.Show("Veuillez choisir un client.", "Attention", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                        MessageBox.Show("Veuillez choisir un client.", "Attention", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
                 else if (bp.Name == "ValidModif")
@@ -159,6 +177,10 @@ namespace Agenda.Gestion
                             ClientManager.UpdateClient(v.pClient);
                             VehiculeManager.UpdateVehicule(v);
                         }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Veuillez sélectionner un client.", "Attention", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
             }
@@ -205,6 +227,8 @@ namespace Agenda.Gestion
             {
                 mOwner.WindowState = System.Windows.WindowState.Normal;
             }
+            mOwner.Child = null;
+            mOwner.Activate();
 
         }
 

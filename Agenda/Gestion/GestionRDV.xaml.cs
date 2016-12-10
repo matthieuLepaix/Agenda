@@ -32,6 +32,8 @@ namespace Agenda.Gestion
 
         private MainWindow mOwner;
 
+        public Window Child = null;
+
         private RendezVous mRdv;
 
         private UserControlNewClient mUcNewClient;
@@ -84,6 +86,15 @@ namespace Agenda.Gestion
             initWorks();
             sb_Works.Height = 300;
             ActionVehicule.Visibility = System.Windows.Visibility.Collapsed;
+            this.Activated += new EventHandler(GestionRDV_Activated);
+        }
+
+        void GestionRDV_Activated(object sender, EventArgs e)
+        {
+            if (Child != null)
+            {
+                Child.Activate();
+            }
         }
 
         public GestionRDV(MainWindow owner, RendezVous rdv)
@@ -121,6 +132,7 @@ namespace Agenda.Gestion
             st_LastWork = AllWorks;
             initWorks();
             sb_Works.Height = 300;
+            this.Activated += new EventHandler(GestionRDV_Activated);
         }
 
         private void InitializeTitle()
@@ -167,16 +179,15 @@ namespace Agenda.Gestion
                     Client c = null;
                     if ((c = mRdv.pClient) != null)
                     {
-                        new GestionVehicule(this, c, false).Show();
+                        (Child = new GestionVehicule(this, c, false)).Show();
                     }
                 }
                 else if (bp.Name == "ChangerVehicule")
                 {
-
                     Client c = null;
                     if ((c = mRdv.pClient) != null)
                     {
-                        new GestionVehicule(this, c, true).Show();
+                        (Child = new GestionVehicule(this, c, true)).Show();
                     }
                 }
                 
@@ -369,6 +380,8 @@ namespace Agenda.Gestion
             mOwner.IsEnabled = true;
             mOwner.Opacity = 1;
             mOwner.WindowState = System.Windows.WindowState.Maximized;
+            mOwner.Child = null;
+            mOwner.Activate();
         }
 
         private void BtnNewClient_Click(object sender, RoutedEventArgs e)

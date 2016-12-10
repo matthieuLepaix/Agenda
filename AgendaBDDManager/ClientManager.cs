@@ -17,8 +17,7 @@ namespace AgendaBDDManager
         private static string maxID_request = "SELECT MAX(id) FROM client";
 
 
-        private static string insertClient = @"INSERT INTO CLIENT (id,nom,prenom,telephone1,telephone2,email,adresse,codepostal,ville) 
-                                        VALUES ({0},'{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}');";
+        private static string insertClient = @"INSERT INTO CLIENT (id,nom,prenom,telephone1,telephone2,email,adresse,codepostal,ville) VALUES ({0},'{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}');";
         
         #endregion
 

@@ -108,12 +108,14 @@ namespace Agenda.Gestion
                 mOwnerClient.IsEnabled = true;
                 mOwnerClient.Opacity = 1;
                 mOwnerClient.WindowState = System.Windows.WindowState.Normal;
+                mOwnerClient.Child = null;
             }
             else if (mOwnerRDV != null)
             {
                 mOwnerRDV.IsEnabled = true;
                 mOwnerRDV.Opacity = 1;
                 mOwnerRDV.WindowState = System.Windows.WindowState.Normal;
+                mOwnerClient.Child = null;
             }
         }
 

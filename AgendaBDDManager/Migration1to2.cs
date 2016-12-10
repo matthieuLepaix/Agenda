@@ -44,7 +44,7 @@ namespace AgendaBDDManager
         public static void doMigration()
         {
             DateTime today = DateTime.Now;
-            string nomFichier = string.Format("C:\\Users\\Matthieu\\Documents\\ISIMA\\Agenda\\BDD\\{0}_Sauvegarde_RendezVous.txt", today.Ticks);
+            string nomFichier = string.Format("C:\\{0}_Sauvegarde_RendezVous.txt", today.Ticks);
             FileStream fichier = File.Create(nomFichier);
             StreamWriter sw = new StreamWriter(fichier);
             sw.WriteLine("delete from rendezvous;");

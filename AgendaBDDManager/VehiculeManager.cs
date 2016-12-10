@@ -16,8 +16,7 @@ namespace AgendaBDDManager
 
         private static string maxID_request = "SELECT MAX(id) FROM vehicule";
 
-        private static string insertVehicule = @"INSERT INTO VEHICULE (id,marque,modele,immatriculation,annee,kilometrage,client) 
-                                          VALUES ({0},'{1}','{2}','{3}','{4}','{5}',{6});";
+        private static string insertVehicule = @"INSERT INTO VEHICULE (id,marque,modele,immatriculation,annee,kilometrage,client) VALUES ({0},'{1}','{2}','{3}','{4}','{5}',{6});";
 
         #endregion
 

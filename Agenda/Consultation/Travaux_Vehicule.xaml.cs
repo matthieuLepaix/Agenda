@@ -20,6 +20,7 @@ using PdfSharp.Drawing;
 using System.Diagnostics;
 using PdfSharp.Drawing.Layout;
 using Microsoft.Office.Interop.Excel;
+using Agenda.Config;
 
 namespace Agenda.Consultation
 {
@@ -33,6 +34,8 @@ namespace Agenda.Consultation
         private UserControlSelectionClient ucSelectClient;
 
         private MainWindow mOwner;
+
+        private string pdfFilename { get; set; }
 
         public Travaux_Vehicule(MainWindow owner)
         {
@@ -127,6 +130,10 @@ namespace Agenda.Consultation
             }
         }
 
+        /// <summary>
+        /// Permet de formater un rendez-vous pour l'affichage.
+        /// </summary>
+        /// <param name="rdv">Le rendez-vous à formater</param>
         private void displayRDV(RendezVous rdv)
         {
             string mTravauxTitle = string.Format("{0} - M. ou MMe {1} {2}",rdv.pDate.ToShortDateString(), rdv.pClient.pPrenom, rdv.pClient.pNom);
@@ -180,14 +187,26 @@ namespace Agenda.Consultation
             mOwner.IsEnabled = true;
             mOwner.Opacity = 1;
             mOwner.WindowState = System.Windows.WindowState.Maximized;
+            mOwner.Child = null;
+            mOwner.Activate();
         }
 
+        /// <summary>
+        /// Au focus du champs de saisi de l'immatriculation.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void rech_immat_GotFocus(object sender, RoutedEventArgs e)
         {
             Les_travaux.Children.Clear();
             ucSelectClient.unselect();
         }
 
+        /// <summary>
+        /// Permet de visualiser et imprimer le fichier listant les rendez-vous.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btn_imprimer_Click(object sender, RoutedEventArgs e)
         {
             generatePDF();
@@ -198,49 +217,75 @@ namespace Agenda.Consultation
 
         }
 
+        /// <summary>
+        /// Permet de générer le pdf contenant tous les rendez-vous sélectionnés.
+        /// </summary>
         private void generatePDF()
         {
-            
+
             if (mesRDVs.Count > 0)
             {
-                int margin = 10;
-                int lineHeight = 20;
-                double pageWidth;
-                double pageHeight;
-                int currentLine = 10;
-
-                PdfDocument pdf = new PdfDocument();
-                pdf.Info.Title = "My First PDF";
-                PdfPage page = pdf.AddPage();
-                page.Size = PageSize.A4;
-                pageWidth = page.Width.Point;
-                pageHeight = page.Height.Point;
-                page.Orientation = PageOrientation.Portrait;
-                XGraphics graph = XGraphics.FromPdfPage(page);
-                XFont fontParagraph = new XFont("Verdana", 12, XFontStyle.Regular);
-                XFont fontTitle = new XFont("Verdana", 20, XFontStyle.Bold);
-                XFont fontHeader = new XFont("Verdana", 12, XFontStyle.Regular);
-                XTextFormatter tf = new XTextFormatter(graph);
-
-                tf.DrawString("Rendez-vous de M. ou Mme "+mesRDVs.ElementAt(0).pClient.pNom, fontTitle, XBrushes.Black, new XRect(margin, currentLine, pageWidth, pageHeight), XStringFormats.TopLeft);
-                currentLine += 30;
-                graph.DrawLine(XPens.Black, new XPoint(margin, currentLine), new XPoint(pageWidth-margin, currentLine));
-                currentLine += lineHeight;
-                tf.DrawString("Liste des Rendez-vous :", fontTitle, XBrushes.Black, new XRect(margin, currentLine, pageWidth, pageHeight), XStringFormats.TopLeft);
-                currentLine += lineHeight+10;
-                foreach (RendezVous rdv in mesRDVs)
+                try
                 {
-                    string infosRdv = string.Format("{0} - M. ou MMe {1} {2}\n", rdv.pDate.ToShortDateString(), rdv.pClient.pPrenom, rdv.pClient.pNom);
-                    infosRdv += string.Format("{0} {1} {2} {3} {4}km", rdv.pVehicule.pMarque,
-                                                                    rdv.pVehicule.pModele, rdv.pVehicule.pImmatriculation,
-                                                                    rdv.pVehicule.pAnnee, rdv.pVehicule.pKilometrage);
-                    tf.DrawString(infosRdv, fontParagraph, XBrushes.Black, new XRect(margin*3, currentLine, pageWidth, pageHeight), XStringFormats.TopLeft);
-                    currentLine += lineHeight+10;
-                    string trvx = "Liste des travaux effectués :\n\n";
-                    tf.DrawString(trvx, fontParagraph, XBrushes.Black, new XRect(margin*3, currentLine, pageWidth, pageHeight), XStringFormats.TopLeft);
+                    int margin = 10;
+                    int lineHeight = 20;
+                    double pageWidth;
+                    double pageHeight;
+                    int currentLine = 10;
+
+                    PdfDocument pdf = new PdfDocument();
+                    pdf.Info.Title = "My First PDF";
+                    PdfPage page = pdf.AddPage();
+                    page.Size = PageSize.A4;
+                    pageWidth = page.Width.Point;
+                    pageHeight = page.Height.Point;
+                    page.Orientation = PageOrientation.Portrait;
+                    XGraphics graph = XGraphics.FromPdfPage(page);
+                    XFont fontParagraph = new XFont("Verdana", 12, XFontStyle.Regular);
+                    XFont fontTitle = new XFont("Verdana", 16, XFontStyle.Bold);
+                    XFont fontHeader = new XFont("Verdana", 12, XFontStyle.Regular);
+                    XTextFormatter tf = new XTextFormatter(graph);
+
+                    tf.DrawString("Rendez-vous de " + mesRDVs.ElementAt(0).pClient, fontTitle, XBrushes.DarkRed, new XRect(margin, currentLine, pageWidth, pageHeight), XStringFormats.TopLeft);
+                    currentLine += 40;
+                    graph.DrawLine(XPens.Black, new XPoint(margin, currentLine), new XPoint(pageWidth - margin, currentLine));
                     currentLine += lineHeight;
-                    foreach (ReparationRDV rep in rdv.pTravaux)
+                    tf.DrawString("Liste des Rendez-vous :", fontTitle, XBrushes.DarkRed, new XRect(margin, currentLine, pageWidth, pageHeight), XStringFormats.TopLeft);
+                    currentLine += lineHeight + 10;
+                    foreach (RendezVous rdv in mesRDVs)
                     {
+                        string infosRdv = string.Format("{0} - {1} {2} {3} {4} {5}km", rdv.pDate.ToShortDateString(), rdv.pVehicule.pMarque,
+                                                                        rdv.pVehicule.pModele, rdv.pVehicule.pImmatriculation,
+                                                                        rdv.pVehicule.pAnnee, rdv.pVehicule.pKilometrage);
+                        tf.DrawString(infosRdv, fontParagraph, XBrushes.Black, new XRect(margin * 8, currentLine, pageWidth, pageHeight), XStringFormats.TopLeft);
+                        currentLine += lineHeight + 10;
+                        string trvx = "Liste des travaux effectués :\n";
+                        tf.DrawString(trvx, fontParagraph, XBrushes.Black, new XRect(margin * 8, currentLine, pageWidth - margin * 20, pageHeight), XStringFormats.TopLeft);
+                        currentLine += lineHeight;
+                        foreach (ReparationRDV rep in rdv.pTravaux)
+                        {
+                            if (currentLine > 750)
+                            {
+                                page = pdf.AddPage();
+                                graph = XGraphics.FromPdfPage(page);
+                                tf = new XTextFormatter(graph);
+                                currentLine = margin;
+                            }
+                            string chaine = "Travaux effectués:\n\n\t- {0} {1}\n\t-qté:{2}\n\t-prix: {3}€";
+                            if (rep.pComments != null && rep.pComments.Trim().Length > 0)
+                            {
+                                chaine = "Travaux effectués:\n\n\t- {0}\n\t-qté:{1}\n\t-prix: {2}€\n\t-remarques :\n{3}";
+                            }
+                            chaine = string.Format(chaine, rep.pReparation, rep.pQuantite, rep.pPrixU, rep.pComments.Replace("\n", "\n\t"));
+                            chaine.Replace("\t", "          ");
+                            int nbReturns = rep.pComments.Split('\n').Length;
+                            tf.DrawString(chaine, fontParagraph, XBrushes.Black, new XRect(margin * 10, currentLine, pageWidth - margin * 10, pageHeight), XStringFormats.TopLeft);
+                            currentLine += lineHeight * (5 + nbReturns);
+
+                        }
+
+                        graph.DrawLine(XPens.Black, new XPoint(margin * 6, currentLine), new XPoint(pageWidth - margin * 6, currentLine));
+                        currentLine += lineHeight;
                         if (currentLine > 750)
                         {
                             page = pdf.AddPage();
@@ -248,34 +293,21 @@ namespace Agenda.Consultation
                             tf = new XTextFormatter(graph);
                             currentLine = margin;
                         }
-                        string chaine = "Travaux effectués:\n\t- {0} {1}\n\t-qté:{2}\n\t-prix: {3}€";
-                        if (rep.pComments != null && rep.pComments.Trim().Length > 0)
-                        {
-                            chaine = "Travaux effectués:\n\t- {0}\n\t-qté:{1}\n\t-prix: {2}€\n\t-remarques : {3}";
-                        }
-                        chaine = string.Format(chaine, rep.pReparation, rep.pQuantite, rep.pPrixU, rep.pComments.Replace("\n", "\n\t"));
-                        int nbReturns = rep.pComments.Split('\n').Length;
-                        tf.DrawString(chaine, fontParagraph, XBrushes.Black, new XRect(margin * 4, currentLine, pageWidth, pageHeight), XStringFormats.TopLeft);
-                        currentLine += lineHeight*(3+nbReturns);
-                        
-                    }
 
-                    graph.DrawLine(XPens.Black, new XPoint(margin*6, currentLine), new XPoint(pageWidth - margin*6, currentLine));
-                    currentLine += lineHeight;
-                    if (currentLine > 750)
-                    {
-                        page = pdf.AddPage();
-                        graph = XGraphics.FromPdfPage(page);
-                        tf = new XTextFormatter(graph);
-                        currentLine = margin;
                     }
-
+                    pdfFilename = string.Format("RDV_{0}_{1}_{2}_{3}.pdf", mesRDVs.ElementAt(0).pClient.pNom, DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year).Replace('/', '_').Replace('\\', '_');
+                    pdf.Save(pdfFilename);
+                    Process.Start(pdfFilename);
+                    pdf.Dispose();
                 }
-
-
-                string pdfFilename = string.Format("RDV_{0}_{1}_{2}_{3}.pdf", mesRDVs.ElementAt(0).pClient.pNom, DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year);
-                pdf.Save(pdfFilename);
-                Process.Start(pdfFilename);
+                catch (Exception e)
+                {
+                    MessageBox.Show(this, "Une erreur est survenue lors de la création du fichier.\n" + e.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.None);
+                }
+            }
+            else
+            {
+                MessageBox.Show(this, "Aucun rendez-vous n'est sélectionné.", "Information", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.None);
             }
         }
     }

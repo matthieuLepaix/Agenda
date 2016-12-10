@@ -64,14 +64,8 @@ namespace Agenda.Gestion
         {
             mOwner.IsEnabled = true;
             mOwner.Opacity = 1;
-            //if (mOwner is MainWindow)
-            //{
-            //    mOwner.WindowState = System.Windows.WindowState.Maximized;
-            //}
-            //else
-            //{
             mOwner.WindowState = System.Windows.WindowState.Normal;
-            //}
+            mOwner.Child = null;
         }
 
 

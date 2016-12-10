@@ -6,6 +6,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 using AgendaCore;
 using System.Windows;
 using System.Runtime.InteropServices;
+using Agenda.Config;
 
 namespace Agenda.Factures
 {
@@ -75,8 +76,7 @@ namespace Agenda.Factures
                 var excelApp = new Excel.Application();
                 // Make the object visible.
                 excelApp.Visible = !imprimer;
-
-                Excel._Workbook wb = excelApp.Workbooks.Open("C:\\modele_facture.xlsx");
+                Excel._Workbook wb = excelApp.Workbooks.Open(string.Format("{0}\\{1}", Configuration.ApplicationPath, Configuration.ModeleFactureFileName));
 
                 // This example uses a single workSheet. The explicit type casting is
                 // removed in a later procedure.

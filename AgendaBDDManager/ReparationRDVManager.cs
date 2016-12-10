@@ -14,6 +14,8 @@ namespace AgendaBDDManager
         private static string maxID_request = "SELECT MAX(id) FROM rdv_reparation";
 
         public static string insertReparationRDV = @"INSERT INTO rdv_reparation(id,rdv,reparation, reference,quantite,prixu, remise,comments) VALUES({0},{1},{2},'{3}',{4}, {5},{6},'{7}');";
+        
+        public static string insertReparationRDV_SANSID = @"INSERT INTO rdv_reparation(rdv,reparation, reference,quantite,prixu, remise,comments) VALUES({0},{1},'{2}',{3},{4},{5},'{6}');";
 
         #endregion
 
@@ -155,7 +157,7 @@ namespace AgendaBDDManager
 
         internal static void SaveReparation(System.IO.StreamWriter sw, ReparationRDV rep)
         {
-            sw.WriteLine(insertReparationRDV, rep.pId, rep.pRdv.pId, rep.pReparation.pId, rep.pReference, rep.pQuantite, rep.pPrixU, rep.pRemise, rep.pComments);
+            sw.WriteLine(insertReparationRDV_SANSID, rep.pRdv.pId, rep.pReparation.pId, rep.pReference, rep.pQuantite, rep.pPrixU, rep.pRemise, rep.pComments);
         }
     }
 }

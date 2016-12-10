@@ -39,4 +39,3 @@ C:\Agenda\bin\Debug\AgendaCore.dll
 C:\Agenda\bin\Debug\AgendaCore.pdb
 C:\Agenda\AgendaCore\obj\Debug\AgendaCore.dll
 C:\Agenda\AgendaCore\obj\Debug\AgendaCore.pdb
-C:\Agenda\AgendaCore\obj\Debug\AgendaCore.csprojResolveAssemblyReference.cache
