@@ -187,7 +187,14 @@ namespace Agenda.Gestion
                     Client c = null;
                     if ((c = mRdv.pClient) != null)
                     {
-                        (Child = new GestionVehicule(this, c, true)).Show();
+                        if (mRdv.pClient.pVehicules.Count() > 1)
+                        {
+                            (Child = new GestionVehicule(this, c, true)).Show();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Inutile, le client ne possède qu'une voiture.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
                     }
                 }
                 

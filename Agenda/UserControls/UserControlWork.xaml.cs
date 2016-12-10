@@ -48,7 +48,7 @@ namespace Agenda.UserControls
             mRep = rep;
             Work.SelectedItem = rep.pReparation;
             qte.Text = rep.pQuantite.ToString();
-            prix.Text = rep.pPrixU.ToString();
+            prix.Text = rep.pPrixU.ToString("n2");
             Comment.Text = rep.pComments;
         }
 
@@ -69,8 +69,26 @@ namespace Agenda.UserControls
             Reparation r = Work.SelectedItem == null ? null : (Work.SelectedItem as Reparation);
             if(r != null) 
             {
-                rep = new ReparationRDV(mRdv, r, "",qte.Text.Trim().Length > 0 ? int.Parse(qte.Text.Trim()) : 0,
-                    prix.Text.Trim().Length > 0 ? float.Parse(prix.Text.Trim()) : 0, 0, Comment.Text.Trim());
+                int qteTemp;
+                float prixTemp;
+                if (!int.TryParse(qte.Text, out qteTemp))
+                {
+                    MessageBox.Show("La quantité est incorrecte.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    if (!float.TryParse(prix.Text, out prixTemp))
+                    {
+                        MessageBox.Show("Le prix est incorrect.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    else
+                    {
+                        rep = new ReparationRDV(mRdv, r, "", qteTemp, prixTemp, 0, Comment.Text.Trim());
+                    }
+                }
+
+
+                
             }
             return rep;
         }

@@ -170,12 +170,11 @@ namespace AgendaCore
             }
         }
 
-
         public void RemoveAllWorks()
         {
             if (mTravaux != null)
             {
-                mTravaux.RemoveAll(x => x==x);
+                mTravaux.RemoveAll(x => true);
             }
         }
 

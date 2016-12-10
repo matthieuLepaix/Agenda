@@ -82,7 +82,7 @@ namespace Agenda.Factures
                 // removed in a later procedure.
                 Excel._Worksheet workSheet = (Excel.Worksheet)excelApp.ActiveSheet;
 
-                workSheet.Cells[RowsIndex.NFacture, ColumnsIndex.NFacture] = 9876543210;
+                workSheet.Cells[RowsIndex.NFacture, ColumnsIndex.NFacture] = facture.pId;
 
                 workSheet.Cells[RowsIndex.NomPrenom, ColumnsIndex.NomPrenom] = facture.pRdv.pClient == null ? string.Empty : facture.pRdv.pClient.ToString();
                 workSheet.Cells[RowsIndex.Adresse, ColumnsIndex.Adresse] = string.IsNullOrEmpty(facture.pRdv.pClient == null ? string.Empty : facture.pRdv.pClient.pAdresse) ? string.Empty : facture.pRdv.pClient.pAdresse.ToUpperInvariant();

@@ -400,6 +400,10 @@ namespace Agenda
         {
             mFactureRDV = rdv;
             nbWorks = 0;
+            if (myWorks != null)
+            {
+                myWorks.RemoveAll(x => true);
+            }
             initTypeReglement();
             if (st_LastWork != null)
             {
@@ -437,11 +441,24 @@ namespace Agenda
                     var tb = this.FindName(string.Format("Facture_MO{0}", i + 1));
                     if (tb is TextBox)
                     {
-                        (tb as TextBox).Text = mFacture.pMainOeuvres[i].ToString();
+                        (tb as TextBox).Text = mFacture.pMainOeuvres[i].ToString("n2");
                     }
                 }
 
                 Facture_TypeReglement.SelectedIndex = (int)mFacture.pReglement;
+            }
+            else
+            {
+                for (int i = 0; i < 5; ++i)
+                {
+                    var tb = this.FindName(string.Format("Facture_MO{0}", i + 1));
+                    if (tb is TextBox)
+                    {
+                        (tb as TextBox).Text = 0.ToString("n2");
+                    }
+                }
+                Facture_TypeReglement.SelectedIndex = 0;
+
             }
 
             Facture.Visibility = System.Windows.Visibility.Visible;
@@ -689,23 +706,58 @@ namespace Agenda
             List<float> MOs = new List<float>();
             if (!string.IsNullOrEmpty(Facture_MO1.Text))
             {
-                MOs.Add(float.Parse(Facture_MO1.Text));
+                try
+                {
+                    MOs.Add(float.Parse(Facture_MO1.Text));
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Attention, Le forfait MO 1 est incorrect.", "Attention", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
             }
             if (!string.IsNullOrEmpty(Facture_MO2.Text))
             {
-                MOs.Add(float.Parse(Facture_MO2.Text));
+                try
+                {
+                    MOs.Add(float.Parse(Facture_MO2.Text));
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Attention, Le forfait MO 2 est incorrect.", "Attention", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
             }
             if (!string.IsNullOrEmpty(Facture_MO3.Text))
             {
-                MOs.Add(float.Parse(Facture_MO3.Text));
+                try
+                {
+                    MOs.Add(float.Parse(Facture_MO3.Text));
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Attention, Le forfait MO 3 est incorrect.", "Attention", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
             }
             if (!string.IsNullOrEmpty(Facture_MO4.Text))
             {
-                MOs.Add(float.Parse(Facture_MO4.Text));
+                try
+                {
+                    MOs.Add(float.Parse(Facture_MO4.Text));
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Attention, Le forfait MO 4 est incorrect.", "Attention", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
             }
             if (!string.IsNullOrEmpty(Facture_MO5.Text))
             {
-                MOs.Add(float.Parse(Facture_MO5.Text));
+                try
+                {
+                    MOs.Add(float.Parse(Facture_MO5.Text));
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Attention, Le forfait MO 5 est incorrect.", "Attention", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
             }
             return MOs;
         }
