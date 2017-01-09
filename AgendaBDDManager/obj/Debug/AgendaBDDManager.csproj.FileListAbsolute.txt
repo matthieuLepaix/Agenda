@@ -37,8 +37,3 @@ C:\Agenda - 2.0\AgendaBDDManager\obj\Debug\AgendaBDDManager.dll
 C:\Agenda - 2.0\AgendaBDDManager\obj\Debug\AgendaBDDManager.pdb
 C:\Agenda - 2.0\bin\Debug\AgendaBDDManager.dll
 C:\Agenda - 2.0\bin\Debug\AgendaBDDManager.pdb
-C:\Agenda\bin\Debug\AgendaBDDManager.dll
-C:\Agenda\bin\Debug\AgendaBDDManager.pdb
-C:\Agenda\AgendaBDDManager\obj\Debug\AgendaBDDManager.csprojResolveAssemblyReference.cache
-C:\Agenda\AgendaBDDManager\obj\Debug\AgendaBDDManager.dll
-C:\Agenda\AgendaBDDManager\obj\Debug\AgendaBDDManager.pdb

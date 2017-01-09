@@ -71,7 +71,7 @@ namespace AgendaBDDManager
             Dictionary<IPAddress, PhysicalAddress> all = GetAllDevicesOnLAN();
             foreach (KeyValuePair<IPAddress, PhysicalAddress> kvp in all)
             {
-                if (kvp.Value != null && kvp.Value.ToString().Equals("F46D040CEE7E"))
+                if (kvp.Value != null && kvp.Value.ToString().Equals("F46D040CEE7E")) //Matt : E894F63FD092, Garage : F46D040CEE7E
                 {
                     chaine = kvp.Key.ToString();
                 }

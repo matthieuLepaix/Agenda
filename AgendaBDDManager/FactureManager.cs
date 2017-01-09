@@ -56,7 +56,7 @@ namespace AgendaBDDManager
                                     odr.IsDBNull(2) ? Facture.Reglement.NA : Facture.getReglementFromString(odr.GetString(2)),
                                     mos,
                                     float.Parse(odr.GetDecimal(8).ToString()),
-                                    RdvManager.getRDVById(int.Parse(odr.GetDecimal(9).ToString()))
+                                    RdvManager.RDVS.First(x => x.pId == Connexion.getIntFromOdr(9, odr))
                                     );
             }
             bdd.CloseConnection();
@@ -83,7 +83,7 @@ namespace AgendaBDDManager
                                     odr.IsDBNull(2) ? Facture.Reglement.NA : Facture.getReglementFromString(odr.GetString(2)),
                                     mos,
                                     float.Parse(odr.GetDecimal(8).ToString()),
-                                    RdvManager.getRDVById(int.Parse(odr.GetDecimal(9).ToString()))
+                                    RdvManager.RDVS.First(x => x.pId == Connexion.getIntFromOdr(9, odr))
                                     );
             }
             bdd.CloseConnection();
@@ -110,7 +110,7 @@ namespace AgendaBDDManager
                                     odr.IsDBNull(2) ? Facture.Reglement.NA : Facture.getReglementFromString(odr.GetString(2)),
                                     mos,
                                     float.Parse(odr.GetDecimal(8).ToString()),
-                                    RdvManager.getRDVById(int.Parse(odr.GetDecimal(9).ToString())))
+                                    RdvManager.RDVS.First(x => x.pId == Connexion.getIntFromOdr(9, odr)))
                                     );
             }
             bdd.CloseConnection();

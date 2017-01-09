@@ -16,6 +16,8 @@ namespace AgendaBDDManager
 
         private static string SELECT_MAXID_RDV = "SELECT MAX(id) FROM rendezvous";
 
+        private static string SELECT_MAXID_REPS = "SELECT MAX(id) FROM rdv_reparation";
+
         private static string INSERTRDV = @"INSERT INTO rendezvous (id,date_rdv,duree,client,vehicule) VALUES ({0},to_date('{1} {2}','DD/MM/RR hh24:mi:ss'),{3},{4},{5})";
 
         private static string INSERTRDV_OLD = @"INSERT INTO rendezvous (id,date_rdv,duree,vehicule) VALUES ({0},to_date('{1} {2}','DD/MM/RR hh24:mi:ss'),{3},{4})";
@@ -67,44 +69,23 @@ namespace AgendaBDDManager
         {
             List<RendezVous> liste = new List<RendezVous>();
 
-            string requete = string.Format(@"SELECT r.id, r.date_rdv, r.duree,
-                                            c.id, c.nom, c.prenom, c.telephone1, c.telephone2, c.email, c.adresse, c.codePostal, c.ville,
-                                            v.id, v.marque, v.modele, v.immatriculation, v.annee, v.kilometrage
-                                            FROM rendezvous r, client c, vehicule v
-                                            WHERE r.vehicule = v.id AND c.id = r.client");
+            string requete = string.Format(@"SELECT r.id, r.date_rdv, r.duree, r.vehicule, r.client
+                                            FROM rendezvous r");
+//                                            WHERE r.DATE_RDV LIKE '%/%/16%'");//, DateTime.Now.Year.ToString().Substring(2,2));
             Connexion bdd = new Connexion();
             bdd.OpenConnection();
             OracleDataReader odr = bdd.ExecuteSelect(requete);
-            int i = 0;
             while (odr.Read())
             {
-                i++;
-                Client c = new Client(Connexion.getIntFromOdr(3,odr),
-                                        Connexion.getStringFromOdr(4, odr),
-                                        Connexion.getStringFromOdr(5, odr),
-                                        Connexion.getStringFromOdr(6, odr),
-                                        Connexion.getStringFromOdr(7, odr),
-                                        Connexion.getStringFromOdr(8, odr),
-                                        Connexion.getStringFromOdr(9, odr),
-                                        Connexion.getStringFromOdr(10, odr),
-                                        Connexion.getStringFromOdr(11, odr));
-                Vehicule v = new Vehicule(Connexion.getIntFromOdr(12, odr),
-                                        Connexion.getStringFromOdr(13, odr),
-                                        Connexion.getStringFromOdr(14, odr),
-                                        Connexion.getStringFromOdr(15, odr),
-                                        Connexion.getStringFromOdr(16, odr),
-                                        int.Parse(Connexion.getStringFromOdr(17, odr)), 
-                                        c);
+                Vehicule v = VehiculeManager.VEHICULES.First(x => x.pId == Connexion.getIntFromOdr(3, odr));
                 RendezVous rdv = new RendezVous(Connexion.getIntFromOdr(0, odr), 
                                             odr.GetDateTime(1), 
                                             (DureeType)Enum.Parse(DureeType.UneHeure.GetType(), Connexion.getIntFromOdr(2, odr).ToString()), 
-                                            v, c);
-                rdv.addReparations(ReparationRDVManager.getReparationRDVByRDV(rdv));
+                                            v,
+                                            v.pClient);
                 liste.Add(rdv);
             }
             bdd.CloseConnection();
-
-            liste.ForEach(rdv => rdv.pClient.AddVehicules(VehiculeManager.GetVehiculesByClient(rdv.pClient)));
             return liste;
         }
 
@@ -352,6 +333,7 @@ namespace AgendaBDDManager
             {
                 rep.pRdv = rdv;
                 ReparationRDVManager.AddReparationRDV(rep);
+                rdv.addReparation(rep);
             }
 
             bdd.CloseConnection();

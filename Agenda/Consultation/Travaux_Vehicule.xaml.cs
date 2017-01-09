@@ -66,7 +66,7 @@ namespace Agenda.Consultation
             string myImmat = rech_immat.Text.Replace('-', ' ');
             myImmat = myImmat.Replace(" ", "");
             myImmat = myImmat.Trim();
-            List<Vehicule> vehicules = VehiculeManager.GetVehiculesByImmatriculation(myImmat);
+            List<Vehicule> vehicules = VehiculeManager.VEHICULES.FindAll(x => x.pImmatriculation == myImmat);
             Les_travaux.Children.Clear();
             if (vehicules != null && vehicules.Count == 0)
             {
@@ -75,7 +75,7 @@ namespace Agenda.Consultation
             else
             {
                 Vehicule vehicule = vehicules.First();
-                mesRDVs = RdvManager.GetTravauxByImmat(vehicule.pImmatriculation);
+                mesRDVs = RdvManager.RDVS.FindAll(r => r.pVehicule.pImmatriculation == vehicule.pImmatriculation);
                 if (mesRDVs.Count == 0)
                 {
                     Les_travaux.Children.Add(getTextBlock("Aucun résultats pour cette immatriculation. (aucun rendez-vous)"));
@@ -94,7 +94,7 @@ namespace Agenda.Consultation
         {
             if (vehicule != null)
             {
-                mesRDVs = RdvManager.GetTravauxByImmat(vehicule.pImmatriculation);
+                mesRDVs = RdvManager.RDVS.FindAll(r => r.pVehicule.pImmatriculation == vehicule.pImmatriculation); ;
                 Les_travaux.Children.Clear();
                 if (mesRDVs.Count == 0)
                 {
@@ -114,7 +114,7 @@ namespace Agenda.Consultation
         {
             if (client != null)
             {
-                mesRDVs = RdvManager.GetTravauxByClient(client.pId);
+                mesRDVs = RdvManager.RDVS.FindAll(r => r.pClient.pId == client.pId);
                 Les_travaux.Children.Clear();
                 if (mesRDVs.Count == 0)
                 {

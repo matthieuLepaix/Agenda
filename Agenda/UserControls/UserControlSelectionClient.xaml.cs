@@ -81,7 +81,7 @@ namespace Agenda.UserControls
         {
             listeClients.Clear();
             listeTriee.Clear();
-            listeClients.AddRange(ClientManager.getAll().OrderBy(c => c.pNom));
+            listeClients.AddRange(ClientManager.CLIENTS.OrderBy(c => c.pNom));
             AddListIntoListeTriee(listeClients);
         }
 

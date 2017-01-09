@@ -98,6 +98,7 @@ namespace AgendaBDDManager
             VehiculeManager.initialize();
             RdvManager.initialize();
             ReparationManager.initialize();
+            ReparationRDVManager.initialize();
         }
 
         /// <summary>

@@ -103,7 +103,7 @@ namespace Agenda
         public void Charger()
         {
             //Migration1to2.doMigration();
-            Connexion.init();
+            //Connexion.init();
             this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             this.DataContext = this;
             try
@@ -214,7 +214,7 @@ namespace Agenda
             DateTime from = day.AddDays(-7);
             DateTime to = day.AddDays(7);
             mListeRDV.Clear();
-            mListeRDV.AddRange(RdvManager.getRDVFromDateToDate(from, to));
+            mListeRDV.AddRange(RdvManager.RDVS.Where(r => r.pDate.CompareTo(from) >= 0 && r.pDate.CompareTo(to) <= 0));
             listeUC.Clear();
             Agenda.Children.Clear();
             InitialiseHours();

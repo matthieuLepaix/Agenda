@@ -5,7 +5,6 @@ using System.Text;
 using AgendaCore;
 using Oracle.DataAccess.Client;
 
-
 namespace AgendaBDDManager
 {
     public class ClientManager
@@ -33,7 +32,7 @@ namespace AgendaBDDManager
 
         public static void initialize()
         {
-            CLIENTS.AddRange(getAll());
+           getAll().ForEach(x=> CLIENTS.Add(x));
         }
 
         public static Client getClientById(int id)
@@ -88,11 +87,6 @@ namespace AgendaBDDManager
                                     Connexion.getStringFromOdr(8,odr)));
             }
             bdd.CloseConnection();
-
-            foreach (Client c in liste)
-            {
-                c.AddVehicules(VehiculeManager.GetVehiculesByClient(c));
-            }
 
             return liste;
         }
@@ -151,7 +145,7 @@ namespace AgendaBDDManager
             bdd.OpenConnection();
             bdd.ExecuteNonQuery(requete);
             bdd.CloseConnection();
-            CLIENTS.Remove(CLIENTS.Find(c => c.pId == client.pId));
+            CLIENTS.Remove(CLIENTS.First(c => c.pId == client.pId));
             CLIENTS.Add(client);
             
         }
@@ -163,7 +157,7 @@ namespace AgendaBDDManager
             bdd.OpenConnection();
             bdd.ExecuteNonQuery(requete);
             bdd.CloseConnection();
-            CLIENTS.Remove(CLIENTS.Find(c => c.pId == client.pId));
+            CLIENTS.Remove(CLIENTS.First(c => c.pId == client.pId));
         }
 
         #endregion

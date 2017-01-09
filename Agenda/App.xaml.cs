@@ -29,21 +29,22 @@ namespace Agenda
             mainView = new Agenda.MainWindow();
             var startup = new Task(() =>
             {
-                Connexion.init();
                 // Simulate application loading
                 for (int i = 5; i < 100; i += 5)
                 {
                     if (i == 60)
                     {
-                        Thread.Sleep(500);
+                        Thread.Sleep(200);
                         Splasher.Splash.Dispatcher.BeginInvoke((Action)(() =>
                             (Splasher.Splash as SplashScreen).MyText.Text = "Chargement du contenu..."));
                     }
                     Splasher.Splash.Dispatcher.BeginInvoke((Action)(() =>
                     (Splasher.Splash as SplashScreen).setProgressValue(i)));
-                    Thread.Sleep(500);
+                    Thread.Sleep(200);
                 }
             });
+
+
 
 
             startup.ContinueWith(t =>
@@ -51,6 +52,9 @@ namespace Agenda
                 mainView.Loaded += (sender, args) => Splasher.Splash.Close();
                 mainView.Show();
             }, TaskScheduler.FromCurrentSynchronizationContext());
+
+            mainView.Charger();
+            Connexion.init();
 
             startup.Start();
 

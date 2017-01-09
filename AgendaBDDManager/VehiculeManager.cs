@@ -70,13 +70,16 @@ namespace AgendaBDDManager
             OracleDataReader odr = bdd.ExecuteSelect(requete);
             while (odr.Read())
             {
-                liste.Add(new Vehicule(Connexion.getIntFromOdr(0,odr), 
+                Client c = ClientManager.CLIENTS.First(x => x.pId == Connexion.getIntFromOdr(6, odr));
+                Vehicule v = new Vehicule(Connexion.getIntFromOdr(0, odr),
                                         Connexion.getStringFromOdr(1, odr),
                                         Connexion.getStringFromOdr(2, odr),
                                         Connexion.getStringFromOdr(3, odr),
                                         Connexion.getStringFromOdr(4, odr),
-                                        int.Parse(Connexion.getStringFromOdr(5, odr)), 
-                                        ClientManager.CLIENTS.Find(c => c.pId == Connexion.getIntFromOdr(6, odr))));
+                                        int.Parse(Connexion.getStringFromOdr(5, odr)),
+                                        c);
+                c.AddVehicule(v);
+                liste.Add(v);
             }
             bdd.CloseConnection();
 
@@ -184,7 +187,7 @@ namespace AgendaBDDManager
             {
                 maxID = int.Parse(odr.GetDecimal(0).ToString());
             }
-            vehicule.pClient = ClientManager.CLIENTS.Find(c => c.pId == idClient);
+            vehicule.pClient = ClientManager.CLIENTS.First(c => c.pId == idClient);
             vehicule.pId = maxID;
             VEHICULES.Add(vehicule);
             vehicule.pClient.AddVehicule(vehicule);
@@ -225,7 +228,7 @@ namespace AgendaBDDManager
             bdd.OpenConnection();
             bdd.ExecuteNonQuery(requete);
             bdd.CloseConnection();
-            VEHICULES.Remove(VEHICULES.Find(v => v.pId == vehicule.pId));
+            VEHICULES.Remove(VEHICULES.First(v => v.pId == vehicule.pId));
             VEHICULES.Add(vehicule);
         }
 
@@ -252,7 +255,7 @@ namespace AgendaBDDManager
             bdd.ExecuteNonQuery(requete);
             bdd.CloseConnection();
             vehicule.pClient = null;
-            VEHICULES.Remove(VEHICULES.Find(v => v.pId == vehicule.pId));
+            VEHICULES.Remove(VEHICULES.First(v => v.pId == vehicule.pId));
             VEHICULES.Add(vehicule);
         }
 
@@ -263,7 +266,7 @@ namespace AgendaBDDManager
             bdd.OpenConnection();
             bdd.ExecuteNonQuery(requete);
             bdd.CloseConnection();
-            VEHICULES.Remove(VEHICULES.Find(v => v.pId == id));
+            VEHICULES.Remove(VEHICULES.First(v => v.pId == id));
         }
 
         #endregion

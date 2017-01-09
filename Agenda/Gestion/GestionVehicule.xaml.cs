@@ -148,7 +148,7 @@ namespace Agenda.Gestion
                 }
                 // Ajouter le véhicule à la base de données
                 List<Vehicule> vehicules = new List<Vehicule>();
-                if ((vehicules = VehiculeManager.VEHICULES.FindAll(v => v.pImmatriculation.Equals(Immat.Text.Trim()))).Count > 0)
+                if ((vehicules = VehiculeManager.VEHICULES.ToList().FindAll(v => v.pImmatriculation.Equals(Immat.Text.Trim()))).Count > 0)
                 {
                     MessageBoxResult result = MessageBox.Show(string.Format(@"L'immatriculation du véhicule existe déjà !
                         Ce véhicule appartient à {0} 

@@ -239,7 +239,15 @@ namespace AgendaCore
         #endregion
 
         #region Operations
+        public override int GetHashCode()
+        {
+            return pId;
+        }
 
+        public override bool Equals(object obj)
+        {
+            return obj is Vehicule && (obj as Vehicule).pId == this.pId;
+        }
         #endregion
     }
 }

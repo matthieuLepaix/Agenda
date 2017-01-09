@@ -11,6 +11,8 @@ namespace AgendaBDDManager
     {
         #region Attributes
 
+        public static List<ReparationRDV> REPARATIONRDVS = new List<ReparationRDV>();
+
         private static string maxID_request = "SELECT MAX(id) FROM rdv_reparation";
 
         public static string insertReparationRDV = @"INSERT INTO rdv_reparation(id,rdv,reparation, reference,quantite,prixu, remise,comments) VALUES({0},{1},{2},'{3}',{4}, {5},{6},'{7}');";
@@ -21,6 +23,11 @@ namespace AgendaBDDManager
 
         #region Methods
 
+        public static void initialize()
+        {
+            REPARATIONRDVS.AddRange(getAll());
+        }
+
         public static List<ReparationRDV> getAll()
         {
             List<ReparationRDV> reps = new List<ReparationRDV>();
@@ -30,14 +37,17 @@ namespace AgendaBDDManager
             OracleDataReader odr = bdd.ExecuteSelect(requete);
             while (odr.Read())
             {
-                reps.Add(new ReparationRDV(Connexion.getIntFromOdr(0, odr),
-                                        RdvManager.getRDVById(Connexion.getIntFromOdr(1, odr)),
-                                        ReparationManager.getReparationById(Connexion.getIntFromOdr(2, odr)),
+                RendezVous rdv = RdvManager.RDVS.First(x => x.pId == Connexion.getIntFromOdr(1, odr));
+                ReparationRDV rep = new ReparationRDV(Connexion.getIntFromOdr(0, odr),
+                                        RdvManager.RDVS.First(x => x.pId == Connexion.getIntFromOdr(1, odr)),
+                                        ReparationManager.REPARATIONS.First(x => x.pId == Connexion.getIntFromOdr(2, odr)),
                                         Connexion.getStringFromOdr(3, odr),
                                         Connexion.getIntFromOdr(4, odr),
                                         Connexion.getIntFromOdr(5, odr),
                                         Connexion.getIntFromOdr(6, odr),
-                                        Connexion.getStringFromOdr(7, odr)));
+                                        Connexion.getStringFromOdr(7, odr));
+                rdv.addReparation(rep);
+                reps.Add(rep);
             }
             bdd.CloseConnection();
             return reps;

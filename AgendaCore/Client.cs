@@ -288,6 +288,10 @@ namespace AgendaCore
         #endregion
 
         #region Operations
+        public override int GetHashCode()
+        {
+            return pId;
+        }
 
         #endregion
     }
