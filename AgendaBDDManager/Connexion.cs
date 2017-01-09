@@ -58,12 +58,14 @@ namespace AgendaBDDManager
 
         public void OpenConnection()
         {
-            Connection.Open();
+            if(Connection.State == System.Data.ConnectionState.Closed)
+                Connection.Open();
         }
 
         public void CloseConnection()
         {
-            Connection.Close();
+            if(Connection.State == System.Data.ConnectionState.Open)
+                Connection.Close();
         }
 
         /// <summary>

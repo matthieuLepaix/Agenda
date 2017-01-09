@@ -95,11 +95,15 @@ namespace Agenda
         #endregion
 
         #region Contructors
-
         public MainWindow()
         {
-            //Migration1to2.doMigration();
             InitializeComponent();
+        }
+
+        public void Charger()
+        {
+            //Migration1to2.doMigration();
+            Connexion.init();
             this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             this.DataContext = this;
             try

@@ -212,17 +212,11 @@ namespace Agenda.Consultation
             generatePDF();
         }
 
-        private void completeBill()
-        {
-
-        }
-
         /// <summary>
         /// Permet de générer le pdf contenant tous les rendez-vous sélectionnés.
         /// </summary>
         private void generatePDF()
         {
-
             if (mesRDVs.Count > 0)
             {
                 try
