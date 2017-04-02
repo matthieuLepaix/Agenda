@@ -124,6 +124,61 @@ namespace Agenda.Factures
 
         }
 
+
+        public static void GenerateExcelDevis(Devis devis, bool imprimer)
+        {
+            if (devis != null)
+            {
+                nbWorks = 0;
+                nbMO = 0;
+                montantHT = 0;
+                TotalHT = 0;
+                var excelApp = new Excel.Application();
+                // Make the object visible.
+                excelApp.Visible = !imprimer;
+                Excel._Workbook wb = excelApp.Workbooks.Open(string.Format("{0}\\{1}", Configuration.ApplicationPath, Configuration.ModeleDevisFileName));
+
+                // This example uses a single workSheet. The explicit type casting is
+                // removed in a later procedure.
+                Excel._Worksheet workSheet = (Excel.Worksheet)excelApp.ActiveSheet;
+
+                workSheet.Cells[RowsIndex.NomPrenom, ColumnsIndex.NomPrenom] = devis.Vehicule.pClient == null ? string.Empty : devis.Vehicule.pClient.ToString();
+                workSheet.Cells[RowsIndex.Adresse, ColumnsIndex.Adresse] = string.IsNullOrEmpty(devis.Vehicule.pClient == null ? string.Empty : devis.Vehicule.pClient.pAdresse) ? string.Empty : devis.Vehicule.pClient.pAdresse.ToUpperInvariant();
+                workSheet.Cells[RowsIndex.CodePostal, ColumnsIndex.CodePostal] = devis.Vehicule.pClient == null ? string.Empty : devis.Vehicule.pClient.pCodePostal;
+                workSheet.Cells[RowsIndex.Ville, ColumnsIndex.Ville] = string.IsNullOrEmpty(devis.Vehicule.pClient.pVille) ? string.Empty : devis.Vehicule.pClient.pVille.ToUpper();
+
+                workSheet.Cells[RowsIndex.Date, ColumnsIndex.Date] = string.Format("{0:00}/{1:00}/{2}", DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year);
+                workSheet.Cells[RowsIndex.Vehicule, ColumnsIndex.Vehicule] = devis.Vehicule == null ? string.Empty : string.Format("{0} {1}", devis.Vehicule.pMarque, devis.Vehicule.pModele);
+                workSheet.Cells[RowsIndex.Annee, ColumnsIndex.Annee] = devis.Vehicule == null ? string.Empty : devis.Vehicule.pAnnee.ToString();
+                workSheet.Cells[RowsIndex.KM, ColumnsIndex.KM] = devis.Vehicule == null ? string.Empty : devis.Vehicule.pKilometrage.ToString();
+                workSheet.Cells[RowsIndex.Immatriculation, ColumnsIndex.Immatriculation] = devis.Vehicule == null ? string.Empty : devis.Vehicule.pImmatriculation.ToString();
+
+                devis.Reparations.ForEach(x => AddWork(workSheet, x));
+                TotalHT = montantHT;
+                devis.Maindoeuvres.ForEach(x => AddMO(workSheet, x));
+                workSheet.Cells[RowsIndex.TypeReglement, ColumnsIndex.TypeReglement] = Facture.getReglementFromEnum(devis.Reglement);
+                
+                if (imprimer)
+                {
+                    workSheet.PrintOut(Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                        Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                    Marshal.FinalReleaseComObject(workSheet);
+                    wb.Close(false, Type.Missing, Type.Missing);
+                    Marshal.FinalReleaseComObject(wb);
+                    excelApp.Quit();
+                    Marshal.FinalReleaseComObject(excelApp);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Création de la facture impossible. La facture n'existe pas.", "Alerte",
+                        MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+
+        }
+
         private static void AddMO(Excel._Worksheet workSheet, float mo)
         {
             workSheet.Cells[RowsIndex.ForfaitMO1 + nbMO++, ColumnsIndex.ForfaitMO] = mo;

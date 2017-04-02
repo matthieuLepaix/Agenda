@@ -25,6 +25,7 @@ namespace AgendaBDDManager
 
         public static void initialize()
         {
+            REPARATIONRDVS.Clear();
             REPARATIONRDVS.AddRange(getAll());
         }
 

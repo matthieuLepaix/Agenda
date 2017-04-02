@@ -8,10 +8,10 @@ namespace Agenda.Config
 {
     public class Configuration
     {
-        public static string ApplicationPath = ".";//Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
+        public static string ApplicationPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
 
         public static string ModeleFactureFileName = "modele_facture.xlsx";
 
-
+        public static string ModeleDevisFileName = "modele_devis.xlsx";
     }
 }

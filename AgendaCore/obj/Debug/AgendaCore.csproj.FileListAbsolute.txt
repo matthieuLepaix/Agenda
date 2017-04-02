@@ -35,3 +35,8 @@ C:\Agenda - 2.0\AgendaCore\obj\Debug\AgendaCore.dll
 C:\Agenda - 2.0\AgendaCore\obj\Debug\AgendaCore.pdb
 C:\Agenda - 2.0\bin\Debug\AgendaCore.dll
 C:\Agenda - 2.0\bin\Debug\AgendaCore.pdb
+C:\Agenda\bin\Debug\AgendaCore.dll
+C:\Agenda\bin\Debug\AgendaCore.pdb
+C:\Agenda\AgendaCore\obj\Debug\AgendaCore.dll
+C:\Agenda\AgendaCore\obj\Debug\AgendaCore.pdb
+C:\Agenda\AgendaCore\obj\Debug\AgendaCore.csprojResolveAssemblyReference.cache

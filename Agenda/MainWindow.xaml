@@ -195,7 +195,77 @@
                 </DockPanel>
             </TabItem>
             <TabItem Header="Devis" HorizontalAlignment="Center" HorizontalContentAlignment="Stretch" UseLayoutRounding="True" Padding="0">
-                <DockPanel Name="Devis" Width="Auto" Height="Auto" Visibility="Collapsed" Background="#E0ECFD">
+                <DockPanel Name="Devis" Width="Auto" Height="Auto" Visibility="Visible" Background="#E0ECFD">
+                    <WrapPanel DockPanel.Dock="Top">
+                        <Button Name="Devis_new" Content="Nouveau devis" FontSize="12" Click="InitDevis" Style="{StaticResource Btn_Options}"/>
+                    </WrapPanel>
+                    <DockPanel DockPanel.Dock="Right" Width="Auto" Height="Auto" Margin="5 5 5 5">
+                        <StackPanel>
+                            <GroupBox Header="Travaux à effectuer" Style="{StaticResource ResourceKey=GroupBoxBasic}" MinHeight="400" MaxHeight="400">
+                                <ScrollViewer Name="Devis_sb_Works" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                              VerticalScrollBarVisibility="Visible" Foreground="Black">
+                                    <StackPanel Name="Devis_AllWorks" DockPanel.Dock="Right" HorizontalAlignment="Center" Margin="5">
+                                        <Button Name="Devis_Btn_AddWork" Cursor="Hand" VerticalAlignment="Center"
+                                Margin="2" Height="30" Click="Add_WorkDevis" Style="{StaticResource ResourceKey=Btn_Add}"/>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </GroupBox>
+                            <GroupBox Header="Forfaits main d'oeuvre" Style="{StaticResource ResourceKey=GroupBoxBasic}" Margin="0 5 0 0" Foreground="Black" FontSize="15">
+                                <StackPanel Orientation="Vertical" Margin="5">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Forfait main d'oeuvre 1 :"/>
+                                        <TextBox Name="Devis_MO1" Width="100" Margin="10 0 0 0" TextAlignment="Right"/>
+                                        <TextBlock Text=" €"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Forfait main d'oeuvre 2 :"/>
+                                        <TextBox Name="Devis_MO2" Width="100" Margin="10 0 0 0" TextAlignment="Right"/>
+                                        <TextBlock Text=" €"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Forfait main d'oeuvre 3 :"/>
+                                        <TextBox Name="Devis_MO3" Width="100" Margin="10 0 0 0" TextAlignment="Right"/>
+                                        <TextBlock Text=" €"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Forfait main d'oeuvre 4 :"/>
+                                        <TextBox Name="Devis_MO4" Width="100" Margin="10 0 0 0" TextAlignment="Right"/>
+                                        <TextBlock Text=" €"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Forfait main d'oeuvre 5 :"/>
+                                        <TextBox Name="Devis_MO5" Width="100" Margin="10 0 0 0" TextAlignment="Right"/>
+                                        <TextBlock Text=" €"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </GroupBox>
+                        </StackPanel>
+                    </DockPanel>
+                    <DockPanel DockPanel.Dock="Left" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Margin="5 5 0 5">
+                        <StackPanel Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <DockPanel Name="Devis_Le_Client" Width="Auto" Height="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                            <StackPanel Orientation="Horizontal" Margin="10">
+                                <TextBlock Text="Type de réglement :" Foreground="Black"/>
+                                <ComboBox Style="{StaticResource ResourceKey=ComboBoxFlatStyle}" Name="Devis_TypeReglement" Width="200" Height="35" 
+                                    VerticalAlignment="Top" Margin="10 0 0 0" IsEditable="False" />
+                            </StackPanel>
+                            <DockPanel>
+                                <WrapPanel DockPanel.Dock="Left" HorizontalAlignment="Stretch" Margin="40 70 0 0">
+                                    <Button Name="Devis_Enregistrer" Style="{StaticResource Btn_Options}" Content="Enregistrer" Click="Devis_Click" Margin="20 0 0 0"/>
+                                    <Button Name="Devis_ToExcel" Style="{StaticResource Btn_Options}" Content="Fichier Excel" Click="Devis_Click" Margin="20 0 0 0"/>
+                                    <Button Name="Devis_Imprimer" Style="{StaticResource Btn_Options}" Content="Imprimer" Click="Devis_Click" Margin="20 0 0 0"/>
+                                </WrapPanel>
+                            </DockPanel>
+                        </StackPanel>
+                    </DockPanel>
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="Activité" HorizontalAlignment="Center" HorizontalContentAlignment="Stretch" UseLayoutRounding="True" Padding="0">
+                <DockPanel Name="Activite" Width="Auto" Height="Auto" Visibility="Collapsed" Background="#E0ECFD">
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="Paramètres" HorizontalAlignment="Center" HorizontalContentAlignment="Stretch" UseLayoutRounding="True" Padding="0">
+                <DockPanel Name="Params" Width="Auto" Height="Auto" Visibility="Collapsed" Background="#E0ECFD">
                 </DockPanel>
             </TabItem>
         </TabControl>

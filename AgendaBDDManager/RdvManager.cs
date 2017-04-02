@@ -37,6 +37,7 @@ namespace AgendaBDDManager
 
         public static void initialize()
         {
+            RDVS.Clear();
             RDVS.AddRange(getAll());
         }
 
@@ -71,18 +72,17 @@ namespace AgendaBDDManager
 
             string requete = string.Format(@"SELECT r.id, r.date_rdv, r.duree, r.vehicule, r.client
                                             FROM rendezvous r");
-//                                            WHERE r.DATE_RDV LIKE '%/%/16%'");//, DateTime.Now.Year.ToString().Substring(2,2));
             Connexion bdd = new Connexion();
             bdd.OpenConnection();
             OracleDataReader odr = bdd.ExecuteSelect(requete);
             while (odr.Read())
             {
-                Vehicule v = VehiculeManager.VEHICULES.First(x => x.pId == Connexion.getIntFromOdr(3, odr));
+                Vehicule v = VehiculeManager.VEHICULES.Find(x => x.pId == Connexion.getIntFromOdr(3, odr));
                 RendezVous rdv = new RendezVous(Connexion.getIntFromOdr(0, odr), 
                                             odr.GetDateTime(1), 
                                             (DureeType)Enum.Parse(DureeType.UneHeure.GetType(), Connexion.getIntFromOdr(2, odr).ToString()), 
                                             v,
-                                            v.pClient);
+                                            v != null ? v.pClient : null);
                 liste.Add(rdv);
             }
             bdd.CloseConnection();
@@ -333,7 +333,6 @@ namespace AgendaBDDManager
             {
                 rep.pRdv = rdv;
                 ReparationRDVManager.AddReparationRDV(rep);
-                rdv.addReparation(rep);
             }
 
             bdd.CloseConnection();
@@ -390,7 +389,9 @@ namespace AgendaBDDManager
                                                     duree = {2}, vehicule = {3}, client = {4} 
                                                 WHERE id = {5}",
                 rdv.pDate.ToShortDateString(), rdv.pDate.ToShortTimeString(), getEntierForDuree(rdv.pDuree), 
-                rdv.pVehicule.pId, rdv.pClient.pId, rdv.pId);
+                rdv.pVehicule != null ? rdv.pVehicule.pId.ToString() : "null", 
+                rdv.pClient != null ?rdv.pClient.pId.ToString() : "null", 
+                rdv.pId);
             bdd.ExecuteNonQuery(requete);
 
             ReparationRDVManager.DeleteReparationRDVByRDV(rdv);
@@ -400,8 +401,6 @@ namespace AgendaBDDManager
             }
 
             bdd.CloseConnection();
-
-            rdv.pClient.AddVehicules(VehiculeManager.GetVehiculesByClient(rdv.pClient));
 
             RDVS.Remove(RDVS.Find(r => r.pId == rdv.pId));
             RDVS.Add(rdv);
@@ -429,7 +428,7 @@ namespace AgendaBDDManager
             {
                 string date = string.Format("{0:00}/{1:00}/{2}", r.pDate.Day, r.pDate.Month, r.pDate.Year);
                 string time = string.Format("{0:00}:{1:00}:00", r.pDate.Hour, r.pDate.Minute);
-                sw.WriteLine(INSERTRDV+";", r.pId, date, time, r.getDuree(), r.pClient.pId, r.pVehicule.pId);
+                sw.WriteLine(INSERTRDV+";", r.pId, date, time, r.getDuree(), r.pClient != null ? r.pClient.pId.ToString() : "null", r.pVehicule.pId);
             }
         }
 
@@ -437,7 +436,7 @@ namespace AgendaBDDManager
         {
             string date = string.Format("{0:00}/{1:00}/{2}", rdv.pDate.Day, rdv.pDate.Month, rdv.pDate.Year);
             string time = string.Format("{0:00}:{1:00}:00", rdv.pDate.Hour, rdv.pDate.Minute);
-            sw.WriteLine(INSERTRDV+";", rdv.pId, date, time,getEntierForDuree(rdv.pDuree), rdv.pClient.pId, rdv.pVehicule.pId);
+            sw.WriteLine(INSERTRDV + ";", rdv.pId, date, time, getEntierForDuree(rdv.pDuree), rdv.pClient != null ? rdv.pClient.pId.ToString() : "null", rdv.pVehicule.pId);
         }
     }
 }

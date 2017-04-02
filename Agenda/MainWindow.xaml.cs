@@ -29,6 +29,8 @@ namespace Agenda
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region Global
+
         public enum TabOptions
         {
             AGENDA = 0,
@@ -36,7 +38,77 @@ namespace Agenda
             DEVIS = 2
         }
 
-        #region Attributes
+        public Window Child = null;
+
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+
+        public void Charger()
+        {
+            //Migration1to2.doMigration();
+            //Connexion.init();
+            this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+            this.DataContext = this;
+            try
+            {
+                InitializeTitle();
+                InitializeDays();
+                CalendarToChoice.SelectedDate = day;
+                this.Activated += new EventHandler(MainWindow_Activated);
+                InitDevis(null, null);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(this, "Une erreur est survenue lors du démarrage.\n" + e.Message, "Fatal error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.None);
+                Application.Current.Shutdown();
+            }
+        }
+
+        void MainWindow_Activated(object sender, EventArgs e)
+        {
+            if (Child != null)
+            {
+                Child.Activate();
+            }
+        }
+
+        private void InitializeTitle()
+        {
+            int nbRDV = RdvManager.CountRdvDay(DateTime.Now);
+            WindowTitle.Text = String.Format("Agenda - {0} - {1} Rendez-vous", DateTime.Now.ToShortDateString(), nbRDV);
+            Btn_ClosePrincipale.MouseDown += new MouseButtonEventHandler(Btn_ClosePrincipale_MouseDown);
+            Btn_MinimizePrincipale.MouseDown += new MouseButtonEventHandler(Btn_MinimizePrincipale_MouseDown);
+            myWindowHeadBar.MouseLeftButtonDown += new MouseButtonEventHandler(myWindowHeadBar_MouseLeftButtonDown);
+        }
+
+        public void selectTabIndex(TabOptions index)
+        {
+            Tabs.SelectedIndex = (int)index;
+        }
+
+        #region WindowEvent
+        void myWindowHeadBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
+
+        void Btn_MinimizePrincipale_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Principale.WindowState = System.Windows.WindowState.Minimized;
+        }
+
+        void Btn_ClosePrincipale_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Agenda
 
         private string[] horaires = new string[] { "8h", "9h", "10h", "11h", "12h", "13h", "14h", "15h", "16h", "17h", "18h" };
 
@@ -71,76 +143,6 @@ namespace Agenda
         private List<UserControlRDV> listeUC = new List<UserControlRDV>();
 
         private RendezVous selectedRDV = null;
-
-        public Window Child = null;
-
-
-        #region Facture
-
-        private UserControlInfosClient mUCFactureClient;
-
-        private int nbWorks = 0;
-
-        private List<UserControlWork> myWorks = new List<UserControlWork>();
-
-        // useful to get the parent of the btn add work
-        private StackPanel st_LastWork;
-
-        private RendezVous mFactureRDV;
-
-        private static Facture mFacture;
-
-        #endregion
-
-        #endregion
-
-        #region Contructors
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
-
-        public void Charger()
-        {
-            //Migration1to2.doMigration();
-            //Connexion.init();
-            this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
-            this.DataContext = this;
-            try
-            {
-                InitializeTitle();
-                InitializeDays();
-                CalendarToChoice.SelectedDate = day;
-                this.Activated += new EventHandler(MainWindow_Activated);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(this, "Une erreur est survenue lors du démarrage.\n" + e.Message, "Fatal error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.None);
-                Application.Current.Shutdown();
-            }
-        }
-
-        void MainWindow_Activated(object sender, EventArgs e)
-        {
-            if (Child != null)
-            {
-                Child.Activate();
-            }
-        }
-
-        private void InitializeTitle()
-        {
-            int nbRDV = RdvManager.CountRdvDay(DateTime.Now);
-            WindowTitle.Text = String.Format("Agenda - {0} - {1} Rendez-vous", DateTime.Now.ToShortDateString(), nbRDV);
-            Btn_ClosePrincipale.MouseDown += new MouseButtonEventHandler(Btn_ClosePrincipale_MouseDown);
-            Btn_MinimizePrincipale.MouseDown += new MouseButtonEventHandler(Btn_MinimizePrincipale_MouseDown);
-            myWindowHeadBar.MouseLeftButtonDown += new MouseButtonEventHandler(myWindowHeadBar_MouseLeftButtonDown);
-        }
-
-
-        #endregion
-
-        #region Operations
 
         /// <summary>
         /// Permet d'ajouter un rdv sur l'agenda
@@ -324,38 +326,6 @@ namespace Agenda
             }
         }
 
-
-        /// <summary>
-        /// Lorsqu'une case est double cliqué, on peut ajouter un rdv à la date et l'heure où se situe le clique
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void st_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            ResetRendezVousStateOnAgenda();
-
-            if (e.ClickCount == 2)
-            {
-                if (sender is StackPanel)
-                {
-                    if (!UserControlRDV.IsMouseDownOnRdv)
-                    {
-                        StackPanel st = sender as StackPanel;
-
-                        int hour = int.Parse(st.Name.Split('_')[0].Substring(3)) + 7;
-                        int col = int.Parse(st.Name.Split('_')[1].Substring(3));
-                        DateTime date = dateStart.AddDays(col - 1);
-                        date = date.AddHours(hour);
-
-                        RendezVous rdv = new RendezVous(date, DureeType.UneHeure, null, null);
-
-                        (Child = new GestionRDV(this, rdv)).Show();
-                    }
-                }
-            }
-        }
-
-
         private DateTime GetCalendarToDatetime(DateTime day)
         {
             day = day.AddDays(getIndexOfDaysOfWeeks(calendrier.GetDayOfWeek(day).ToString()) * -1);
@@ -400,6 +370,411 @@ namespace Agenda
             return days.Keys.ToList().IndexOf(day);
         }
 
+        private void Raffraichir()
+        {
+            InitializeTitle();
+            RefreshAgenda();
+        }
+
+        /// <summary>
+        /// Permet de raffraîchir l'agenda lorsqu'on se trouve sur une autre fenêtre
+        /// </summary>
+        public void RefreshAgenda()
+        {
+            CalendarToChoice_SelectedDatesChanged(null, null);
+        }
+
+        /// <summary>
+        /// Cette méthode permet de réinitialisé l'état (cliqué/non cliqué) d'un rdv sur l'agenda
+        /// </summary>
+        private void ResetRendezVousStateOnAgenda()
+        {
+            foreach (UserControlRDV u in listeUC)
+            {
+                u.initializeStyle();
+            }
+            ResetDetailsRendezVous();
+        }
+
+        /// <summary>
+        /// Permet de remettre à zéro les détails d'un rendez vous
+        /// </summary>
+        private void ResetDetailsRendezVous()
+        {
+            Details_Client.Text = string.Empty;
+            Details_Vehicule.Text = string.Empty;
+            Details_Jour.Text = string.Empty;
+            Details_Heure.Text = string.Empty;
+            Details_Travaux.Text = string.Empty;
+            RDVselected.Visibility = System.Windows.Visibility.Collapsed;
+            noRDVselected.Visibility = System.Windows.Visibility.Visible;
+            Btn_FactureRDV.Visibility = System.Windows.Visibility.Visible;
+            Btn_FactureRDV.Visibility = System.Windows.Visibility.Collapsed;
+            Btn_DeleteRDV.Visibility = System.Windows.Visibility.Collapsed;
+        }
+
+
+        /// <summary>
+        /// Permet d'afficher les informations d'un rendez-vous lorsqu'on clique dessus
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void border_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is UserControlRDV)
+            {
+                ResetRendezVousStateOnAgenda();
+                noRDVselected.Visibility = System.Windows.Visibility.Collapsed;
+                RDVselected.Visibility = System.Windows.Visibility.Visible;
+                Btn_FactureRDV.Visibility = System.Windows.Visibility.Visible;
+                Btn_FactureRDV.Visibility = System.Windows.Visibility.Visible;
+                Btn_DeleteRDV.Visibility = System.Windows.Visibility.Visible;
+                UserControlRDV uc = sender as UserControlRDV;
+                uc.RdvBorder.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#002860"));
+                selectedRDV = uc.Rdv;
+                foreach (object t in uc.RDVText.Children)
+                {
+                    if (t is TextBlock)
+                    {
+                        (t as TextBlock).Foreground = Brushes.WhiteSmoke;
+                    }
+                }
+                Details_Client.Text = uc.Rdv.pVehicule.pClient != null ? string.Format("M. ou Mme {0}", uc.Rdv.pVehicule.pClient.pNom) : "Le véhicule n'appartient plus à ce propriétaire"; //uc.Rdv.pVehicule.pClient.ToString();
+                Details_Vehicule.Text = uc.Rdv.pVehicule.ToString();
+                Details_Jour.Text = string.Format("{0} {1} {2} {3}", days[calendrier.GetDayOfWeek(uc.Rdv.pDate).ToString()], uc.Rdv.pDate.Day,
+                                                                        months[uc.Rdv.pDate.Month], uc.Rdv.pDate.Year);
+                Details_Heure.Text = uc.Rdv.pDate.ToLongTimeString();
+                if (uc.Rdv.pTravaux.Count() > 0)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    uc.Rdv.pTravaux.ToList().ForEach(x => sb.Append("- ").AppendLine(x.pReparation.pNom));
+                    Details_Travaux.Text = sb.ToString();
+                }
+                UserControlRDV.IsMouseDownOnRdv = false;
+            }
+        }
+
+        /// <summary>
+        /// Lorsque la date est changée
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void CalendarToChoice_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
+        {
+            day = new DateTime(CalendarToChoice.SelectedDate != null ? CalendarToChoice.SelectedDate.Value.Ticks : day.Ticks);
+            ResetDetailsRendezVous();
+            InitializeAgenda();
+        }
+
+
+
+        /// <summary>
+        /// Lorsqu'on clique sur un bouton dans l'onglet Agenda
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button)
+            {
+                Button bp = sender as Button;
+                if (bp.Name == "AjoutRDV")
+                {
+                    (Child = new GestionRDV(this)).Show();
+                }
+                else if (bp.Name == "LesClients")
+                {
+                    (Child = new GestionClient(this)).Show();
+                }
+                else if (bp.Name == "Save")
+                {
+                    System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
+                    if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+                        string path = fbd.SelectedPath;
+                        Thread thSaver = new Thread(new ParameterizedThreadStart(Connexion.Sauvegarde));
+                        thSaver.Start(path);
+                    }
+                }
+                else if (bp.Name == "Works")
+                {
+                    (Child = new Travaux_Vehicule(this)).Show();
+                }
+                else if (bp.Name == "Refresh")
+                {
+                    Raffraichir();
+                }
+            }
+        }
+
+
+
+        void Btn_DeleteRDV_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (selectedRDV != null)
+            {
+                MessageBoxResult result = MessageBox.Show("Êtes-vous sûr de supprimer ce rendez-vous ?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (result.Equals(MessageBoxResult.Yes))
+                {
+                    FactureManager.DeleteFactureByRDV(selectedRDV);
+                    ReparationRDVManager.DeleteReparationRDVByRDV(selectedRDV);
+                    RdvManager.DeleteRdv(selectedRDV.pId);
+                    RefreshAgenda();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Lorsqu'une case est double cliqué, on peut ajouter un rdv à la date et l'heure où se situe le clique
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void st_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            ResetRendezVousStateOnAgenda();
+
+            if (e.ClickCount == 2)
+            {
+                if (sender is StackPanel)
+                {
+                    if (!UserControlRDV.IsMouseDownOnRdv)
+                    {
+                        StackPanel st = sender as StackPanel;
+
+                        int hour = int.Parse(st.Name.Split('_')[0].Substring(3)) + 7;
+                        int col = int.Parse(st.Name.Split('_')[1].Substring(3));
+                        DateTime date = dateStart.AddDays(col - 1);
+                        date = date.AddHours(hour);
+
+                        RendezVous rdv = new RendezVous(date, DureeType.UneHeure, null, null);
+
+                        (Child = new GestionRDV(this, rdv)).Show();
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region Devis
+
+        private UserControlSelectionClient mUCDevisClient;
+
+        private int nbWorksDevis = 0;
+
+        private List<UserControlWork> myWorksDevis = new List<UserControlWork>();
+
+        // useful to get the parent of the btn add work
+        private StackPanel st_LastWorkDevis;
+
+        public void InitDevis(object sender, RoutedEventArgs e)
+        {
+            nbWorksDevis = 0;
+            if (myWorksDevis != null)
+            {
+                myWorksDevis.RemoveAll(x => true);
+            }
+            initTypeReglementDevis();
+            if (st_LastWorkDevis != null)
+            {
+                st_LastWorkDevis.Children.Remove(Devis_Btn_AddWork);
+            }
+            st_LastWorkDevis = Devis_AllWorks;
+            st_LastWorkDevis.Children.Clear();
+
+
+            mUCDevisClient = new UserControlSelectionClient();
+            Devis_Le_Client.Children.Clear();
+            Devis_Le_Client.Children.Add(mUCDevisClient);
+
+            Add_WorkDevis(null, null);
+
+            for (int i = 0; i < 5; ++i)
+            {
+                var tb = this.FindName(string.Format("Devis_MO{0}", i + 1));
+                if (tb is TextBox)
+                {
+                    (tb as TextBox).Text = 0.ToString("n2");
+                }
+            }
+            Devis_TypeReglement.SelectedIndex = 0;
+
+            Devis.Visibility = System.Windows.Visibility.Visible;
+        }
+
+        private void initTypeReglementDevis()
+        {
+            Devis_TypeReglement.Items.Clear();
+            Devis_TypeReglement.Items.Add(AgendaCore.Facture.getReglementFromEnum(AgendaCore.Facture.Reglement.CB));
+            Devis_TypeReglement.Items.Add(AgendaCore.Facture.getReglementFromEnum(AgendaCore.Facture.Reglement.Cheque));
+            Devis_TypeReglement.Items.Add(AgendaCore.Facture.getReglementFromEnum(AgendaCore.Facture.Reglement.Especes));
+        }
+
+        private void Add_WorkDevis(object sender, RoutedEventArgs e)
+        {
+            Devis_AllWorks.Children.Add(createWorkDevis());
+        }
+
+        private StackPanel createWorkDevis()
+        {
+            StackPanel st_work = new StackPanel();
+            nbWorksDevis++;
+            st_work.Orientation = Orientation.Horizontal;
+            foreach (UserControlWork uc in myWorksDevis)
+            {
+                uc.setDeleteBtn();
+            }
+            Panel parent = Devis_Btn_AddWork.Parent as Panel;
+            if (parent != null)
+            {
+                parent.Children.Remove(Devis_Btn_AddWork);
+            }
+            UserControlWork work = new UserControlWork(nbWorksDevis);
+            myWorksDevis.Add(work);
+            st_work.Children.Add(work);
+            st_LastWorkDevis.Children.Remove(Devis_Btn_AddWork);
+            st_work.Children.Add(Devis_Btn_AddWork);
+            st_LastWorkDevis = st_work;
+
+            return st_work;
+        }
+
+        private void Devis_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button)
+            {
+                Button bp = sender as Button;
+                if (bp.Name == "Devis_ToExcel")
+                {
+                    if (MessageBox.Show("Etes-vous sûr de vouloir éditer ce devis?", "Information",
+                                MessageBoxButton.YesNoCancel, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    {
+                        EnregistrerDevis(true, false);
+                    }
+                }
+                else if (bp.Name == "Devis_Imprimer")
+                {
+                    if (MessageBox.Show("Etes-vous sûr de vouloir imprimer ce devis?", "Information",
+                                   MessageBoxButton.YesNoCancel, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    {
+                        EnregistrerDevis(true, true);
+                    }
+                }
+                else if (bp.Name == "Devis_Enregistrer")
+                {
+                    if (MessageBox.Show("Etes-vous sûr de vouloir enregistrer ce devis?", "Information",
+                                MessageBoxButton.YesNoCancel, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    {
+                        EnregistrerDevis(false, false);
+                    }
+                }
+            }
+        }
+        
+        private void EnregistrerDevis(bool excel, bool imprimer)
+        {
+            var vehicule = mUCDevisClient.GetVehicule();
+            if (vehicule != null)
+            {
+                var reps = new List<ReparationRDV>();
+                foreach (UserControlWork uc in myWorksDevis)
+                {
+                    var work = uc.getWork();
+                    if (work != null)
+                    {
+                        reps.Add(work);
+                    }
+                }
+                var devis = new Devis(vehicule, reps, GetMainOeuvresDevis(), AgendaCore.Facture.getReglementFromString((string)Devis_TypeReglement.SelectedValue));
+                if (excel)
+                {
+                    ExcelManager.GenerateExcelDevis(devis, imprimer);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Veuillez sélectionner un client et son véhicule", "Error",
+                                            MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+        }
+
+        private List<float> GetMainOeuvresDevis()
+        {
+            List<float> MOs = new List<float>();
+            if (!string.IsNullOrEmpty(Devis_MO1.Text))
+            {
+                try
+                {
+                    MOs.Add(float.Parse(Devis_MO1.Text));
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Attention, Le forfait MO 1 est incorrect.", "Attention", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
+            }
+            if (!string.IsNullOrEmpty(Devis_MO2.Text))
+            {
+                try
+                {
+                    MOs.Add(float.Parse(Devis_MO2.Text));
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Attention, Le forfait MO 2 est incorrect.", "Attention", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
+            }
+            if (!string.IsNullOrEmpty(Devis_MO3.Text))
+            {
+                try
+                {
+                    MOs.Add(float.Parse(Devis_MO3.Text));
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Attention, Le forfait MO 3 est incorrect.", "Attention", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
+            }
+            if (!string.IsNullOrEmpty(Devis_MO4.Text))
+            {
+                try
+                {
+                    MOs.Add(float.Parse(Devis_MO4.Text));
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Attention, Le forfait MO 4 est incorrect.", "Attention", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
+            }
+            if (!string.IsNullOrEmpty(Devis_MO5.Text))
+            {
+                try
+                {
+                    MOs.Add(float.Parse(Devis_MO5.Text));
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Attention, Le forfait MO 5 est incorrect.", "Attention", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
+            }
+            return MOs;
+        }
+        #endregion
+
+        #region Facture
+
+        private UserControlInfosClient mUCFactureClient;
+
+        private int nbWorks = 0;
+
+        private List<UserControlWork> myWorks = new List<UserControlWork>();
+
+        // useful to get the parent of the btn add work
+        private StackPanel st_LastWork;
+
+        private RendezVous mFactureRDV;
+
+        private static Facture mFacture;
+
         public void InitFacture(RendezVous rdv)
         {
             mFactureRDV = rdv;
@@ -408,7 +783,7 @@ namespace Agenda
             {
                 myWorks.RemoveAll(x => true);
             }
-            initTypeReglement();
+            InitTypeReglementFacture();
             if (st_LastWork != null)
             {
                 st_LastWork.Children.Remove(Facture_Btn_AddWork);
@@ -468,7 +843,7 @@ namespace Agenda
             Facture.Visibility = System.Windows.Visibility.Visible;
         }
 
-        private void initTypeReglement()
+        private void InitTypeReglementFacture()
         {
             Facture_TypeReglement.Items.Clear();
             Facture_TypeReglement.Items.Add(AgendaCore.Facture.getReglementFromEnum(AgendaCore.Facture.Reglement.CB));
@@ -478,10 +853,11 @@ namespace Agenda
 
         private void Add_Work(object sender, RoutedEventArgs e)
         {
-            Facture_AllWorks.Children.Add(createWork());
+            Facture_AllWorks.Children.Add(CreateWorkFacture());
         }
 
-        private StackPanel createWork()
+
+        private StackPanel CreateWorkFacture()
         {
             StackPanel st_work = new StackPanel();
             nbWorks++;
@@ -503,110 +879,8 @@ namespace Agenda
             st_LastWork = st_work;
 
             return st_work;
-
         }
 
-
-        public void selectTabIndex(TabOptions index)
-        {
-            Tabs.SelectedIndex = (int)index;
-        }
-
-
-        #endregion
-
-        #region events
-
-        /// <summary>
-        /// Permet d'afficher les informations d'un rendez-vous lorsqu'on clique dessus
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void border_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            if (sender is UserControlRDV)
-            {
-                ResetRendezVousStateOnAgenda();
-                noRDVselected.Visibility = System.Windows.Visibility.Collapsed;
-                RDVselected.Visibility = System.Windows.Visibility.Visible;
-                Btn_FactureRDV.Visibility = System.Windows.Visibility.Visible;
-                Btn_FactureRDV.Visibility = System.Windows.Visibility.Visible;
-                Btn_DeleteRDV.Visibility = System.Windows.Visibility.Visible;
-                UserControlRDV uc = sender as UserControlRDV;
-                uc.RdvBorder.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#002860"));
-                selectedRDV = uc.Rdv;
-                foreach (object t in uc.RDVText.Children)
-                {
-                    if (t is TextBlock)
-                    {
-                        (t as TextBlock).Foreground = Brushes.WhiteSmoke;
-                    }
-                }
-                Details_Client.Text = string.Format("M. ou Mme {0}", uc.Rdv.pVehicule.pClient.pNom); //uc.Rdv.pVehicule.pClient.ToString();
-                Details_Vehicule.Text = uc.Rdv.pVehicule.ToString();
-                Details_Jour.Text = string.Format("{0} {1} {2} {3}", days[calendrier.GetDayOfWeek(uc.Rdv.pDate).ToString()], uc.Rdv.pDate.Day,
-                                                                        months[uc.Rdv.pDate.Month], uc.Rdv.pDate.Year);
-                Details_Heure.Text = uc.Rdv.pDate.ToLongTimeString();
-                if (uc.Rdv.pTravaux.Count() > 0)
-                {
-                    StringBuilder sb = new StringBuilder();
-                    uc.Rdv.pTravaux.ToList().ForEach(x => sb.Append("- ").AppendLine(x.pReparation.pNom));
-                    Details_Travaux.Text = sb.ToString();
-                }
-                UserControlRDV.IsMouseDownOnRdv = false;
-            }
-        }
-
-        /// <summary>
-        /// Lorsque la date est changée
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void CalendarToChoice_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
-        {
-            day = new DateTime(CalendarToChoice.SelectedDate != null ? CalendarToChoice.SelectedDate.Value.Ticks : day.Ticks);
-            ResetDetailsRendezVous();
-            InitializeAgenda();
-        }
-
-        /// <summary>
-        /// Lorsqu'on clique sur un bouton
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button)
-            {
-                Button bp = sender as Button;
-                if (bp.Name == "AjoutRDV")
-                {
-                    (Child = new GestionRDV(this)).Show();
-                }
-                else if (bp.Name == "LesClients")
-                {
-                    (Child = new GestionClient(this)).Show();
-                }
-                else if (bp.Name == "Save")
-                {
-                    System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
-                    if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                    {
-                        string path = fbd.SelectedPath;
-                        Thread thSaver = new Thread(new ParameterizedThreadStart(Connexion.Sauvegarde));
-                        thSaver.Start(path);
-                    }
-                }
-                else if (bp.Name == "Works")
-                {
-                    (Child = new Travaux_Vehicule(this)).Show();
-                }
-                else if (bp.Name == "Refresh")
-                {
-                    Raffraichir();
-                }
-            }
-        }
 
         private void Facture_Click(object sender, RoutedEventArgs e)
         {
@@ -642,26 +916,33 @@ namespace Agenda
 
         private void EnregistrerFacture(bool excel, bool imprimer)
         {
-            CreateOrUpdateFactureRDV();
-
-            mFacture = new AgendaCore.Facture(0, AgendaCore.Facture.getReglementFromString((string)Facture_TypeReglement.SelectedValue), getMainOeuvres(), 0, mFactureRDV);
-            if (excel)
+            if (mFactureRDV.pClient != null)
             {
-                ExcelManager.GenerateExcelFacture(mFacture, imprimer);
-            }
-            Facture factureTemp = FactureManager.GetFactureByRdv(mFactureRDV.pId);
-            if (factureTemp == null)
-            {
-                FactureManager.AddFacture(mFacture);
+                CreateOrUpdateFactureRDV();
+                mFacture = new AgendaCore.Facture(0, AgendaCore.Facture.getReglementFromString((string)Facture_TypeReglement.SelectedValue), GetMainOeuvresFacture(), 0, mFactureRDV);
+                Facture factureTemp = FactureManager.GetFactureByRdv(mFactureRDV.pId);
+                if (factureTemp == null)
+                {
+                    FactureManager.AddFacture(mFacture);
+                }
+                else
+                {
+                    if (MessageBox.Show("La facture existe déjà pour ce rendez-vous. Voulez-vous enregistrer les modifications apportées à celle-ci?", "Information",
+                                            MessageBoxButton.YesNoCancel, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    {
+                        mFacture.pId = factureTemp.pId;
+                        FactureManager.UpdateFacture(mFacture);
+                    }
+                }
+                if (excel)
+                {
+                    ExcelManager.GenerateExcelFacture(mFacture, imprimer);
+                }
             }
             else
             {
-                if (MessageBox.Show("La facture existe déjà pour ce rendez-vous. Voulez-vous enregistrer les modifications apportées à celle-ci?", "Information",
-                                        MessageBoxButton.YesNoCancel, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                {
-                    mFacture.pId = factureTemp.pId;
-                    FactureManager.UpdateFacture(mFacture);
-                }
+                MessageBox.Show("La facture est invalide. Le client n'est plus renseigné pour ce rendez-vous.", "Error",
+                                            MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -705,7 +986,7 @@ namespace Agenda
             }
         }
 
-        private List<float> getMainOeuvres()
+        private List<float> GetMainOeuvresFacture()
         {
             List<float> MOs = new List<float>();
             if (!string.IsNullOrEmpty(Facture_MO1.Text))
@@ -766,43 +1047,6 @@ namespace Agenda
             return MOs;
         }
 
-        private void Raffraichir()
-        {
-            InitializeTitle();
-            RefreshAgenda();
-        }
-
-        /// <summary>
-        /// Cette méthode permet de réinitialisé l'état (cliqué/non cliqué) d'un rdv sur l'agenda
-        /// </summary>
-        private void ResetRendezVousStateOnAgenda()
-        {
-            foreach (UserControlRDV u in listeUC)
-            {
-                u.initializeStyle();
-            }
-            ResetDetailsRendezVous();
-        }
-
-        /// <summary>
-        /// Permet de remettre à zéro les détails d'un rendez vous
-        /// </summary>
-        private void ResetDetailsRendezVous()
-        {
-            Details_Client.Text = string.Empty;
-            Details_Vehicule.Text = string.Empty;
-            Details_Jour.Text = string.Empty;
-            Details_Heure.Text = string.Empty;
-            Details_Travaux.Text = string.Empty;
-            RDVselected.Visibility = System.Windows.Visibility.Collapsed;
-            noRDVselected.Visibility = System.Windows.Visibility.Visible;
-            Btn_FactureRDV.Visibility = System.Windows.Visibility.Visible;
-            Btn_FactureRDV.Visibility = System.Windows.Visibility.Collapsed;
-            Btn_DeleteRDV.Visibility = System.Windows.Visibility.Collapsed;
-        }
-
-
-
         void Btn_FactureRDV_MouseUp(object sender, MouseButtonEventArgs e)
         {
             if (selectedRDV != null)
@@ -811,47 +1055,6 @@ namespace Agenda
                 selectTabIndex(TabOptions.FACTURE);
             }
         }
-
-        void Btn_DeleteRDV_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (selectedRDV != null)
-            {
-                MessageBoxResult result = MessageBox.Show("Êtes-vous sûr de supprimer ce rendez-vous ?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                if (result.Equals(MessageBoxResult.Yes))
-                {
-                    FactureManager.DeleteFactureByRDV(selectedRDV);
-                    ReparationRDVManager.DeleteReparationRDVByRDV(selectedRDV);
-                    RdvManager.DeleteRdv(selectedRDV.pId);
-                    RefreshAgenda();
-                }
-            }
-        }
-
-        void myWindowHeadBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            DragMove();
-        }
-
-        void Btn_MinimizePrincipale_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            Principale.WindowState = System.Windows.WindowState.Minimized;
-        }
-
-        void Btn_ClosePrincipale_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
-
         #endregion
-
-        /// <summary>
-        /// Permet de raffraîchir l'agenda lorsqu'on se trouve sur une autre fenêtre
-        /// </summary>
-        public void RefreshAgenda()
-        {
-            CalendarToChoice_SelectedDatesChanged(null, null);
-        }
-
-
     }
 }

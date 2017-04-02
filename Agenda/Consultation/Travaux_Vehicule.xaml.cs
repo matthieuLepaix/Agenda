@@ -114,7 +114,7 @@ namespace Agenda.Consultation
         {
             if (client != null)
             {
-                mesRDVs = RdvManager.RDVS.FindAll(r => r.pClient.pId == client.pId);
+                mesRDVs = RdvManager.RDVS.FindAll(r => r.pClient != null && r.pClient.pId == client.pId);
                 Les_travaux.Children.Clear();
                 if (mesRDVs.Count == 0)
                 {
@@ -136,7 +136,7 @@ namespace Agenda.Consultation
         /// <param name="rdv">Le rendez-vous à formater</param>
         private void displayRDV(RendezVous rdv)
         {
-            string mTravauxTitle = string.Format("{0} - M. ou MMe {1} {2}",rdv.pDate.ToShortDateString(), rdv.pClient.pPrenom, rdv.pClient.pNom);
+            string mTravauxTitle = string.Format("{0} - M. ou MMe {1} {2}", rdv.pDate.ToShortDateString(), rdv.pClient != null ? rdv.pClient.pPrenom : "", rdv.pClient != null ? rdv.pClient.pNom : "");
             string mTravauxInfos = string.Format("\t{0} {1} {2} {3} {4}km", rdv.pVehicule.pMarque, 
                                                             rdv.pVehicule.pModele, rdv.pVehicule.pImmatriculation, 
                                                             rdv.pVehicule.pAnnee, rdv.pVehicule.pKilometrage);

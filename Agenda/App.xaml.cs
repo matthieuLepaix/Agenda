@@ -53,8 +53,8 @@ namespace Agenda
                 mainView.Show();
             }, TaskScheduler.FromCurrentSynchronizationContext());
 
-            mainView.Charger();
             Connexion.init();
+            mainView.Charger();
 
             startup.Start();
 

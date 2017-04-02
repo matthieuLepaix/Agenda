@@ -32,6 +32,7 @@ namespace AgendaBDDManager
 
         public static void initialize()
         {
+            VEHICULES.Clear();
             VEHICULES.AddRange(getAll());
         }
 
@@ -46,13 +47,13 @@ namespace AgendaBDDManager
             OracleDataReader odr = bdd.ExecuteSelect(requete);
             while (odr.Read())
             {
-                liste.Add(new Vehicule(Connexion.getIntFromOdr(0,odr),
+                liste.Add(new Vehicule(Connexion.getIntFromOdr(0, odr),
                                         Connexion.getStringFromOdr(1, odr),
                                         Connexion.getStringFromOdr(2, odr),
                                         Connexion.getStringFromOdr(3, odr),
                                         "année",
                                         0,
-                                        new Client(Connexion.getIntFromOdr(4,odr),"","","","","","","","")));
+                                        new Client(Connexion.getIntFromOdr(4, odr), "", "", "", "", "", "", "", "")));
             }
             bdd.CloseConnection();
 
@@ -70,7 +71,7 @@ namespace AgendaBDDManager
             OracleDataReader odr = bdd.ExecuteSelect(requete);
             while (odr.Read())
             {
-                Client c = ClientManager.CLIENTS.First(x => x.pId == Connexion.getIntFromOdr(6, odr));
+                Client c = ClientManager.CLIENTS.Find(x => x.pId == Connexion.getIntFromOdr(6, odr));
                 Vehicule v = new Vehicule(Connexion.getIntFromOdr(0, odr),
                                         Connexion.getStringFromOdr(1, odr),
                                         Connexion.getStringFromOdr(2, odr),
@@ -78,7 +79,8 @@ namespace AgendaBDDManager
                                         Connexion.getStringFromOdr(4, odr),
                                         int.Parse(Connexion.getStringFromOdr(5, odr)),
                                         c);
-                c.AddVehicule(v);
+                if (c != null)
+                    c.AddVehicule(v);
                 liste.Add(v);
             }
             bdd.CloseConnection();
@@ -107,35 +109,35 @@ namespace AgendaBDDManager
             OracleDataReader odr = bdd.ExecuteSelect(requete);
             while (odr.Read())
             {
-                int id_client = Connexion.getIntFromOdr(6,odr);
+                int id_client = Connexion.getIntFromOdr(6, odr);
                 liste.Add(new Vehicule(Connexion.getIntFromOdr(0, odr),
                                         Connexion.getStringFromOdr(1, odr),
                                         Connexion.getStringFromOdr(2, odr),
                                         Connexion.getStringFromOdr(3, odr),
                                         Connexion.getStringFromOdr(4, odr),
-                                        int.Parse(Connexion.getStringFromOdr(5, odr)), 
+                                        int.Parse(Connexion.getStringFromOdr(5, odr)),
                                         ClientManager.getClientById(id_client)));
             }
             bdd.CloseConnection();
             return liste;
         }
-        
+
 
         public static List<Vehicule> GetVehiculesByClient(Client c)
         {
             List<Vehicule> liste = new List<Vehicule>();
             string requete = string.Format("SELECT id, marque, modele, immatriculation, annee, kilometrage FROM vehicule WHERE client = {0}", c.pId);
-            Connexion bdd = new Connexion(); 
+            Connexion bdd = new Connexion();
             bdd.OpenConnection();
             OracleDataReader odr = bdd.ExecuteSelect(requete);
             while (odr.Read())
             {
-                liste.Add(new Vehicule(Connexion.getIntFromOdr(0, odr), 
+                liste.Add(new Vehicule(Connexion.getIntFromOdr(0, odr),
                                         Connexion.getStringFromOdr(1, odr),
                                         Connexion.getStringFromOdr(2, odr),
                                         Connexion.getStringFromOdr(3, odr),
                                         Connexion.getStringFromOdr(4, odr),
-                                        int.Parse(Connexion.getStringFromOdr(5, odr)), 
+                                        int.Parse(Connexion.getStringFromOdr(5, odr)),
                                         c));
             }
             bdd.CloseConnection();
@@ -157,7 +159,7 @@ namespace AgendaBDDManager
             if (vehicule.pClient.pId == -1)
             // récupérer l'id du client s'il est null
             {
-                string requeteClient = string.Format("SELECT id FROM client WHERE nom = '{0}' AND telephone1 = '{1}'", 
+                string requeteClient = string.Format("SELECT id FROM client WHERE nom = '{0}' AND telephone1 = '{1}'",
                     bdd.DeleteInjectionSQL(vehicule.pClient.pNom), bdd.DeleteInjectionSQL(vehicule.pClient.pTelephone1));
 
                 odr = bdd.ExecuteSelect(requeteClient);
@@ -166,7 +168,7 @@ namespace AgendaBDDManager
                 if (odr.Read())
                 {
                     idClient = int.Parse(odr.GetDecimal(0).ToString());
-                    
+
                     string requete = string.Format("INSERT INTO vehicule(marque, modele, immatriculation, annee, kilometrage, client) VALUES('{0}','{1}','{2}','{3}','{4}',{5})",
                                                     bdd.DeleteInjectionSQL(vehicule.pMarque), bdd.DeleteInjectionSQL(vehicule.pModele), bdd.DeleteInjectionSQL(vehicule.pImmatriculation), bdd.DeleteInjectionSQL(vehicule.pAnnee), vehicule.pKilometrage, idClient);
                     bdd.ExecuteNonQuery(requete);
@@ -208,7 +210,6 @@ namespace AgendaBDDManager
         {
             Connexion bdd = new Connexion();
 
-
             string requete = string.Format(@"UPDATE vehicule 
                                             SET 
                                                 marque = '{0}', 
@@ -218,12 +219,12 @@ namespace AgendaBDDManager
                                                 kilometrage= '{4}',
                                                 client = {5} 
                                             WHERE id = {6}",
-                                                       bdd.DeleteInjectionSQL(vehicule.pMarque), 
+                                                       bdd.DeleteInjectionSQL(vehicule.pMarque),
                                                        bdd.DeleteInjectionSQL(vehicule.pModele),
                                                        bdd.DeleteInjectionSQL(vehicule.pImmatriculation),
                                                        bdd.DeleteInjectionSQL(vehicule.pAnnee),
                                                        vehicule.pKilometrage,
-                                                       vehicule.pClient.pId,
+                                                       vehicule.pClient != null ? vehicule.pClient.pId.ToString() : "null",
                                                        vehicule.pId.ToString());
             bdd.OpenConnection();
             bdd.ExecuteNonQuery(requete);
@@ -266,6 +267,7 @@ namespace AgendaBDDManager
             bdd.OpenConnection();
             bdd.ExecuteNonQuery(requete);
             bdd.CloseConnection();
+            RdvManager.RDVS.RemoveAll(r => r.pVehicule.pId == id);
             VEHICULES.Remove(VEHICULES.First(v => v.pId == id));
         }
 
@@ -276,14 +278,15 @@ namespace AgendaBDDManager
         {
             foreach (Vehicule v in getAll())
             {
-                sw.WriteLine(insertVehicule, v.pId, v.pMarque, v.pModele, v.pImmatriculation, v.pAnnee, v.pKilometrage, v.pClient.pId);
+                sw.WriteLine(insertVehicule, v.pId, v.pMarque, v.pModele, v.pImmatriculation, v.pAnnee, v.pKilometrage, v.pClient != null ? v.pClient.pId.ToString() : "null");
             }
         }
 
         internal static void saveVehicule(System.IO.StreamWriter sw, List<Vehicule> vehicules)
         {
-            foreach(Vehicule v in vehicules) {
-                sw.WriteLine(string.Format(insertVehicule, v.pId, v.pMarque, v.pModele, v.pImmatriculation, v.pAnnee, v.pKilometrage, v.pClient.pId));
+            foreach (Vehicule v in vehicules)
+            {
+                sw.WriteLine(string.Format(insertVehicule, v.pId, v.pMarque, v.pModele, v.pImmatriculation, v.pAnnee, v.pKilometrage, v.pClient != null ? v.pClient.pId.ToString() : "null"));
             }
         }
     }

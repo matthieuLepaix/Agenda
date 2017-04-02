@@ -32,6 +32,7 @@ namespace AgendaBDDManager
 
         public static void initialize()
         {
+            CLIENTS.Clear();
            getAll().ForEach(x=> CLIENTS.Add(x));
         }
 
@@ -157,6 +158,8 @@ namespace AgendaBDDManager
             bdd.OpenConnection();
             bdd.ExecuteNonQuery(requete);
             bdd.CloseConnection();
+            RdvManager.RDVS.RemoveAll(r => r.pClient == client);
+            VehiculeManager.VEHICULES.RemoveAll(v => v.pClient == client);
             CLIENTS.Remove(CLIENTS.First(c => c.pId == client.pId));
         }
 
