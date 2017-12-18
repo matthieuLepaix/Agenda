@@ -10,21 +10,21 @@ namespace AgendaCore
 
         #region Attributes
 
-        private int mId;
+        private int id;
 
-        private RendezVous mRdv;
+        private RendezVous rendezVous;
 
-        private Reparation mReparation;
+        private Reparation reparation;
 
         private string mReference;
 
-        private int mQuantite;
+        private int quantite;
 
-        private float mPrixU;
+        private float prixU;
 
-        private float mRemise;
+        private float remise;
 
-        private string mComments;
+        private string comments;
 
         #endregion
 
@@ -33,52 +33,52 @@ namespace AgendaCore
         /// <summary>
         /// L'identifiant
         /// </summary>
-        public int pId
+        public int Id
         {
             get
             {
-                return mId;
+                return id;
             }
             set
             {
-                mId = value;
+                id = value;
             }
         }
 
         /// <summary>
         /// Le rendez-vous.
         /// </summary>
-        public RendezVous pRdv
+        public RendezVous RendezVous
         {
             get
             {
-                return mRdv;
+                return rendezVous;
             }
             set
             {
-                mRdv = value;
+                rendezVous = value;
             }
         }
 
         /// <summary>
         /// La réparation.
         /// </summary>
-        public Reparation pReparation
+        public Reparation Reparation
         {
             get
             {
-                return mReparation;
+                return reparation;
             }
             set
             {
-                mReparation = value;
+                reparation = value;
             }
         }
 
         /// <summary>
         /// La réfrence du produit.
         /// </summary>
-        public string pReference
+        public string Reference
         {
             get
             {
@@ -93,60 +93,60 @@ namespace AgendaCore
         /// <summary>
         /// La quantité.
         /// </summary>
-        public int pQuantite
+        public int Quantite
         {
             get
             {
-                return mQuantite;
+                return quantite;
             }
             set
             {
-                mQuantite = value;
+                quantite = value;
             }
         }
 
         /// <summary>
         /// Le prix unitaire hors taxes
         /// </summary>
-        public float pPrixU
+        public float PrixU
         {
             get
             {
-                return mPrixU;
+                return prixU;
             }
             set
             {
-                mPrixU = value;
+                prixU = value;
             }
         }
 
         /// <summary>
         /// Le remise au client pour cette réparation
         /// </summary>
-        public float pRemise
+        public float Remise
         {
             get
             {
-                return mRemise;
+                return remise;
             }
             set
             {
-                mRemise = value;
+                remise = value;
             }
         }
 
         /// <summary>
         /// L'identifiant du client.
         /// </summary>
-        public string pComments
+        public string Comments
         {
             get
             {
-                return mComments;
+                return comments;
             }
             set
             {
-                mComments = value;
+                comments = value;
             }
         }
 
@@ -156,25 +156,25 @@ namespace AgendaCore
 
         public ReparationRDV(int id, RendezVous rdv, Reparation reparation, string refe, int qte, float pu, float rem, string comments)
         {
-            pId = id;
-            pRdv = rdv;
-            pReparation = reparation;
-            pReference = refe;
-            pQuantite = qte;
-            pPrixU = pu;
-            pRemise = rem;
-            pComments = comments;
+            Id = id;
+            RendezVous = rdv;
+            Reparation = reparation;
+            Reference = refe;
+            Quantite = qte;
+            PrixU = pu;
+            Remise = rem;
+            Comments = comments;
         }
 
         public ReparationRDV(RendezVous rdv, Reparation reparation, string refe, int qte, float pu, float rem, string comments)
         {
-            pRdv = rdv;
-            pReparation = reparation;
-            pReference = refe;
-            pQuantite = qte;
-            pPrixU = pu;
-            pRemise = rem;
-            pComments = comments;
+            RendezVous = rdv;
+            Reparation = reparation;
+            Reference = refe;
+            Quantite = qte;
+            PrixU = pu;
+            Remise = rem;
+            Comments = comments;
         }
 
         #endregion

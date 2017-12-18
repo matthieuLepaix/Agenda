@@ -33,7 +33,7 @@ namespace AgendaBDDManager
             List<ReparationRDV> reps = RdvManager.getAllForOldVersion();
             foreach (ReparationRDV rep in reps)
             {
-                RdvManager.SaveRDV(sw, rep.pRdv);
+                RdvManager.SaveRDV(sw, rep.RendezVous);
             }
             foreach (ReparationRDV rep in reps)
             {

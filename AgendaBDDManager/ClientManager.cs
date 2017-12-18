@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AgendaCore;
-using Oracle.DataAccess.Client;
+using Oracle.ManagedDataAccess.Client;
 
 namespace AgendaBDDManager
 {
@@ -14,7 +14,6 @@ namespace AgendaBDDManager
         public static List<Client> CLIENTS = new List<Client>();
 
         private static string maxID_request = "SELECT MAX(id) FROM client";
-
 
         private static string insertClient = @"INSERT INTO CLIENT (id,nom,prenom,telephone1,telephone2,email,adresse,codepostal,ville) VALUES ({0},'{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}');";
         
@@ -104,10 +103,10 @@ namespace AgendaBDDManager
             Connexion bdd = new Connexion();
             string requete = string.Format(@"INSERT INTO client(nom, prenom,telephone1,telephone2,email, adresse, codepostal, ville) 
                                             VALUES('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}')",
-                                                    bdd.DeleteInjectionSQL(client.pNom), bdd.DeleteInjectionSQL(client.pPrenom),
-                                                    bdd.DeleteInjectionSQL(client.pTelephone1), bdd.DeleteInjectionSQL(client.pTelephone2),
-                                                    bdd.DeleteInjectionSQL(client.pEmail), bdd.DeleteInjectionSQL(client.pAdresse),
-                                                    bdd.DeleteInjectionSQL(client.pCodePostal), bdd.DeleteInjectionSQL(client.pVille));
+                                                    bdd.DeleteInjectionSQL(client.Nom), bdd.DeleteInjectionSQL(client.Prenom),
+                                                    bdd.DeleteInjectionSQL(client.Telephone1), bdd.DeleteInjectionSQL(client.Telephone2),
+                                                    bdd.DeleteInjectionSQL(client.Email), bdd.DeleteInjectionSQL(client.Adresse),
+                                                    bdd.DeleteInjectionSQL(client.CodePostal), bdd.DeleteInjectionSQL(client.Ville));
             bdd.OpenConnection();
             bdd.ExecuteNonQuery(requete);
             OracleDataReader odr = bdd.ExecuteSelect(maxID_request);
@@ -117,7 +116,7 @@ namespace AgendaBDDManager
                 maxID = int.Parse(odr.GetDecimal(0).ToString());
             }
             bdd.CloseConnection();
-            client.pId = maxID;
+            client.Id = maxID;
             CLIENTS.Add(client);
         }
         
@@ -138,29 +137,29 @@ namespace AgendaBDDManager
                                                 ville = '{7}'
                                             WHERE 
                                                 id = {8}",
-                                                    bdd.DeleteInjectionSQL(client.pNom), bdd.DeleteInjectionSQL(client.pPrenom), 
-                                                    bdd.DeleteInjectionSQL(client.pTelephone1), bdd.DeleteInjectionSQL(client.pTelephone2), 
-                                                    bdd.DeleteInjectionSQL(client.pEmail), bdd.DeleteInjectionSQL(client.pAdresse),
-                                                    bdd.DeleteInjectionSQL(client.pCodePostal), bdd.DeleteInjectionSQL(client.pVille),
-                                                    client.pId.ToString());
+                                                    bdd.DeleteInjectionSQL(client.Nom), bdd.DeleteInjectionSQL(client.Prenom), 
+                                                    bdd.DeleteInjectionSQL(client.Telephone1), bdd.DeleteInjectionSQL(client.Telephone2), 
+                                                    bdd.DeleteInjectionSQL(client.Email), bdd.DeleteInjectionSQL(client.Adresse),
+                                                    bdd.DeleteInjectionSQL(client.CodePostal), bdd.DeleteInjectionSQL(client.Ville),
+                                                    client.Id.ToString());
             bdd.OpenConnection();
             bdd.ExecuteNonQuery(requete);
             bdd.CloseConnection();
-            CLIENTS.Remove(CLIENTS.First(c => c.pId == client.pId));
+            CLIENTS.Remove(CLIENTS.First(c => c.Id == client.Id));
             CLIENTS.Add(client);
             
         }
 
         public static void DeleteClient(Client client)
         {
-            string requete = string.Format("DELETE client WHERE id = {0} ", client.pId);
+            string requete = string.Format("DELETE client WHERE id = {0} ", client.Id);
             Connexion bdd = new Connexion();
             bdd.OpenConnection();
             bdd.ExecuteNonQuery(requete);
             bdd.CloseConnection();
-            RdvManager.RDVS.RemoveAll(r => r.pClient == client);
-            VehiculeManager.VEHICULES.RemoveAll(v => v.pClient == client);
-            CLIENTS.Remove(CLIENTS.First(c => c.pId == client.pId));
+            RdvManager.RDVS.RemoveAll(r => r.Client == client);
+            VehiculeManager.VEHICULES.RemoveAll(v => v.Client == client);
+            CLIENTS.Remove(CLIENTS.First(c => c.Id == client.Id));
         }
 
         #endregion
@@ -176,7 +175,7 @@ namespace AgendaBDDManager
 
         public static void SaveClient(System.IO.StreamWriter sw, Client c)
         {
-            sw.WriteLine(string.Format(insertClient, c.pId, c.pNom, c.pPrenom, c.pTelephone1, c.pTelephone2, c.pEmail, c.pAdresse, c.pCodePostal, c.pVille));
+            sw.WriteLine(string.Format(insertClient, c.Id, c.Nom, c.Prenom, c.Telephone1, c.Telephone2, c.Email, c.Adresse, c.CodePostal, c.Ville));
         }
     }
 }

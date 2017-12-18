@@ -1,0 +1,6 @@
+C:\Agenda\SetupWIXV3\bin\Debug\SetupWIXV3.msi
+C:\Agenda\SetupWIXV3\bin\Debug\SetupWIXV3.wixpdb
+obj\Debug\Product.wixobj
+obj\Debug\SetupWIXV3.wixproj.BindContentsFileListnull.txt
+obj\Debug\SetupWIXV3.wixproj.BindOutputsFileListnull.txt
+obj\Debug\SetupWIXV3.wixproj.BindBuiltOutputsFileListnull.txt

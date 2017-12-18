@@ -75,6 +75,10 @@ CREATE TABLE FACTURE
 	  REFERENCES RENDEZVOUS (ID) ENABLE
 );
 
+CREATE TABLE JOURS_FERIES(
+	ID NUMBER(38,0) PRIMARY KEY,
+	JOUR DATE UNIQUE
+);
 
 INSERT INTO reparation(id,nom) VALUES(241,'CONTROLE TECHNIQUE');
 INSERT INTO reparation(id,nom) VALUES(242,'EMBRAYAGE');
@@ -97,6 +101,7 @@ DROP SEQUENCE seq_client;
 DROP SEQUENCE seq_reparation;
 DROP SEQUENCE seq_rendezvous;
 DROP SEQUENCE seq_rdv_reparation;
+DROP SEQUENCE seq_jours_feries;
 
 
 CREATE OR REPLACE procedure createSequences
@@ -214,6 +219,19 @@ BEGIN
       INTO :new.id FROM dual;
     END IF;
 END tr_facture;
+/
+
+create or replace 
+trigger tr_JOURS_FERIES
+BEFORE INSERT ON JOURS_FERIES
+FOR EACH ROW
+BEGIN
+    IF( :new.id IS NULL )
+    THEN
+      SELECT seq_JOURS_FERIES.nextval
+      INTO :new.id FROM dual;
+    END IF;
+END tr_JOURS_FERIES;
 /
 
 commit;

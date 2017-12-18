@@ -17,7 +17,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -116,11 +116,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Analysis\CoreAnalysis.cs" />
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="Consultation\Travaux_Vehicule.xaml.cs">
       <DependentUpon>Travaux_Vehicule.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Converter\TabSizeConverter.cs" />
+    <Compile Include="Converters\BackgroundRendezVousConverter.cs" />
+    <Compile Include="Converters\BasicConverters.cs" />
+    <Compile Include="Converters\DateTimeConverter.cs" />
+    <Compile Include="Converters\DayOfWeekConverter.cs" />
+    <Compile Include="Converters\GestionClientsConverters.cs" />
+    <Compile Include="Converters\ListRendezVousConverter.cs" />
+    <Compile Include="Converters\TabSizeConverter.cs" />
     <Compile Include="Factures\ExcelManager.cs" />
     <Compile Include="Gestion\AjoutClient.xaml.cs">
       <DependentUpon>AjoutClient.xaml</DependentUpon>
@@ -152,6 +159,15 @@
     <Compile Include="UserControls\UserControlWork.xaml.cs">
       <DependentUpon>UserControlWork.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\Command.cs" />
+    <Compile Include="ViewModels\AbstractViewModel.cs" />
+    <Compile Include="ViewModels\ActiviteViewModel.cs" />
+    <Compile Include="ViewModels\AddClientViewModel.cs" />
+    <Compile Include="ViewModels\AgendaViewModel.cs" />
+    <Compile Include="ViewModels\GestionClientsViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\ParamsViewModel.cs" />
+    <Compile Include="ViewModels\RendezVousViewModel.cs" />
     <Page Include="Consultation\Travaux_Vehicule.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

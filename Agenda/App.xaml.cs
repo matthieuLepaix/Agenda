@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
 using System.Windows;
 using System.Threading;
-using System.Security.Permissions;
-using System.Windows.Threading;
 using System.Threading.Tasks;
 using AgendaBDDManager;
 
@@ -26,7 +20,6 @@ namespace Agenda
         {
             Splasher.Splash = new SplashScreen();
             Splasher.ShowSplash();
-            mainView = new Agenda.MainWindow();
             var startup = new Task(() =>
             {
                 // Simulate application loading
@@ -54,12 +47,9 @@ namespace Agenda
             }, TaskScheduler.FromCurrentSynchronizationContext());
 
             Connexion.init();
-            mainView.Charger();
+            mainView = new Agenda.MainWindow();
 
             startup.Start();
-
-            
-
         }
     }
 

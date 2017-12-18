@@ -30,7 +30,7 @@ namespace Agenda.UserControls
             Client c = new Client(NomClient.Text.Trim(), PrenomClient.Text.Trim(), Tel1Client.Text.Trim(), Tel2Client.Text.Trim(),
                                   EmailClient.Text.Trim(), string.Format("{0} {1}",AdresseClient.Text.Trim(), AdresseClient.Text.Trim()),
                                   codePostalClient.Text.Trim(), VilleClient.Text.Trim());
-            if (c.pNom.Length == 0 || c.pPrenom.Length == 0 || c.pTelephone1.Length == 0)
+            if (c.Nom.Length == 0 || c.Prenom.Length == 0 || c.Telephone1.Length == 0)
             {
                 c = null;
             }
@@ -41,14 +41,14 @@ namespace Agenda.UserControls
         {
             Vehicule v = new Vehicule(MarqueVehicule.Text.Trim(), ModeleVehicule.Text.Trim(), ImmatVehicule.Text.Trim(), Annee.Text.Trim(), km.Text.Trim().Length > 0 ?int.Parse(km.Text.Trim()) : 0,
                         GetClient());
-            if (v.pClient != null)
+            if (v.Client != null)
             {
-                if (v.pClient.pNom.Length == 0 || v.pClient.pPrenom.Length == 0 || v.pClient.pTelephone1.Length == 0 ||
-                    v.pClient.pTelephone1.Length == 0)
+                if (v.Client.Nom.Length == 0 || v.Client.Prenom.Length == 0 || v.Client.Telephone1.Length == 0 ||
+                    v.Client.Telephone1.Length == 0)
                 {
                     v = null;
                 }
-                else if (v.pImmatriculation.Length == 0 || v.pMarque.Length == 0 || v.pModele.Length == 0)
+                else if (v.Immatriculation.Length == 0 || v.Marque.Length == 0 || v.Modele.Length == 0)
                 {
                     v = null;
                 }

@@ -66,7 +66,7 @@ namespace Agenda.Consultation
             string myImmat = rech_immat.Text.Replace('-', ' ');
             myImmat = myImmat.Replace(" ", "");
             myImmat = myImmat.Trim();
-            List<Vehicule> vehicules = VehiculeManager.VEHICULES.FindAll(x => x.pImmatriculation == myImmat);
+            List<Vehicule> vehicules = VehiculeManager.VEHICULES.FindAll(x => x.Immatriculation == myImmat);
             Les_travaux.Children.Clear();
             if (vehicules != null && vehicules.Count == 0)
             {
@@ -75,7 +75,7 @@ namespace Agenda.Consultation
             else
             {
                 Vehicule vehicule = vehicules.First();
-                mesRDVs = RdvManager.RDVS.FindAll(r => r.pVehicule.pImmatriculation == vehicule.pImmatriculation);
+                mesRDVs = RdvManager.RDVS.FindAll(r => r.Vehicule.Immatriculation == vehicule.Immatriculation);
                 if (mesRDVs.Count == 0)
                 {
                     Les_travaux.Children.Add(getTextBlock("Aucun résultats pour cette immatriculation. (aucun rendez-vous)"));
@@ -94,7 +94,7 @@ namespace Agenda.Consultation
         {
             if (vehicule != null)
             {
-                mesRDVs = RdvManager.RDVS.FindAll(r => r.pVehicule.pImmatriculation == vehicule.pImmatriculation); ;
+                mesRDVs = RdvManager.RDVS.FindAll(r => r.Vehicule.Immatriculation == vehicule.Immatriculation); ;
                 Les_travaux.Children.Clear();
                 if (mesRDVs.Count == 0)
                 {
@@ -114,7 +114,7 @@ namespace Agenda.Consultation
         {
             if (client != null)
             {
-                mesRDVs = RdvManager.RDVS.FindAll(r => r.pClient != null && r.pClient.pId == client.pId);
+                mesRDVs = RdvManager.RDVS.FindAll(r => r.Client != null && r.Client.Id == client.Id);
                 Les_travaux.Children.Clear();
                 if (mesRDVs.Count == 0)
                 {
@@ -136,24 +136,24 @@ namespace Agenda.Consultation
         /// <param name="rdv">Le rendez-vous à formater</param>
         private void displayRDV(RendezVous rdv)
         {
-            string mTravauxTitle = string.Format("{0} - M. ou MMe {1} {2}", rdv.pDate.ToShortDateString(), rdv.pClient != null ? rdv.pClient.pPrenom : "", rdv.pClient != null ? rdv.pClient.pNom : "");
-            string mTravauxInfos = string.Format("\t{0} {1} {2} {3} {4}km", rdv.pVehicule.pMarque, 
-                                                            rdv.pVehicule.pModele, rdv.pVehicule.pImmatriculation, 
-                                                            rdv.pVehicule.pAnnee, rdv.pVehicule.pKilometrage);
+            string mTravauxTitle = string.Format("{0} - M. ou MMe {1} {2}", rdv.Date.ToShortDateString(), rdv.Client != null ? rdv.Client.Prenom : "", rdv.Client != null ? rdv.Client.Nom : "");
+            string mTravauxInfos = string.Format("\t{0} {1} {2} {3} {4}km", rdv.Vehicule.Marque, 
+                                                            rdv.Vehicule.Modele, rdv.Vehicule.Immatriculation, 
+                                                            rdv.Vehicule.Annee, rdv.Vehicule.Kilometrage);
             TextBlock tDate = getTextBlock(mTravauxInfos);
             TextBlock tTitle = getTextBlock(mTravauxTitle);
             tTitle.FontStyle = FontStyles.Italic;
             tTitle.FontWeight = FontWeights.Bold;
             Les_travaux.Children.Add(tTitle);
             Les_travaux.Children.Add(tDate);
-            foreach (ReparationRDV rep in rdv.pTravaux)
+            foreach (ReparationRDV rep in rdv.Travaux)
             {
                 string chaine = "Travaux effectués:\n\t- {0} {1}\n\t-qté:{2}\n\t-prix: {3}€";
-                if (rep.pComments != null && rep.pComments.Trim().Length > 0)
+                if (rep.Comments != null && rep.Comments.Trim().Length > 0)
                 {
                     chaine = "Travaux effectués:\n\t- {0}\n\t-qté:{1}\n\t-prix: {2}€\n\t-remarques : {3}";
                 }
-                chaine = string.Format(chaine, rep.pReparation, rep.pQuantite, rep.pPrixU, rep.pComments.Replace("\n","\n\t"));
+                chaine = string.Format(chaine, rep.Reparation, rep.Quantite, rep.PrixU, rep.Comments.Replace("\n","\n\t"));
                 mTravauxInfos += "\n" + chaine;
                 TextBlock tTravaux = getTextBlock(chaine);
                 Les_travaux.Children.Add(tTravaux);
@@ -187,7 +187,7 @@ namespace Agenda.Consultation
             mOwner.IsEnabled = true;
             mOwner.Opacity = 1;
             mOwner.WindowState = System.Windows.WindowState.Maximized;
-            mOwner.Child = null;
+            //mOwner.Child = null;
             mOwner.Activate();
         }
 
@@ -240,7 +240,7 @@ namespace Agenda.Consultation
                     XFont fontHeader = new XFont("Verdana", 12, XFontStyle.Regular);
                     XTextFormatter tf = new XTextFormatter(graph);
 
-                    tf.DrawString("Rendez-vous de " + mesRDVs.ElementAt(0).pClient, fontTitle, XBrushes.DarkRed, new XRect(margin, currentLine, pageWidth, pageHeight), XStringFormats.TopLeft);
+                    tf.DrawString("Rendez-vous de " + mesRDVs.ElementAt(0).Client, fontTitle, XBrushes.DarkRed, new XRect(margin, currentLine, pageWidth, pageHeight), XStringFormats.TopLeft);
                     currentLine += 40;
                     graph.DrawLine(XPens.Black, new XPoint(margin, currentLine), new XPoint(pageWidth - margin, currentLine));
                     currentLine += lineHeight;
@@ -248,15 +248,15 @@ namespace Agenda.Consultation
                     currentLine += lineHeight + 10;
                     foreach (RendezVous rdv in mesRDVs)
                     {
-                        string infosRdv = string.Format("{0} - {1} {2} {3} {4} {5}km", rdv.pDate.ToShortDateString(), rdv.pVehicule.pMarque,
-                                                                        rdv.pVehicule.pModele, rdv.pVehicule.pImmatriculation,
-                                                                        rdv.pVehicule.pAnnee, rdv.pVehicule.pKilometrage);
+                        string infosRdv = string.Format("{0} - {1} {2} {3} {4} {5}km", rdv.Date.ToShortDateString(), rdv.Vehicule.Marque,
+                                                                        rdv.Vehicule.Modele, rdv.Vehicule.Immatriculation,
+                                                                        rdv.Vehicule.Annee, rdv.Vehicule.Kilometrage);
                         tf.DrawString(infosRdv, fontParagraph, XBrushes.Black, new XRect(margin * 8, currentLine, pageWidth, pageHeight), XStringFormats.TopLeft);
                         currentLine += lineHeight + 10;
                         string trvx = "Liste des travaux effectués :\n";
                         tf.DrawString(trvx, fontParagraph, XBrushes.Black, new XRect(margin * 8, currentLine, pageWidth - margin * 20, pageHeight), XStringFormats.TopLeft);
                         currentLine += lineHeight;
-                        foreach (ReparationRDV rep in rdv.pTravaux)
+                        foreach (ReparationRDV rep in rdv.Travaux)
                         {
                             if (currentLine > 750)
                             {
@@ -266,13 +266,13 @@ namespace Agenda.Consultation
                                 currentLine = margin;
                             }
                             string chaine = "Travaux effectués:\n\n\t- {0} {1}\n\t-qté:{2}\n\t-prix: {3}€";
-                            if (rep.pComments != null && rep.pComments.Trim().Length > 0)
+                            if (rep.Comments != null && rep.Comments.Trim().Length > 0)
                             {
                                 chaine = "Travaux effectués:\n\n\t- {0}\n\t-qté:{1}\n\t-prix: {2}€\n\t-remarques :\n{3}";
                             }
-                            chaine = string.Format(chaine, rep.pReparation, rep.pQuantite, rep.pPrixU, rep.pComments.Replace("\n", "\n\t"));
+                            chaine = string.Format(chaine, rep.Reparation, rep.Quantite, rep.PrixU, rep.Comments.Replace("\n", "\n\t"));
                             chaine.Replace("\t", "          ");
-                            int nbReturns = rep.pComments.Split('\n').Length;
+                            int nbReturns = rep.Comments.Split('\n').Length;
                             tf.DrawString(chaine, fontParagraph, XBrushes.Black, new XRect(margin * 10, currentLine, pageWidth - margin * 10, pageHeight), XStringFormats.TopLeft);
                             currentLine += lineHeight * (5 + nbReturns);
 
@@ -289,7 +289,7 @@ namespace Agenda.Consultation
                         }
 
                     }
-                    pdfFilename = string.Format("RDV_{0}_{1}_{2}_{3}.pdf", mesRDVs.ElementAt(0).pClient.pNom, DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year).Replace('/', '_').Replace('\\', '_');
+                    pdfFilename = string.Format("RDV_{0}_{1}_{2}_{3}.pdf", mesRDVs.ElementAt(0).Client.Nom, DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year).Replace('/', '_').Replace('\\', '_');
                     pdf.Save(pdfFilename);
                     Process.Start(pdfFilename);
                     pdf.Dispose();

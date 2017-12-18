@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AgendaCore;
-using Oracle.DataAccess.Client;
+using Oracle.ManagedDataAccess.Client;
 
 
 namespace AgendaBDDManager
@@ -77,12 +77,12 @@ namespace AgendaBDDManager
             OracleDataReader odr = bdd.ExecuteSelect(requete);
             while (odr.Read())
             {
-                Vehicule v = VehiculeManager.VEHICULES.Find(x => x.pId == Connexion.getIntFromOdr(3, odr));
+                Vehicule v = VehiculeManager.VEHICULES.Find(x => x.Id == Connexion.getIntFromOdr(3, odr));
                 RendezVous rdv = new RendezVous(Connexion.getIntFromOdr(0, odr), 
                                             odr.GetDateTime(1), 
                                             (DureeType)Enum.Parse(DureeType.UneHeure.GetType(), Connexion.getIntFromOdr(2, odr).ToString()), 
                                             v,
-                                            v != null ? v.pClient : null);
+                                            v != null ? v.Client : null);
                 liste.Add(rdv);
             }
             bdd.CloseConnection();
@@ -128,7 +128,7 @@ namespace AgendaBDDManager
             }
             bdd.CloseConnection();
 
-            rdv.pClient.AddVehicules(VehiculeManager.GetVehiculesByClient(rdv.pClient));
+            rdv.Client.AddVehicules(VehiculeManager.GetVehiculesByClient(rdv.Client));
 
             return rdv;
         }
@@ -173,7 +173,7 @@ namespace AgendaBDDManager
             }
             bdd.CloseConnection();
 
-            liste.ForEach(rdv => rdv.pClient.AddVehicules(VehiculeManager.GetVehiculesByClient(rdv.pClient)));
+            liste.ForEach(rdv => rdv.Client.AddVehicules(VehiculeManager.GetVehiculesByClient(rdv.Client)));
             return liste;
         }
 
@@ -217,7 +217,7 @@ namespace AgendaBDDManager
             }
             bdd.CloseConnection();
 
-            liste.ForEach(rdv => rdv.pClient.AddVehicules(VehiculeManager.GetVehiculesByClient(rdv.pClient)));
+            liste.ForEach(rdv => rdv.Client.AddVehicules(VehiculeManager.GetVehiculesByClient(rdv.Client)));
             return liste;
         }
 
@@ -266,7 +266,7 @@ namespace AgendaBDDManager
             }
             bdd.CloseConnection();
 
-            liste.ForEach(rdv => rdv.pClient.AddVehicules(VehiculeManager.GetVehiculesByClient(rdv.pClient)));
+            liste.ForEach(rdv => rdv.Client.AddVehicules(VehiculeManager.GetVehiculesByClient(rdv.Client)));
 
             return liste;
         }
@@ -299,22 +299,22 @@ namespace AgendaBDDManager
             OracleDataReader odr;
             bdd.OpenConnection();
             // Si le client n'existe pas en bdd
-            if (rdv.pVehicule.pClient.pId == -1)
+            if (rdv.Vehicule.Client.Id == -1)
             {
-                ClientManager.AddClient(rdv.pVehicule.pClient);
+                ClientManager.AddClient(rdv.Vehicule.Client);
             }
 
             // Si le véhicule n'existe pas en bdd
-            if (rdv.pVehicule.pId == -1)
+            if (rdv.Vehicule.Id == -1)
             {
-                VehiculeManager.AddVehicule(rdv.pVehicule);
+                VehiculeManager.AddVehicule(rdv.Vehicule);
                 string requeteVehicule = string.Format("SELECT id FROM vehicule WHERE LOWER(immatriculation) = '{0}'",
-                                                            bdd.DeleteInjectionSQL(rdv.pVehicule.pImmatriculation.ToLower()));
+                                                            bdd.DeleteInjectionSQL(rdv.Vehicule.Immatriculation.ToLower()));
                 odr = bdd.ExecuteSelect(requeteVehicule);
 
                 if (odr.Read())
                 {
-                    rdv.pVehicule.pId = int.Parse(odr.GetDecimal(0).ToString());
+                    rdv.Vehicule.Id = int.Parse(odr.GetDecimal(0).ToString());
                 }
             }
 
@@ -324,14 +324,14 @@ namespace AgendaBDDManager
             {
                 maxID = int.Parse(odr.GetDecimal(0).ToString());
             }
-            rdv.pId = maxID + 1;
+            rdv.Id = maxID + 1;
 
-            string requete = string.Format(INSERTRDV, rdv.pId, rdv.pDate.ToShortDateString(), rdv.pDate.ToShortTimeString(), getEntierForDuree(rdv.pDuree), rdv.pClient.pId, rdv.pVehicule.pId);
+            string requete = string.Format(INSERTRDV, rdv.Id, rdv.Date.ToShortDateString(), rdv.Date.ToShortTimeString(), getEntierForDuree(rdv.Duree), rdv.Client.Id, rdv.Vehicule.Id);
             bdd.ExecuteNonQuery(requete);
             
-            foreach(ReparationRDV rep in rdv.pTravaux)
+            foreach(ReparationRDV rep in rdv.Travaux)
             {
-                rep.pRdv = rdv;
+                rep.RendezVous = rdv;
                 ReparationRDVManager.AddReparationRDV(rep);
             }
 
@@ -388,21 +388,21 @@ namespace AgendaBDDManager
                                                     date_rdv = to_date('{0} {1}','dd/mm/yyyy hh24:mi:ss'), 
                                                     duree = {2}, vehicule = {3}, client = {4} 
                                                 WHERE id = {5}",
-                rdv.pDate.ToShortDateString(), rdv.pDate.ToShortTimeString(), getEntierForDuree(rdv.pDuree), 
-                rdv.pVehicule != null ? rdv.pVehicule.pId.ToString() : "null", 
-                rdv.pClient != null ?rdv.pClient.pId.ToString() : "null", 
-                rdv.pId);
+                rdv.Date.ToShortDateString(), rdv.Date.ToShortTimeString(), getEntierForDuree(rdv.Duree), 
+                rdv.Vehicule != null ? rdv.Vehicule.Id.ToString() : "null", 
+                rdv.Client != null ?rdv.Client.Id.ToString() : "null", 
+                rdv.Id);
             bdd.ExecuteNonQuery(requete);
 
             ReparationRDVManager.DeleteReparationRDVByRDV(rdv);
-            foreach (ReparationRDV rep in rdv.pTravaux)
+            foreach (ReparationRDV rep in rdv.Travaux)
             {
                 ReparationRDVManager.AddReparationRDV(rep);
             }
 
             bdd.CloseConnection();
 
-            RDVS.Remove(RDVS.Find(r => r.pId == rdv.pId));
+            RDVS.Remove(RDVS.Find(r => r.Id == rdv.Id));
             RDVS.Add(rdv);
         }
 
@@ -415,7 +415,7 @@ namespace AgendaBDDManager
             bdd.ExecuteNonQuery(requete);
 
             bdd.CloseConnection();
-            RDVS.Remove(RDVS.Find(r => r.pId == id));
+            RDVS.Remove(RDVS.Find(r => r.Id == id));
         }
 
         #endregion
@@ -426,17 +426,17 @@ namespace AgendaBDDManager
         {
             foreach (RendezVous r in getAll())
             {
-                string date = string.Format("{0:00}/{1:00}/{2}", r.pDate.Day, r.pDate.Month, r.pDate.Year);
-                string time = string.Format("{0:00}:{1:00}:00", r.pDate.Hour, r.pDate.Minute);
-                sw.WriteLine(INSERTRDV+";", r.pId, date, time, r.getDuree(), r.pClient != null ? r.pClient.pId.ToString() : "null", r.pVehicule.pId);
+                string date = string.Format("{0:00}/{1:00}/{2}", r.Date.Day, r.Date.Month, r.Date.Year);
+                string time = string.Format("{0:00}:{1:00}:00", r.Date.Hour, r.Date.Minute);
+                sw.WriteLine(INSERTRDV+";", r.Id, date, time, r.getDuree(), r.Client != null ? r.Client.Id.ToString() : "null", r.Vehicule.Id);
             }
         }
 
         internal static void SaveRDV(System.IO.StreamWriter sw, RendezVous rdv)
         {
-            string date = string.Format("{0:00}/{1:00}/{2}", rdv.pDate.Day, rdv.pDate.Month, rdv.pDate.Year);
-            string time = string.Format("{0:00}:{1:00}:00", rdv.pDate.Hour, rdv.pDate.Minute);
-            sw.WriteLine(INSERTRDV + ";", rdv.pId, date, time, getEntierForDuree(rdv.pDuree), rdv.pClient != null ? rdv.pClient.pId.ToString() : "null", rdv.pVehicule.pId);
+            string date = string.Format("{0:00}/{1:00}/{2}", rdv.Date.Day, rdv.Date.Month, rdv.Date.Year);
+            string time = string.Format("{0:00}:{1:00}:00", rdv.Date.Hour, rdv.Date.Minute);
+            sw.WriteLine(INSERTRDV + ";", rdv.Id, date, time, getEntierForDuree(rdv.Duree), rdv.Client != null ? rdv.Client.Id.ToString() : "null", rdv.Vehicule.Id);
         }
     }
 }

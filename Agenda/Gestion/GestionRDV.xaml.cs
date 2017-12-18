@@ -107,15 +107,15 @@ namespace Agenda.Gestion
             InitializeTitle();
             InitializeComboBoxDuree();
 
-            DatePickerRDV.SelectedDate = mRdv.pDate;
-            HourRDV.SelectedIndex = rdv.pDate.Hour - 8;
+            DatePickerRDV.SelectedDate = mRdv.Date;
+            HourRDV.SelectedIndex = rdv.Date.Hour - 8;
             DurationRDV.SelectedIndex = rdv.getDuree();                   
 
-            if (mRdv.pVehicule != null)
+            if (mRdv.Vehicule != null)
             {
                 BtnNewClientPanel.Children.Clear();
                 Le_Client.Children.Clear();
-                mUcInfosClient = new UserControlInfosClient(this, mRdv.pVehicule);
+                mUcInfosClient = new UserControlInfosClient(this, mRdv.Vehicule);
                 mUcNewClient = null;
                 mUcSelectClient = null;
                 Le_Client.Children.Add(mUcInfosClient);
@@ -177,7 +177,7 @@ namespace Agenda.Gestion
                 if (bp.Name == "AjouterVehicule")
                 {
                     Client c = null;
-                    if ((c = mRdv.pClient) != null)
+                    if ((c = mRdv.Client) != null)
                     {
                         (Child = new GestionVehicule(this, c, false)).Show();
                     }
@@ -185,9 +185,9 @@ namespace Agenda.Gestion
                 else if (bp.Name == "ChangerVehicule")
                 {
                     Client c = null;
-                    if ((c = mRdv.pClient) != null)
+                    if ((c = mRdv.Client) != null)
                     {
-                        if (mRdv.pClient.pVehicules.Count() > 1)
+                        if (mRdv.Client.Vehicules.Count() > 1)
                         {
                             (Child = new GestionVehicule(this, c, true)).Show();
                         }
@@ -203,7 +203,7 @@ namespace Agenda.Gestion
 
         public void refreshVehicule(Vehicule v)
         {
-            mRdv.pVehicule = v;
+            mRdv.Vehicule = v;
             mUcInfosClient.SetVehicule(v);
         }
         
@@ -249,17 +249,17 @@ namespace Agenda.Gestion
                 dt = dt.AddHours(double.Parse((HourRDV.SelectedValue as ComboBoxItem).Content.ToString().Substring(0, 2)));
                 if (mRdv != null)
                 {
-                    mRdv.pDate = dt;
-                    mRdv.pDuree = getDureeType(DurationRDV.SelectedIndex);
-                    if (mRdv.pVehicule == null)
+                    mRdv.Date = dt;
+                    mRdv.Duree = getDureeType(DurationRDV.SelectedIndex);
+                    if (mRdv.Vehicule == null)
                     {
                         if (!mIsNewClient)
                         {
-                            mRdv.pVehicule = mUcSelectClient.GetVehicule();
+                            mRdv.Vehicule = mUcSelectClient.GetVehicule();
                         }
                         else
                         {
-                            mRdv.pVehicule = mUcNewClient.GetVehicule();
+                            mRdv.Vehicule = mUcNewClient.GetVehicule();
                         }
                     }
                 }
@@ -267,7 +267,7 @@ namespace Agenda.Gestion
                 {
                     mRdv = new RendezVous(dt, getDureeType(DurationRDV.SelectedIndex),
                         mIsNewClient ? mUcNewClient.GetVehicule() : mUcSelectClient.GetVehicule(),
-                        mIsNewClient ? mUcNewClient.GetVehicule().pClient : mUcSelectClient.GetVehicule().pClient);
+                        mIsNewClient ? mUcNewClient.GetVehicule().Client : mUcSelectClient.GetVehicule().Client);
                 }
 
                 ReparationRDV work = null;
@@ -280,9 +280,9 @@ namespace Agenda.Gestion
                     }
                 }
 
-                mRdv.pClient = mRdv.pVehicule.pClient;
+                mRdv.Client = mRdv.Vehicule.Client;
 
-                if (mRdv.pId != -1)
+                if (mRdv.Id != -1)
                 {
                     RdvManager.UpdateRdv(mRdv);
                 }
@@ -291,10 +291,10 @@ namespace Agenda.Gestion
                     RdvManager.AddRdv(mRdv);
                 }
 
-                ClientManager.UpdateClient(mRdv.pClient);
-                VehiculeManager.UpdateVehicule(mRdv.pVehicule);
+                ClientManager.UpdateClient(mRdv.Client);
+                VehiculeManager.UpdateVehicule(mRdv.Vehicule);
 
-                mOwner.RefreshAgenda();
+                //mOwner.RefreshAgenda();
             }
             catch (Exception ex)
             {
@@ -370,7 +370,7 @@ namespace Agenda.Gestion
         private void ButtonFacture_Click(object sender, RoutedEventArgs e)
         {
             CreateOrUpdateRDV();
-            mOwner.InitFacture(mRdv);
+            //mOwner.InitFacture(mRdv);
             mOwner.selectTabIndex(MainWindow.TabOptions.FACTURE);
             this.Close();
         }
@@ -383,11 +383,11 @@ namespace Agenda.Gestion
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            UserControlRDV.IsMouseDownOnRdv = false;
+            //UserControlRDV.IsMouseDownOnRdv = false;
             mOwner.IsEnabled = true;
             mOwner.Opacity = 1;
             mOwner.WindowState = System.Windows.WindowState.Maximized;
-            mOwner.Child = null;
+            //mOwner.Child = null;
             mOwner.Activate();
         }
 
@@ -406,7 +406,7 @@ namespace Agenda.Gestion
             if (mRdv != null)
             {
                 
-                foreach (ReparationRDV rep in mRdv.pTravaux)
+                foreach (ReparationRDV rep in mRdv.Travaux)
                 {
                     StackPanel st_work = new StackPanel();
                     nbWorks++;

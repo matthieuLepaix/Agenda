@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
@@ -12,52 +13,52 @@ namespace AgendaCore
         /// <summary>
         /// Les véhicules du client.
         /// </summary>
-        private List<Vehicule> mVehicules = new List<Vehicule>();
+        private ObservableCollection<Vehicule> vehicules = new ObservableCollection<Vehicule>();
 
         /// <summary>
         /// L'identifiant en base de données
         /// </summary>
-        private int mId;
+        private int id;
 
         /// <summary>
         /// Le nom du client.
         /// </summary>
-        private string mNom;
+        private string nom;
 
         /// <summary>
         /// Le prénom du client.
         /// </summary>
-        private string mPrenom;
+        private string prenom;
 
         /// <summary>
         /// Le premier téléphone du client.
         /// </summary>
-        private string mTelephone1;
+        private string telephone1;
 
         /// <summary>
         /// Le second téléphone du client.
         /// </summary>
-        private string mTelephone2;
+        private string telephone2;
 
         /// <summary>
         /// L'adresse email du client.
         /// </summary>
-        private string mEmail;
+        private string email;
 
         /// <summary>
         /// L'adresse postale du client.
         /// </summary>
-        private string mAdresse;
+        private string adresse;
 
         /// <summary>
         /// Le code postal du client.
         /// </summary>
-        private string mCodePostal;
+        private string codePostal;
 
         /// <summary>
         /// La ville du client.
         /// </summary>
-        private string mVille;
+        private string ville;
         #endregion
 
         #region Properties
@@ -65,75 +66,75 @@ namespace AgendaCore
         /// <summary>
         /// Les véhicules du client.
         /// </summary>
-        public IEnumerable<Vehicule> pVehicules
+        public ObservableCollection<Vehicule> Vehicules
         {
             get
             {
-                return mVehicules;
+                return vehicules;
             }
             set
             {
-                mVehicules = value.ToList();
+                vehicules = value;
             }
         }
 
         /// <summary>
         /// L'identifiant du client.
         /// </summary>
-        public int pId
+        public int Id
         {
             get
             {
-                return mId;
+                return id;
             }
             set
             {
-                mId = value;
+                id = value;
             }
         }
 
         /// <summary>
         /// Le nom du client.
         /// </summary>
-        public string pNom
+        public string Nom
         {
             get
             {
-                return mNom;
+                return nom;
             }
             set
             {
-                mNom = value;
+                nom = value;
             }
         }
 
         /// <summary>
         /// Le prénom du client.
         /// </summary>
-        public string pPrenom
+        public string Prenom
         {
             get
             {
-                return mPrenom.Length > 1 ? mPrenom.ElementAt(0).ToString().ToUpper()+mPrenom.Substring(1,mPrenom.Length-1).ToLower() : mPrenom;
+                return prenom.Length > 1 ? prenom.ElementAt(0).ToString().ToUpper()+prenom.Substring(1,prenom.Length-1).ToLower() : prenom;
             }
             set
             {
-                mPrenom = value;
+                prenom = value;
             }
         }
 
         /// <summary>
         /// Le premier téléphone du client.
         /// </summary>
-        public string pTelephone1
+        public string Telephone1
         {
             get
             {
-                return mTelephone1;
+                return telephone1;
             }
             set
             {
-                mTelephone1 = value;
+                telephone1 = value;
             }
         }
 
@@ -142,75 +143,75 @@ namespace AgendaCore
         /// <summary>
         /// Le second téléphone du client.
         /// </summary>
-        public string pTelephone2
+        public string Telephone2
         {
             get
             {
-                return mTelephone2;
+                return telephone2;
             }
             set
             {
-                mTelephone2 = value;
+                telephone2 = value;
             }
         }
 
         /// <summary>
         /// L'adresse email du client.
         /// </summary>
-        public string pEmail
+        public string Email
         {
             get
             {
-                return mEmail;
+                return email;
             }
             set
             {
-                mEmail = value;
+                email = value;
             }
         }
 
         /// <summary>
         /// L'adresse du client.
         /// </summary>
-        public string pAdresse
+        public string Adresse
         {
             get
             {
-                return mAdresse;
+                return adresse;
             }
             set
             {
-                mAdresse = value;
+                adresse = value;
             }
         }
 
         /// <summary>
         /// L'adresse email du client.
         /// </summary>
-        public string pCodePostal
+        public string CodePostal
         {
             get
             {
-                return mCodePostal;
+                return codePostal;
             }
             set
             {
-                mCodePostal = value;
+                codePostal = value;
             }
         }
 
         /// <summary>
         /// La ville du client.
         /// </summary>
-        public string pVille
+        public string Ville
         {
             get
             {
-                return mVille;
+                return ville;
             }
             set
             {
-                mVille = value;
+                ville = value;
             }
         }
 
@@ -230,15 +231,15 @@ namespace AgendaCore
         /// <param name="telephone2">Le second téléphone</param>
         public Client(string nom, string prenom, string telephone1, string telephone2, string email, string adresse, string codePostal, string ville)
         {
-            mId = -1;
-            mNom = nom;
-            mPrenom = prenom;
-            mTelephone1 = telephone1;
-            mTelephone2 = telephone2;
-            mEmail = email;
-            mAdresse = adresse;
-            mCodePostal = codePostal;
-            mVille = ville;
+            id = -1;
+            this.nom = nom;
+            this.prenom = prenom;
+            this.telephone1 = telephone1;
+            this.telephone2 = telephone2;
+            this.email = email;
+            this.adresse = adresse;
+            this.codePostal = codePostal;
+            this.ville = ville;
         }
 
         /// <summary>
@@ -250,15 +251,27 @@ namespace AgendaCore
         /// <param name="telephone2">Le second téléphone</param>
         public Client(int id, string nom, string prenom, string telephone1, string telephone2, string email, string adresse, string codePostal, string ville)
         {
-            mId = id;
-            mNom = nom;
-            mPrenom = prenom;
-            mTelephone1 = telephone1;
-            mTelephone2 = telephone2;
-            mEmail = email;
-            mAdresse = adresse;
-            mCodePostal = codePostal;
-            mVille = ville;
+            this.id = id;
+            this.nom = nom;
+            this.prenom = prenom;
+            this.telephone1 = telephone1;
+            this.telephone2 = telephone2;
+            this.email = email;
+            this.adresse = adresse;
+            this.codePostal = codePostal;
+            this.ville = ville;
+        }
+
+        public Client()
+        {
+            this.nom = string.Empty;
+            this.prenom = string.Empty;
+            this.telephone1 = string.Empty;
+            this.telephone2 = string.Empty;
+            this.email = string.Empty;
+            this.adresse = string.Empty;
+            this.codePostal = string.Empty;
+            this.ville = string.Empty;
         }
 
         #endregion
@@ -267,22 +280,22 @@ namespace AgendaCore
 
         public override string ToString()
         {
-            return string.Format("M. ou Mme {0} {1}", string.IsNullOrEmpty(pNom) ? string.Empty : pNom.ToUpper(), string.IsNullOrEmpty(pPrenom) ? string.Empty : string.Format("{0}{1}", pPrenom.Substring(0, 1), pPrenom.Substring(1, pPrenom.Length - 1)));
+            return string.Format("M. ou Mme {0} {1}", string.IsNullOrEmpty(Nom) ? string.Empty : Nom.ToUpper(), string.IsNullOrEmpty(Prenom) ? string.Empty : string.Format("{0}{1}", Prenom.Substring(0, 1), Prenom.Substring(1, Prenom.Length - 1)));
         }
 
         public void AddVehicule(Vehicule v)
         {
-            mVehicules.Add(v);
+            vehicules.Add(v);
         }
 
         public void RemoveVehicule(Vehicule v)
         {
-            mVehicules.Remove(v);
+            vehicules.Remove(v);
         }
 
-        public void AddVehicules(List<Vehicule> v)
+        public void AddVehicules(List<Vehicule> vehicules)
         {
-            mVehicules.AddRange(v);
+            vehicules.ForEach(v => Vehicules.Add(v));
         }
 
         #endregion
@@ -290,7 +303,7 @@ namespace AgendaCore
         #region Operations
         public override int GetHashCode()
         {
-            return pId;
+            return Id;
         }
 
         #endregion

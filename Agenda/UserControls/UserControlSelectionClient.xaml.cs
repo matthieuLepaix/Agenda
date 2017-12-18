@@ -26,7 +26,7 @@ namespace Agenda.UserControls
 
         private ObservableCollection<Client> listeTriee = new ObservableCollection<Client>();
 
-        private Gestion.GestionClient mOwnerGestion;
+        private Gestion.GestionClients mOwnerGestion;
 
         private Consultation.Travaux_Vehicule mOwnerTravaux;
 
@@ -38,28 +38,28 @@ namespace Agenda.UserControls
             RefreshClients();
         }
 
-        public UserControlSelectionClient(Gestion.GestionClient owner) : this()
+        public UserControlSelectionClient(Gestion.GestionClients owner) : this()
         {
             mOwnerGestion = owner;
             Clients.SelectionChanged += new SelectionChangedEventHandler(GestionClients_SelectionChanged);
-            Vehicules_Client.SelectionChanged += new SelectionChangedEventHandler(GestionVehicules_Client_SelectionChanged);
+            //Vehicules_Client.SelectionChanged += new SelectionChangedEventHandler(GestionVehicules_Client_SelectionChanged);
         }
 
         public UserControlSelectionClient(Consultation.Travaux_Vehicule owner) : this()
         {
             mOwnerTravaux = owner;
             Clients.SelectionChanged += new SelectionChangedEventHandler(TravauxClients_SelectionChanged);
-            Vehicules_Client.SelectionChanged += new SelectionChangedEventHandler(TravauxVehicules_Client_SelectionChanged);
+            //Vehicules_Client.SelectionChanged += new SelectionChangedEventHandler(TravauxVehicules_Client_SelectionChanged);
         }
 
         void GestionVehicules_Client_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            mOwnerGestion.SetVehiculeSelected(GetVehicule());
+            //mOwnerGestion.SetVehiculeSelected(GetVehicule());
         }
 
         void GestionClients_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            mOwnerGestion.SetClientSelected(GetClient());
+            //mOwnerGestion.SetClientSelected(GetClient());
         }
 
         void TravauxVehicules_Client_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -81,7 +81,7 @@ namespace Agenda.UserControls
         {
             listeClients.Clear();
             listeTriee.Clear();
-            listeClients.AddRange(ClientManager.CLIENTS.OrderBy(c => c.pNom));
+            listeClients.AddRange(ClientManager.CLIENTS.OrderBy(c => c.Nom));
             AddListIntoListeTriee(listeClients);
         }
 
@@ -103,7 +103,7 @@ namespace Agenda.UserControls
             string valeur = Champs_Nom.Text.Trim();
             if (valeur.Length > 0)
             {
-                AddListIntoListeTriee(listeClients.Where(c => c.pNom.ToUpper().StartsWith(valeur.ToUpper())).ToList());
+                AddListIntoListeTriee(listeClients.Where(c => c.Nom.ToUpper().StartsWith(valeur.ToUpper())).ToList());
             }
             else
             {
@@ -113,7 +113,7 @@ namespace Agenda.UserControls
 
         public Vehicule GetVehicule()
         {
-            return Vehicules_Client.SelectedItem as Vehicule;
+            return null;// Vehicules_Client.SelectedItem as Vehicule;
         }
 
         public Client GetClient()

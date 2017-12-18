@@ -22,7 +22,7 @@ namespace Agenda.Gestion
     {
         #region Attributes
 
-        private GestionClient mOwnerClient = null;
+        private GestionClients mOwnerClient = null;
 
         private GestionRDV mOwnerRDV = null;
 
@@ -49,9 +49,9 @@ namespace Agenda.Gestion
         {
             InitializeComponent();
             InitializeTitle();
-            if (owner is GestionClient)
+            if (owner is GestionClients)
             {
-                mOwnerClient = owner as GestionClient;
+                mOwnerClient = owner as GestionClients;
                 mOwnerClient.IsEnabled = false;
                 mOwnerClient.Opacity = 0.3;
             }
@@ -65,7 +65,7 @@ namespace Agenda.Gestion
             Closed += new EventHandler(GestionVehicule_Closed);
             if (change)
             {
-                ChangeVehicule.ItemsSource = pClient.pVehicules;
+                ChangeVehicule.ItemsSource = pClient.Vehicules;
                 DPAjoutVehicule.Visibility = System.Windows.Visibility.Collapsed;
                 DPChangerVehicule.Visibility = System.Windows.Visibility.Visible;
             }
@@ -108,14 +108,14 @@ namespace Agenda.Gestion
                 mOwnerClient.IsEnabled = true;
                 mOwnerClient.Opacity = 1;
                 mOwnerClient.WindowState = System.Windows.WindowState.Normal;
-                mOwnerClient.Child = null;
+                //mOwnerClient.Child = null;
             }
             else if (mOwnerRDV != null)
             {
                 mOwnerRDV.IsEnabled = true;
                 mOwnerRDV.Opacity = 1;
                 mOwnerRDV.WindowState = System.Windows.WindowState.Normal;
-                mOwnerClient.Child = null;
+                //mOwnerClient.Child = null;
             }
         }
 
@@ -148,11 +148,11 @@ namespace Agenda.Gestion
                 }
                 // Ajouter le véhicule à la base de données
                 List<Vehicule> vehicules = new List<Vehicule>();
-                if ((vehicules = VehiculeManager.VEHICULES.ToList().FindAll(v => v.pImmatriculation.Equals(Immat.Text.Trim()))).Count > 0)
+                if ((vehicules = VehiculeManager.VEHICULES.ToList().FindAll(v => v.Immatriculation.Equals(Immat.Text.Trim()))).Count > 0)
                 {
                     MessageBoxResult result = MessageBox.Show(string.Format(@"L'immatriculation du véhicule existe déjà !
                         Ce véhicule appartient à {0} 
-                        Voulez-vous attribuer ce véhicule à {1}?", vehicules.First().pClient, pClient), "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                        Voulez-vous attribuer ce véhicule à {1}?", vehicules.First().Client, pClient), "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                     if (result.Equals(MessageBoxResult.Yes))
                     {
                         UpdateVehiculeToDB(vehicules.First());
@@ -168,10 +168,10 @@ namespace Agenda.Gestion
 
         private void FormatImmat()
         {
-            string nom = pClient.pNom;
+            string nom = pClient.Nom;
             int longNom = nom.Length;
-            int nbVehicule = pClient.pVehicules.Count();
-            Immat.Text = string.Format("{0}{1}_{2}", pClient.pPrenom.Substring(0, 2), nom.Substring(0, longNom > 19 ? 19 : longNom), nbVehicule);
+            int nbVehicule = pClient.Vehicules.Count();
+            Immat.Text = string.Format("{0}{1}_{2}", pClient.Prenom.Substring(0, 2), nom.Substring(0, longNom > 19 ? 19 : longNom), nbVehicule);
         }
 
         private void AddVehiculeToDB()
@@ -180,7 +180,7 @@ namespace Agenda.Gestion
             VehiculeManager.AddVehicule(v);
             if(mOwnerClient != null)
             {
-                mOwnerClient.RefreshClients();
+                //mOwnerClient.RefreshClients();
             }else if(mOwnerRDV != null)
             {
                 mOwnerRDV.refreshVehicule(v);
@@ -190,16 +190,16 @@ namespace Agenda.Gestion
 
         private void UpdateVehiculeToDB(Vehicule v)
         {
-            v.pClient.RemoveVehicule(v);
-            v.pClient = pClient;
-            v.pClient.AddVehicule(v);
-            v.pMarque = Marque.Text.Trim();
-            v.pModele = Modele.Text.Trim();
-            v.pImmatriculation = Immat.Text.Trim();
+            v.Client.RemoveVehicule(v);
+            v.Client = pClient;
+            v.Client.AddVehicule(v);
+            v.Marque = Marque.Text.Trim();
+            v.Modele = Modele.Text.Trim();
+            v.Immatriculation = Immat.Text.Trim();
             VehiculeManager.UpdateVehicule(v);
             if (mOwnerClient != null)
             {
-                mOwnerClient.RefreshClients();
+                //mOwnerClient.RefreshClients();
             }
             else if (mOwnerRDV != null)
             {

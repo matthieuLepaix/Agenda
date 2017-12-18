@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AgendaCore;
-using Oracle.DataAccess.Client;
+using Oracle.ManagedDataAccess.Client;
 
 
 namespace AgendaBDDManager
@@ -71,7 +71,7 @@ namespace AgendaBDDManager
             OracleDataReader odr = bdd.ExecuteSelect(requete);
             while (odr.Read())
             {
-                Client c = ClientManager.CLIENTS.Find(x => x.pId == Connexion.getIntFromOdr(6, odr));
+                Client c = ClientManager.CLIENTS.Find(x => x.Id == Connexion.getIntFromOdr(6, odr));
                 Vehicule v = new Vehicule(Connexion.getIntFromOdr(0, odr),
                                         Connexion.getStringFromOdr(1, odr),
                                         Connexion.getStringFromOdr(2, odr),
@@ -79,7 +79,7 @@ namespace AgendaBDDManager
                                         Connexion.getStringFromOdr(4, odr),
                                         int.Parse(Connexion.getStringFromOdr(5, odr)),
                                         c);
-                if (c != null)
+                if (c != null && !c.Vehicules.Contains(v))
                     c.AddVehicule(v);
                 liste.Add(v);
             }
@@ -126,7 +126,7 @@ namespace AgendaBDDManager
         public static List<Vehicule> GetVehiculesByClient(Client c)
         {
             List<Vehicule> liste = new List<Vehicule>();
-            string requete = string.Format("SELECT id, marque, modele, immatriculation, annee, kilometrage FROM vehicule WHERE client = {0}", c.pId);
+            string requete = string.Format("SELECT id, marque, modele, immatriculation, annee, kilometrage FROM vehicule WHERE client = {0}", c.Id);
             Connexion bdd = new Connexion();
             bdd.OpenConnection();
             OracleDataReader odr = bdd.ExecuteSelect(requete);
@@ -156,11 +156,11 @@ namespace AgendaBDDManager
             OracleDataReader odr;
             bdd.OpenConnection();
             int idClient = -1;
-            if (vehicule.pClient.pId == -1)
+            if (vehicule.Client.Id == -1)
             // récupérer l'id du client s'il est null
             {
                 string requeteClient = string.Format("SELECT id FROM client WHERE nom = '{0}' AND telephone1 = '{1}'",
-                    bdd.DeleteInjectionSQL(vehicule.pClient.pNom), bdd.DeleteInjectionSQL(vehicule.pClient.pTelephone1));
+                    bdd.DeleteInjectionSQL(vehicule.Client.Nom), bdd.DeleteInjectionSQL(vehicule.Client.Telephone1));
 
                 odr = bdd.ExecuteSelect(requeteClient);
 
@@ -170,16 +170,16 @@ namespace AgendaBDDManager
                     idClient = int.Parse(odr.GetDecimal(0).ToString());
 
                     string requete = string.Format("INSERT INTO vehicule(marque, modele, immatriculation, annee, kilometrage, client) VALUES('{0}','{1}','{2}','{3}','{4}',{5})",
-                                                    bdd.DeleteInjectionSQL(vehicule.pMarque), bdd.DeleteInjectionSQL(vehicule.pModele), bdd.DeleteInjectionSQL(vehicule.pImmatriculation), bdd.DeleteInjectionSQL(vehicule.pAnnee), vehicule.pKilometrage, idClient);
+                                                    bdd.DeleteInjectionSQL(vehicule.Marque), bdd.DeleteInjectionSQL(vehicule.Modele), bdd.DeleteInjectionSQL(vehicule.Immatriculation), bdd.DeleteInjectionSQL(vehicule.Annee), vehicule.Kilometrage, idClient);
                     bdd.ExecuteNonQuery(requete);
                 }
                 //Sinon Erreur !
             }
             else
             {
-                idClient = vehicule.pClient.pId;
+                idClient = vehicule.Client.Id;
                 string requete = string.Format("INSERT INTO vehicule(marque, modele, immatriculation, annee, kilometrage, client) VALUES('{0}','{1}','{2}','{3}','{4}',{5})",
-                                                       bdd.DeleteInjectionSQL(vehicule.pMarque), bdd.DeleteInjectionSQL(vehicule.pModele), bdd.DeleteInjectionSQL(vehicule.pImmatriculation), bdd.DeleteInjectionSQL(vehicule.pAnnee), vehicule.pKilometrage, vehicule.pClient.pId);
+                                                       bdd.DeleteInjectionSQL(vehicule.Marque), bdd.DeleteInjectionSQL(vehicule.Modele), bdd.DeleteInjectionSQL(vehicule.Immatriculation), bdd.DeleteInjectionSQL(vehicule.Annee), vehicule.Kilometrage, vehicule.Client.Id);
                 bdd.ExecuteNonQuery(requete);
             }
 
@@ -189,10 +189,10 @@ namespace AgendaBDDManager
             {
                 maxID = int.Parse(odr.GetDecimal(0).ToString());
             }
-            vehicule.pClient = ClientManager.CLIENTS.First(c => c.pId == idClient);
-            vehicule.pId = maxID;
+            vehicule.Client = ClientManager.CLIENTS.First(c => c.Id == idClient);
+            vehicule.Id = maxID;
             VEHICULES.Add(vehicule);
-            vehicule.pClient.AddVehicule(vehicule);
+            vehicule.Client.AddVehicule(vehicule);
             bdd.CloseConnection();
 
         }
@@ -219,17 +219,17 @@ namespace AgendaBDDManager
                                                 kilometrage= '{4}',
                                                 client = {5} 
                                             WHERE id = {6}",
-                                                       bdd.DeleteInjectionSQL(vehicule.pMarque),
-                                                       bdd.DeleteInjectionSQL(vehicule.pModele),
-                                                       bdd.DeleteInjectionSQL(vehicule.pImmatriculation),
-                                                       bdd.DeleteInjectionSQL(vehicule.pAnnee),
-                                                       vehicule.pKilometrage,
-                                                       vehicule.pClient != null ? vehicule.pClient.pId.ToString() : "null",
-                                                       vehicule.pId.ToString());
+                                                       bdd.DeleteInjectionSQL(vehicule.Marque),
+                                                       bdd.DeleteInjectionSQL(vehicule.Modele),
+                                                       bdd.DeleteInjectionSQL(vehicule.Immatriculation),
+                                                       bdd.DeleteInjectionSQL(vehicule.Annee),
+                                                       vehicule.Kilometrage,
+                                                       vehicule.Client != null ? vehicule.Client.Id.ToString() : "null",
+                                                       vehicule.Id.ToString());
             bdd.OpenConnection();
             bdd.ExecuteNonQuery(requete);
             bdd.CloseConnection();
-            VEHICULES.Remove(VEHICULES.First(v => v.pId == vehicule.pId));
+            VEHICULES.Remove(VEHICULES.First(v => v.Id == vehicule.Id));
             VEHICULES.Add(vehicule);
         }
 
@@ -245,18 +245,18 @@ namespace AgendaBDDManager
                                                 kilometrage= '{4}',
                                                 client = {5} 
                                             WHERE id = {6}",
-                                                       bdd.DeleteInjectionSQL(vehicule.pMarque),
-                                                       bdd.DeleteInjectionSQL(vehicule.pModele),
-                                                       bdd.DeleteInjectionSQL(vehicule.pImmatriculation),
-                                                       bdd.DeleteInjectionSQL(vehicule.pAnnee),
-                                                       vehicule.pKilometrage,
+                                                       bdd.DeleteInjectionSQL(vehicule.Marque),
+                                                       bdd.DeleteInjectionSQL(vehicule.Modele),
+                                                       bdd.DeleteInjectionSQL(vehicule.Immatriculation),
+                                                       bdd.DeleteInjectionSQL(vehicule.Annee),
+                                                       vehicule.Kilometrage,
                                                        "null",
-                                                       vehicule.pId.ToString());
+                                                       vehicule.Id.ToString());
             bdd.OpenConnection();
             bdd.ExecuteNonQuery(requete);
             bdd.CloseConnection();
-            vehicule.pClient = null;
-            VEHICULES.Remove(VEHICULES.First(v => v.pId == vehicule.pId));
+            vehicule.Client = null;
+            VEHICULES.Remove(VEHICULES.First(v => v.Id == vehicule.Id));
             VEHICULES.Add(vehicule);
         }
 
@@ -267,8 +267,8 @@ namespace AgendaBDDManager
             bdd.OpenConnection();
             bdd.ExecuteNonQuery(requete);
             bdd.CloseConnection();
-            RdvManager.RDVS.RemoveAll(r => r.pVehicule.pId == id);
-            VEHICULES.Remove(VEHICULES.First(v => v.pId == id));
+            RdvManager.RDVS.RemoveAll(r => r.Vehicule.Id == id);
+            VEHICULES.Remove(VEHICULES.First(v => v.Id == id));
         }
 
         #endregion
@@ -278,7 +278,7 @@ namespace AgendaBDDManager
         {
             foreach (Vehicule v in getAll())
             {
-                sw.WriteLine(insertVehicule, v.pId, v.pMarque, v.pModele, v.pImmatriculation, v.pAnnee, v.pKilometrage, v.pClient != null ? v.pClient.pId.ToString() : "null");
+                sw.WriteLine(insertVehicule, v.Id, v.Marque, v.Modele, v.Immatriculation, v.Annee, v.Kilometrage, v.Client != null ? v.Client.Id.ToString() : "null");
             }
         }
 
@@ -286,7 +286,7 @@ namespace AgendaBDDManager
         {
             foreach (Vehicule v in vehicules)
             {
-                sw.WriteLine(string.Format(insertVehicule, v.pId, v.pMarque, v.pModele, v.pImmatriculation, v.pAnnee, v.pKilometrage, v.pClient != null ? v.pClient.pId.ToString() : "null"));
+                sw.WriteLine(string.Format(insertVehicule, v.Id, v.Marque, v.Modele, v.Immatriculation, v.Annee, v.Kilometrage, v.Client != null ? v.Client.Id.ToString() : "null"));
             }
         }
     }

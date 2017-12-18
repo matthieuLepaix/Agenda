@@ -1,0 +1,2 @@
+C:\Agenda\SetupWIXV3\bin\Debug\SetupWIXV3.msi
+C:\Agenda\SetupWIXV3\bin\Debug\SetupWIXV3.wixpdb

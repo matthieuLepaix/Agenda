@@ -72,20 +72,20 @@ namespace Agenda.UserControls
             Vehicule v = mVehicule;
             if (v != null)
             {
-                v.pClient.pNom = NomClient.Text.Trim();
-                v.pClient.pPrenom = PrenomClient.Text.Trim();
-                v.pClient.pTelephone1 = Tel1Client.Text.Trim();
-                v.pClient.pTelephone2 = Tel2Client.Text.Trim();
-                v.pClient.pEmail = EmailClient.Text.Trim();
-                v.pClient.pAdresse = AdresseClient.Text.Trim();
-                v.pClient.pCodePostal = codePostalClient.Text.Trim();
-                v.pClient.pVille = VilleClient.Text.Trim();
+                v.Client.Nom = NomClient.Text.Trim();
+                v.Client.Prenom = PrenomClient.Text.Trim();
+                v.Client.Telephone1 = Tel1Client.Text.Trim();
+                v.Client.Telephone2 = Tel2Client.Text.Trim();
+                v.Client.Email = EmailClient.Text.Trim();
+                v.Client.Adresse = AdresseClient.Text.Trim();
+                v.Client.CodePostal = codePostalClient.Text.Trim();
+                v.Client.Ville = VilleClient.Text.Trim();
 
-                v.pMarque = MarqueVehicule.Text.Trim();
-                v.pModele = ModeleVehicule.Text.Trim();
-                v.pImmatriculation = ImmatVehicule.Text.Trim();
-                v.pAnnee = Annee.Text.Trim();
-                v.pKilometrage = Int32.Parse(km.Text.Trim());
+                v.Marque = MarqueVehicule.Text.Trim();
+                v.Modele = ModeleVehicule.Text.Trim();
+                v.Immatriculation = ImmatVehicule.Text.Trim();
+                v.Annee = Annee.Text.Trim();
+                v.Kilometrage = Int32.Parse(km.Text.Trim());
             }
             return v;
         }

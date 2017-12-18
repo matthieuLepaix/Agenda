@@ -1,8 +1,10 @@
 ﻿<Window x:Class="Agenda.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Name="Principale"
-        Title="MainWindow" 
+        xmlns:Chart="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit" 
+        xmlns:utils="clr-namespace:Agenda.Utils"
+        xmlns:UC="clr-namespace:Agenda.UserControls"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         WindowState="Maximized"
         WindowStyle="None"
         Foreground="Black"
@@ -11,16 +13,39 @@
         FontSize="13"
         BorderBrush="#AACEFF"
         BorderThickness="0"
+        MaxHeight="{Binding MaxHeight}"
         >
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Activated" >
+            <i:InvokeCommandAction Command="{Binding ActivatedCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Window.Resources>
+        <ResourceDictionary>
+            <utils:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <utils:ReverseBooleanToVisibilityConverter x:Key="ReverseBooleanToVisibilityConverter"/>
+            <utils:ListRendezVousConverter x:Key="ListRendezVousConverter"/>
+            <utils:DayOfWeekConverter x:Key="DayOfWeekConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
     <DockPanel Background="#0064ef">
-        <DockPanel Name="myWindowHeadBar" DockPanel.Dock="Top" Background="#002860" Margin="0">
-            <TextBlock Name="WindowTitle" Margin="4" DockPanel.Dock="Left" HorizontalAlignment="Left" Foreground="WhiteSmoke" FontSize="15" FontWeight="Bold"></TextBlock>
+        <DockPanel DockPanel.Dock="Top" Background="#002860" Margin="0">
+            <DockPanel.InputBindings>
+                <MouseBinding Gesture="LeftClick" Command="{Binding DragCommand}"/>
+            </DockPanel.InputBindings>
+            <TextBlock Text="{Binding WindowTitle}" Margin="4" DockPanel.Dock="Left" HorizontalAlignment="Left" Foreground="WhiteSmoke" FontSize="15" FontWeight="Bold"></TextBlock>
             <WrapPanel DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="0,0,10,0">
                 <Border Name="Btn_MinimizePrincipale" BorderBrush="WhiteSmoke" BorderThickness="1,0,1,1" CornerRadius="0,0,0,5">
+                    <Border.InputBindings>
+                        <MouseBinding Gesture="LeftClick" Command="{Binding MinimizeCommand}"/>
+                    </Border.InputBindings>
                     <TextBlock Margin="10,0,10,0" Foreground="WhiteSmoke" 
                                HorizontalAlignment="Right" FontSize="15" FontWeight="ExtraBold">_</TextBlock>
                 </Border>
                 <Border Name="Btn_ClosePrincipale" BorderBrush="WhiteSmoke" BorderThickness="1,0,1,1" CornerRadius="0,0,5,0" Margin="-1,0,0,0" Background="#FF5050">
+                    <Border.InputBindings>
+                        <MouseBinding Gesture="LeftClick" Command="{Binding CloseCommand}"/>
+                    </Border.InputBindings>
                     <TextBlock  Margin="12,0,12,0" Foreground="WhiteSmoke" 
                            HorizontalAlignment="Right" FontSize="15" FontWeight="ExtraBold">X</TextBlock>
                 </Border>
@@ -34,15 +59,25 @@
                     <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Margin="15 5" >
                         <DockPanel>
                             <WrapPanel DockPanel.Dock="Left" HorizontalAlignment="Stretch">
-                                <Button Name="AjoutRDV" Style="{StaticResource Btn_Options}" Content="Ajouter un RDV" Click="Button_Click"/>
-                                <Button Name="LesClients" Style="{StaticResource Btn_Options}" Content="Les clients" Click="Button_Click" />
-                                <Button Name="Save" Style="{StaticResource Btn_Options}" Content="Sauvegarde" Click="Button_Click"/>
-                                <Button Name="Works" Style="{StaticResource Btn_Options}" Content="Travaux" Click="Button_Click"/>
+                                <Button Style="{StaticResource Btn_Options}" 
+                                        Content="{Binding AddRdvTextButton}" 
+                                        Command="{Binding AddRdvCommand}"/>
+                                <Button Style="{StaticResource Btn_Options}" 
+                                        Content="{Binding ClientsTextButton}" 
+                                        Command="{Binding ClientsCommand}"/>
+                                <Button Style="{StaticResource Btn_Options}" 
+                                        Content="{Binding SaveTextButton}" 
+                                        Command="{Binding SaveCommand}"/>
+                                <Button Style="{StaticResource Btn_Options}" 
+                                        Content="{Binding WorksTextButton}" 
+                                        Command="{Binding WorksCommand}"/>
                             </WrapPanel>
                             <WrapPanel DockPanel.Dock="Right" HorizontalAlignment="Right">
-                                <Button Name="Refresh" Style="{StaticResource Btn_Options}" Click="Button_Click">
+                                <Button Style="{StaticResource Btn_Options}" 
+                                        Command="{Binding RefreshCommand}">
                                     <StackPanel>
-                                        <Image Source="images/refresh.png" Height="50"/>
+                                        <Image Source="{Binding RefreshImgPath}" 
+                                               Height="50"/>
                                     </StackPanel>
                                 </Button>
                             </WrapPanel>
@@ -52,49 +87,73 @@
 
                     <StackPanel Margin="5" DockPanel.Dock="Left" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" >
                         <Viewbox  HorizontalAlignment="Stretch" Width="280" Height="Auto">
-                            <Calendar Name="CalendarToChoice" SelectedDatesChanged="CalendarToChoice_SelectedDatesChanged"/>
+                            <Calendar Name="CalendarToChoice" SelectedDate="{Binding SelectedDate}"/>
                         </Viewbox>
 
                         <GroupBox Header="Rendez-vous" Style="{StaticResource ResourceKey=GroupBoxBasic}"
                                   Width="280" Margin="5" FontSize="15" Foreground="Black" FontWeight="DemiBold">
 
                             <DockPanel Margin="0 15">
-                                <TextBlock DockPanel.Dock="Top" Name="noRDVselected" Text="Aucun rendez-vous sélectionné" Margin="5"/>
-                                <ScrollViewer DockPanel.Dock="Top" Name="RDVselected" VerticalScrollBarVisibility="Auto" Height="200" Visibility="Collapsed">
+                                <TextBlock DockPanel.Dock="Top" Text="Aucun rendez-vous sélectionné" Margin="5"
+                                           Visibility="{Binding IsRdvSelected, Converter={StaticResource ReverseBooleanToVisibilityConverter}}"/>
+                                <ScrollViewer DockPanel.Dock="Top" Name="RDVselected" VerticalScrollBarVisibility="Auto" Height="200" 
+                                              Visibility="{Binding IsRdvSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <StackPanel Width="260" DockPanel.Dock="Top">
                                         <WrapPanel Width="Auto" Margin="3">
-                                            <TextBlock Text="Client : " TextAlignment="Right" Width="60" FontSize="11" FontWeight="Bold"/>
-                                            <TextBlock Name="Details_Client" FontSize="11"/>
+                                            <TextBlock Text="Client : " 
+                                                       TextAlignment="Right" 
+                                                       Width="60" 
+                                                       FontSize="11" 
+                                                       FontWeight="Bold"/>
+                                            <TextBlock FontSize="11"
+                                                       Text="{Binding DetailsClient}"/>
                                         </WrapPanel>
                                         <WrapPanel Margin="3">
-                                            <TextBlock Text="Jour : " TextAlignment="Right" Width="60" FontSize="11" FontWeight="Bold"/>
-                                            <TextBlock Name="Details_Jour" FontSize="11"/>
+                                            <TextBlock Text="Jour : " TextAlignment="Right" 
+                                                       Width="60" FontSize="11" FontWeight="Bold"/>
+                                            <TextBlock FontSize="11"
+                                                       Text="{Binding DetailsDay}"/>
                                         </WrapPanel>
                                         <WrapPanel Margin="3">
-                                            <TextBlock Text="Heure : " TextAlignment="Right" Width="60" FontSize="11" FontWeight="Bold"/>
-                                            <TextBlock Name="Details_Heure" FontSize="11"/>
+                                            <TextBlock Text="Heure : " TextAlignment="Right" 
+                                                       Width="60" FontSize="11" FontWeight="Bold"/>
+                                            <TextBlock FontSize="11"
+                                                       Text="{Binding DetailsTime}"/>
                                         </WrapPanel>
                                         <WrapPanel Margin="3">
-                                            <TextBlock Text="Véhicule : " TextAlignment="Right" Width="60" FontSize="11" FontWeight="Bold"/>
-                                            <TextBlock Name="Details_Vehicule" FontSize="11"/>
+                                            <TextBlock Text="Véhicule : " 
+                                                       TextAlignment="Right" Width="60" 
+                                                       FontSize="11" FontWeight="Bold"/>
+                                            <TextBlock FontSize="11"
+                                                       Text="{Binding DetailsVehicule}"/>
                                         </WrapPanel>
                                         <WrapPanel Margin="3" MinHeight="60">
-                                            <TextBlock Text="Travaux : " TextAlignment="Right" Width="60" FontSize="11" FontWeight="Bold"/>
-                                            <TextBlock Name="Details_Travaux" TextWrapping="Wrap" FontSize="11"/>
+                                            <TextBlock Text="Travaux : " 
+                                                       TextAlignment="Right" 
+                                                       Width="60" FontSize="11" 
+                                                       FontWeight="Bold"/>
+                                            <TextBlock TextWrapping="Wrap" FontSize="11"
+                                                       Text="{Binding DetailsWorks}"/>
                                         </WrapPanel>
                                     </StackPanel>
                                 </ScrollViewer>
-                                <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="0">
+                                <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="0"
+                                           Visibility="{Binding IsRdvSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <Image Name="Btn_FactureRDV" Source="images/facture.png" Height="40" 
-                                           Cursor="Hand" MouseUp="Btn_FactureRDV_MouseUp" Margin="15 0 10 0"/>
+                                           Cursor="Hand" Margin="15 0 10 0">
+                                        <Image.InputBindings>
+                                            <MouseBinding Gesture="LeftClick" Command="{Binding DetailsFactureCommand}"/>
+                                        </Image.InputBindings>
+                                    </Image>
                                     <Image Name="Btn_DeleteRDV" Source="images/DeleteRed.png" Height="35" 
-                                           Cursor="Hand" MouseDown="Btn_DeleteRDV_MouseDown" Margin="15 0 10 0"/>
+                                           Cursor="Hand" Margin="15 0 10 0">
+                                        <Image.InputBindings>
+                                            <MouseBinding Gesture="LeftClick" Command="{Binding DetailsDeleteCommand}"/>
+                                        </Image.InputBindings>
+                                    </Image>
                                 </WrapPanel>
                             </DockPanel>
                         </GroupBox>
-                        <!--<WrapPanel HorizontalAlignment="Center" Margin="0 20">
-                    <Button Name="Save" Content="Sauvegarde" Padding="30 10" Click="Button_Click"/>
-                </WrapPanel>-->
                     </StackPanel>
 
                     <DockPanel DockPanel.Dock="Right" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
@@ -125,74 +184,518 @@
                                     <RowDefinition Height="6*"/>
                                     <RowDefinition Height="6*"/>
                                 </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="1" Grid.Column="0" 
+                                           Text="08:00"
+                                           TextAlignment="Center"
+                                           FontSize="13" FontWeight="Bold"
+                                           VerticalAlignment="Center"
+                                           Foreground="Black"/>
+                                <TextBlock Grid.Row="2" Grid.Column="0"
+                                           Text="09:00"
+                                           TextAlignment="Center"
+                                           FontSize="13" FontWeight="Bold"
+                                           VerticalAlignment="Center"
+                                           Foreground="Black"/>
+                                <TextBlock Grid.Row="3" Grid.Column="0"
+                                           Text="10:00"
+                                           TextAlignment="Center"
+                                           FontSize="13" FontWeight="Bold"
+                                           VerticalAlignment="Center"
+                                           Foreground="Black"/>
+                                <TextBlock Grid.Row="4" Grid.Column="0"
+                                           Text="11:00"
+                                           TextAlignment="Center"
+                                           FontSize="13" FontWeight="Bold"
+                                           VerticalAlignment="Center"
+                                           Foreground="Black"/>
+                                <TextBlock Grid.Row="5" Grid.Column="0"
+                                           Text="12:00"
+                                           TextAlignment="Center"
+                                           FontSize="13" FontWeight="Bold"
+                                           VerticalAlignment="Center"
+                                           Foreground="Black"/>
+                                <TextBlock Grid.Row="6" Grid.Column="0"
+                                           Text="13:00"
+                                           TextAlignment="Center"
+                                           FontSize="13" FontWeight="Bold"
+                                           VerticalAlignment="Center"
+                                           Foreground="Black"/>
+                                <TextBlock Grid.Row="7" Grid.Column="0"
+                                           Text="14:00"
+                                           TextAlignment="Center"
+                                           FontSize="13" FontWeight="Bold"
+                                           VerticalAlignment="Center"
+                                           Foreground="Black"/>
+                                <TextBlock Grid.Row="8" Grid.Column="0"
+                                           Text="15:00"
+                                           TextAlignment="Center"
+                                           FontSize="13" FontWeight="Bold"
+                                           VerticalAlignment="Center"
+                                           Foreground="Black"/>
+                                <TextBlock Grid.Row="9" Grid.Column="0"
+                                           Text="16:00"
+                                           TextAlignment="Center"
+                                           FontSize="13" FontWeight="Bold"
+                                           VerticalAlignment="Center"
+                                           Foreground="Black"/>
+                                <TextBlock Grid.Row="10" Grid.Column="0"
+                                           Text="17:00"
+                                           TextAlignment="Center"
+                                           FontSize="13" FontWeight="Bold"
+                                           VerticalAlignment="Center"
+                                           Foreground="Black"/>
+                                <TextBlock Grid.Row="11" Grid.Column="0"
+                                           Text="18:00"
+                                           TextAlignment="Center"
+                                           FontSize="13" FontWeight="Bold"
+                                           VerticalAlignment="Center"
+                                           Foreground="Black"/>
+
+
+                                <TextBlock Grid.Row="0" Grid.Column="1" 
+                                           Text="{Binding SelectedDate, Converter={StaticResource DayOfWeekConverter}, ConverterParameter=0}"
+                                           TextAlignment="Center"
+                                           FontSize="13" FontWeight="Bold"
+                                           VerticalAlignment="Center"
+                                           Foreground="Black"/>
+                                <TextBlock Grid.Row="0" Grid.Column="2"
+                                           Text="{Binding SelectedDate, Converter={StaticResource DayOfWeekConverter}, ConverterParameter=1}"
+                                           TextAlignment="Center"
+                                           FontSize="13" FontWeight="Bold"
+                                           VerticalAlignment="Center"
+                                           Foreground="Black"/>
+                                <TextBlock Grid.Row="0" Grid.Column="3"
+                                           Text="{Binding SelectedDate, Converter={StaticResource DayOfWeekConverter}, ConverterParameter=2}"
+                                           TextAlignment="Center"
+                                           FontSize="13" FontWeight="Bold"
+                                           VerticalAlignment="Center"
+                                           Foreground="Black"/>
+                                <TextBlock Grid.Row="0" Grid.Column="4"
+                                           Text="{Binding SelectedDate, Converter={StaticResource DayOfWeekConverter}, ConverterParameter=3}"
+                                           TextAlignment="Center"
+                                           FontSize="13" FontWeight="Bold"
+                                           VerticalAlignment="Center"
+                                           Foreground="Black"/>
+                                <TextBlock Grid.Row="0" Grid.Column="5"
+                                           Text="{Binding SelectedDate, Converter={StaticResource DayOfWeekConverter}, ConverterParameter=4}"
+                                           TextAlignment="Center"
+                                           FontSize="13" FontWeight="Bold"
+                                           VerticalAlignment="Center"
+                                           Foreground="Black"/>
+
+
+                                <StackPanel Grid.Row="1" Grid.Column="1" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="L8"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=L8}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="2" Grid.Column="1" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="L9"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=L9}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="3" Grid.Column="1" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="L10"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=L10}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="4" Grid.Column="1" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="L11"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=L11}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="5" Grid.Column="1" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="L12"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=L12}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="6" Grid.Column="1" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="L13"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=L13}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="7" Grid.Column="1" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="L14"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=L14}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="8" Grid.Column="1" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="L15"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=L15}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="9" Grid.Column="1" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="L16"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=L16}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="10" Grid.Column="1" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="L17"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=L17}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="11" Grid.Column="1" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="L18"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=L18}" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="1" Grid.Column="2" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="M8"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=M8}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="2" Grid.Column="2" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="M9"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=M9}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="3" Grid.Column="2" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="M10"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=M10}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="4" Grid.Column="2" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="M11"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=M11}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="5" Grid.Column="2" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="M12"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=M12}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="6" Grid.Column="2" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="M13"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=M13}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="7" Grid.Column="2" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="M14"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=M14}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="8" Grid.Column="2" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="M15"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=M15}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="9" Grid.Column="2" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="M16"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=M16}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="10" Grid.Column="2" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="M17"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=M17}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="11" Grid.Column="2" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="M18"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=M18}" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="1" Grid.Column="3" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="m8"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=m8}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="2" Grid.Column="3" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="m9"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=m9}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="3" Grid.Column="3" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="m10"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=m10}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="4" Grid.Column="3" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="m11"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=m11}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="5" Grid.Column="3" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="m12"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=m12}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="6" Grid.Column="3" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="m13"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=m13}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="7" Grid.Column="3" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="m14"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=m14}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="8" Grid.Column="3" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="m15"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=m15}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="9" Grid.Column="3" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="m16"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=m16}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="10" Grid.Column="3" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="m17"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=m17}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="11" Grid.Column="3" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="m18"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=m18}" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="1" Grid.Column="4" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="J8"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=J8}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="2" Grid.Column="4" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="J9"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=J9}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="3" Grid.Column="4" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="J10"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=J10}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="4" Grid.Column="4" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="J11"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=J11}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="5" Grid.Column="4" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="J12"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=J12}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="6" Grid.Column="4" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="J13"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=J13}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="7" Grid.Column="4" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="J14"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=J14}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="8" Grid.Column="4" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="J15"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=J15}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="9" Grid.Column="4" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="J16"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=J16}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="10" Grid.Column="4" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="J17"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=J17}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="11" Grid.Column="4" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="J18"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=J18}" />
+                                </StackPanel>
+                                
+                                <StackPanel Grid.Row="1" Grid.Column="5" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="V8"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=V8}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="2" Grid.Column="5" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="V9"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=V9}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="3" Grid.Column="5" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="V10"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=V10}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="4" Grid.Column="5" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="V11"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=V11}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="5" Grid.Column="5" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="V12"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=V12}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="6" Grid.Column="5" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="V13"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=V13}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="7" Grid.Column="5" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="V14"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=V14}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="8" Grid.Column="5" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="V15"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=V15}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="9" Grid.Column="5" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="V16"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=V16}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="10" Grid.Column="5" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="V17"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=V17}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="11" Grid.Column="5" Background="Transparent">
+                                    <StackPanel.InputBindings>
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="V18"/>
+                                    </StackPanel.InputBindings>
+                                    <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=V18}" />
+                                </StackPanel>
                             </Grid>
                         </Border>
 
                     </DockPanel>
                 </DockPanel>
             </TabItem>
-            <TabItem Header="Facturation" HorizontalAlignment="Center" HorizontalContentAlignment="Stretch" UseLayoutRounding="True" Padding="0">
-                <DockPanel Name="Facture" Width="Auto" Height="Auto" Visibility="Collapsed" Background="#E0ECFD">
-                    <DockPanel DockPanel.Dock="Right" Width="Auto" Height="Auto" Margin="5 5 5 5">
-                        <StackPanel>
-                            <GroupBox Header="Travaux à effectuer" Style="{StaticResource ResourceKey=GroupBoxBasic}" MinHeight="400" MaxHeight="400">
-                                <ScrollViewer Name="Facture_sb_Works" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+            <!--<TabItem Header="Facturation" HorizontalAlignment="Center" HorizontalContentAlignment="Stretch" UseLayoutRounding="True" Padding="0">
+                <StackPanel  Width="Auto" Height="Auto" Visibility="Visible" Background="#E0ECFD">
+                    <DockPanel Name="Facture" Width="Auto" Height="Auto" Visibility="Collapsed" Background="#E0ECFD">
+                        <DockPanel DockPanel.Dock="Top" Width="Auto" Height="Auto" Margin="5 5 5 5">
+                            <WrapPanel HorizontalAlignment="Right">
+                                <Button Content="Fermer" Style="{StaticResource Btn_Options}" Foreground="DarkRed" FontSize="12" Click="Facture_Fermer"/>
+                            </WrapPanel>
+                        </DockPanel>
+                        <DockPanel DockPanel.Dock="Right" Width="Auto" Height="Auto" Margin="5 5 5 5">
+                            <StackPanel Width="Auto">
+                                <GroupBox Header="Travaux à effectuer" Style="{StaticResource ResourceKey=GroupBoxBasic}" MinHeight="400" MaxHeight="400">
+                                    <ScrollViewer Name="Facture_sb_Works" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
                               VerticalScrollBarVisibility="Visible" Foreground="Black">
-                                    <StackPanel Name="Facture_AllWorks" DockPanel.Dock="Right" HorizontalAlignment="Center" Margin="5">
-                                        <Button Name="Facture_Btn_AddWork" Cursor="Hand" VerticalAlignment="Center"
+                                        <StackPanel Name="Facture_AllWorks" DockPanel.Dock="Right" HorizontalAlignment="Center" Margin="5">
+                                            <Button Name="Facture_Btn_AddWork" Cursor="Hand" VerticalAlignment="Center"
                                 Margin="2" Height="30" Click="Add_Work" Style="{StaticResource ResourceKey=Btn_Add}"/>
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </GroupBox>
+                                <GroupBox Header="Forfaits main d'oeuvre" Style="{StaticResource ResourceKey=GroupBoxBasic}" Margin="0 5 0 0" Foreground="Black" FontSize="15">
+                                    <StackPanel Orientation="Vertical" Margin="5">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Forfait main d'oeuvre 1 :"/>
+                                            <TextBox Name="Facture_MO1" Width="100" Margin="10 0 0 0" TextAlignment="Right"/>
+                                            <TextBlock Text=" €"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Forfait main d'oeuvre 2 :"/>
+                                            <TextBox Name="Facture_MO2" Width="100" Margin="10 0 0 0" TextAlignment="Right"/>
+                                            <TextBlock Text=" €"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Forfait main d'oeuvre 3 :"/>
+                                            <TextBox Name="Facture_MO3" Width="100" Margin="10 0 0 0" TextAlignment="Right"/>
+                                            <TextBlock Text=" €"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Forfait main d'oeuvre 4 :"/>
+                                            <TextBox Name="Facture_MO4" Width="100" Margin="10 0 0 0" TextAlignment="Right"/>
+                                            <TextBlock Text=" €"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Forfait main d'oeuvre 5 :"/>
+                                            <TextBox Name="Facture_MO5" Width="100" Margin="10 0 0 0" TextAlignment="Right"/>
+                                            <TextBlock Text=" €"/>
+                                        </StackPanel>
                                     </StackPanel>
-                                </ScrollViewer>
-                            </GroupBox>
-                            <GroupBox Header="Forfaits main d'oeuvre" Style="{StaticResource ResourceKey=GroupBoxBasic}" Margin="0 5 0 0" Foreground="Black" FontSize="15">
-                                <StackPanel Orientation="Vertical" Margin="5">
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Forfait main d'oeuvre 1 :"/>
-                                        <TextBox Name="Facture_MO1" Width="100" Margin="10 0 0 0" TextAlignment="Right"/>
-                                        <TextBlock Text=" €"/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Forfait main d'oeuvre 2 :"/>
-                                        <TextBox Name="Facture_MO2" Width="100" Margin="10 0 0 0" TextAlignment="Right"/>
-                                        <TextBlock Text=" €"/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Forfait main d'oeuvre 3 :"/>
-                                        <TextBox Name="Facture_MO3" Width="100" Margin="10 0 0 0" TextAlignment="Right"/>
-                                        <TextBlock Text=" €"/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Forfait main d'oeuvre 4 :"/>
-                                        <TextBox Name="Facture_MO4" Width="100" Margin="10 0 0 0" TextAlignment="Right"/>
-                                        <TextBlock Text=" €"/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Forfait main d'oeuvre 5 :"/>
-                                        <TextBox Name="Facture_MO5" Width="100" Margin="10 0 0 0" TextAlignment="Right"/>
-                                        <TextBlock Text=" €"/>
-                                    </StackPanel>
-                                </StackPanel>
-                            </GroupBox>
-                        </StackPanel>
-                    </DockPanel>
-                    <DockPanel DockPanel.Dock="Left" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Margin="5 5 0 5">
-                        <StackPanel Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
-                            <DockPanel Name="Facture_Le_Client" Width="Auto" Height="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                            <StackPanel Orientation="Horizontal" Margin="10">
-                                <TextBlock Text="Type de réglement :" Foreground="Black"/>
-                                <ComboBox Style="{StaticResource ResourceKey=ComboBoxFlatStyle}" Name="Facture_TypeReglement" Width="200" Height="35" 
-                                    VerticalAlignment="Top" Margin="10 0 0 0" IsEditable="False" />
+                                </GroupBox>
                             </StackPanel>
-                            <DockPanel>
-                                <WrapPanel DockPanel.Dock="Left" HorizontalAlignment="Stretch" Margin="40 70 0 0">
-                                    <Button Name="Facture_Enregistrer" Style="{StaticResource Btn_Options}" Content="Enregistrer" Click="Facture_Click" Margin="20 0 0 0"/>
-                                    <Button Name="Facture_ToExcel" Style="{StaticResource Btn_Options}" Content="Fichier Excel" Click="Facture_Click" Margin="20 0 0 0"/>
-                                    <Button Name="Facture_Imprimer" Style="{StaticResource Btn_Options}" Content="Imprimer" Click="Facture_Click" Margin="20 0 0 0"/>
-                                </WrapPanel>
-                            </DockPanel>
-                        </StackPanel>
+                        </DockPanel>
+                        <DockPanel DockPanel.Dock="Left" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Margin="5 5 0 5">
+                            <StackPanel Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                                <DockPanel Name="Facture_Le_Client" Width="Auto" Height="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                <StackPanel Orientation="Horizontal" Margin="10">
+                                    <TextBlock Text="Type de réglement :" Foreground="Black"/>
+                                    <ComboBox Style="{StaticResource ResourceKey=ComboBoxFlatStyle}" Name="Facture_TypeReglement" Width="200" Height="35" 
+                                    VerticalAlignment="Top" Margin="10 0 0 0" IsEditable="False" />
+                                </StackPanel>
+                                <DockPanel>
+                                    <WrapPanel DockPanel.Dock="Left" HorizontalAlignment="Stretch" Margin="30 50 0 0">
+                                        <Button Name="Facture_Enregistrer" Style="{StaticResource Btn_Options}" Content="Enregistrer" Click="Facture_Click" Margin="20 0 0 0"/>
+                                        <Button Name="Facture_ToExcel" Style="{StaticResource Btn_Options}" Content="Fichier Excel" Click="Facture_Click" Margin="20 0 0 0"/>
+                                        <Button Name="Facture_Imprimer" Style="{StaticResource Btn_Options}" Content="Imprimer" Click="Facture_Click" Margin="20 0 0 0"/>
+                                    </WrapPanel>
+                                </DockPanel>
+                            </StackPanel>
+                        </DockPanel>
                     </DockPanel>
-                </DockPanel>
+                    <DockPanel Name="Facture_SearchRDV" Width="Auto" Height="Auto" Visibility="Visible" Background="#E0ECFD">
+                        <TextBlock Text="Veuillez sélectionner un rendez-vous dans l'agenda afin d'éditer sa facture." Foreground="Black"/>
+                    </DockPanel>
+                </StackPanel>
             </TabItem>
             <TabItem Header="Devis" HorizontalAlignment="Center" HorizontalContentAlignment="Stretch" UseLayoutRounding="True" Padding="0">
                 <DockPanel Name="Devis" Width="Auto" Height="Auto" Visibility="Visible" Background="#E0ECFD">
@@ -245,9 +748,9 @@
                         <StackPanel Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                             <DockPanel Name="Devis_Le_Client" Width="Auto" Height="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                             <StackPanel Orientation="Horizontal" Margin="10">
-                                <TextBlock Text="Type de réglement :" Foreground="Black"/>
+                                <TextBlock Text="Type de réglement :" Foreground="Black" FontSize="12"/>
                                 <ComboBox Style="{StaticResource ResourceKey=ComboBoxFlatStyle}" Name="Devis_TypeReglement" Width="200" Height="35" 
-                                    VerticalAlignment="Top" Margin="10 0 0 0" IsEditable="False" />
+                                    VerticalAlignment="Top" Margin="10 0 0 0" IsEditable="False" FontSize="12" VerticalContentAlignment="Center" />
                             </StackPanel>
                             <DockPanel>
                                 <WrapPanel DockPanel.Dock="Left" HorizontalAlignment="Stretch" Margin="40 70 0 0">
@@ -260,16 +763,97 @@
                     </DockPanel>
                 </DockPanel>
             </TabItem>
-            <TabItem Header="Activité" HorizontalAlignment="Center" HorizontalContentAlignment="Stretch" UseLayoutRounding="True" Padding="0">
+            <TabItem Header="Activité"  Visibility="Collapsed" HorizontalAlignment="Center" HorizontalContentAlignment="Stretch" UseLayoutRounding="True" Padding="0">
                 <DockPanel Name="Activite" Width="Auto" Height="Auto" Visibility="Collapsed" Background="#E0ECFD">
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Background="WhiteSmoke" Margin="5">
+                        <TextBlock Text="Année courante :" Foreground="Black"/>
+                    </StackPanel>
+                    <StackPanel DockPanel.Dock="Left" Background="Beige" Margin="10 0 10 0">
+                        <TextBlock Text="Année" Foreground="Black" Padding="10px"/>
+                        <ComboBox Style="{StaticResource ResourceKey=ComboBoxFlatStyle}" Name="YearToAnalysis" Width="100" Height="28" ItemsSource="{Binding}" Padding="10px">
+                        </ComboBox>
+                    </StackPanel>
+                    <Grid DockPanel.Dock="Right" Width="1200px" Background="Azure">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <Chart:Chart Grid.Column="0" Grid.Row="0" Name="YearChart" 
+                                     Title="Activité Annuelle" FontSize="11" BorderThickness="0"
+                                     Foreground="Black">
+                            <Chart:ColumnSeries Title="Nombre de RDV" BorderThickness="0"
+                                                ItemsSource="{Binding}" IndependentValuePath="Key"  
+                                                DependentValuePath="Value">
+                            </Chart:ColumnSeries>
+                        </Chart:Chart>
+                        <Chart:Chart Grid.Column="1" Grid.Row="0" Name="MonthChart" 
+                                     Title="Activité mensuelle" FontSize="11" BorderThickness="0"
+                                     Foreground="Black">
+                            <Chart:LineSeries BorderThickness="0"
+                                                ItemsSource="{Binding [0]}" IndependentValuePath="Key"  
+                                                DependentValuePath="Value">
+                            </Chart:LineSeries>
+                            <Chart:LineSeries BorderThickness="0"
+                                                ItemsSource="{Binding [1]}" IndependentValuePath="Key"  
+                                                DependentValuePath="Value">
+                            </Chart:LineSeries>
+                            <Chart:LineSeries BorderThickness="0"
+                                                ItemsSource="{Binding [2]}" IndependentValuePath="Key"  
+                                                DependentValuePath="Value">
+                            </Chart:LineSeries>
+                        </Chart:Chart>
+                        
+                        -->
+            <!--<Chart:Chart Grid.Column="0" Grid.Row="1" Name="ClientChart" 
+                                     Title="10 Meilleurs clients" FontSize="11" BorderThickness="0"
+                                     Foreground="Black">
+                            <Chart:PieSeries Title="Nombre de RDV" BorderThickness="0"
+                                                ItemsSource="{Binding}" IndependentValuePath="Key"  
+                                                DependentValuePath="Value">
+                            </Chart:PieSeries>
+                        </Chart:Chart>
+                        <Chart:Chart Grid.Column="1" Grid.Row="1" Name="MarqueChart" 
+                                     Title="Les marques de voiture" FontSize="11" BorderThickness="0"
+                                     Foreground="Black">
+                            <Chart:PieSeries Title="Nombre de RDV" BorderThickness="0"
+                                                ItemsSource="{Binding}" IndependentValuePath="Key"  
+                                                DependentValuePath="Value">
+                            </Chart:PieSeries>
+                        </Chart:Chart>-->
+            <!--
+                    </Grid>
                 </DockPanel>
             </TabItem>
-            <TabItem Header="Paramètres" HorizontalAlignment="Center" HorizontalContentAlignment="Stretch" UseLayoutRounding="True" Padding="0">
+            <TabItem Header="Paramètres"  Visibility="Collapsed" HorizontalAlignment="Center" HorizontalContentAlignment="Stretch" UseLayoutRounding="True" Padding="0">
                 <DockPanel Name="Params" Width="Auto" Height="Auto" Visibility="Collapsed" Background="#E0ECFD">
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Vertical" Margin="5">
+                            <TextBlock Text="Vacances et jours fériés" Foreground="Black" Margin="5"/>
+                            <DatePicker Name="Params_VJF_selected" SelectedDate="{Binding JourSelected, Mode=TwoWay}" Foreground="Black" Margin="5" />
+                            <Button Name="Params_VJF_Add" Content="Ajouter" Foreground="Black" Margin="5"
+                                    Style="{StaticResource Btn_Options}" FontSize="11"
+                                    Command="{Binding Add_JoursFeries}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Margin="5">
+                            <ListBox Name="Params_VJF_list" FontSize="12" Height="100" Margin="5" 
+                                     SelectedValue="{Binding JourListSelected, Mode=TwoWay}"
+                                     ItemsSource="{Binding Jours_feries, Mode=TwoWay}"/>
+                            <Button Name="Params_VJF_del" Content="Supprimer de la liste" Margin="5"
+                                    Style="{StaticResource Btn_Options}" FontSize="11"
+                                    Command="{Binding Del_JoursFeries}"/>
+                        </StackPanel>
+                    </StackPanel>
                 </DockPanel>
-            </TabItem>
+            </TabItem>-->
         </TabControl>
     </DockPanel>
+
 
 
 </Window>

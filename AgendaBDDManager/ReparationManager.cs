@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AgendaCore;
-using Oracle.DataAccess.Client;
+using Oracle.ManagedDataAccess.Client;
 
 namespace AgendaBDDManager
 {
@@ -71,7 +71,7 @@ namespace AgendaBDDManager
             
             Connexion bdd = new Connexion();
             string requete = string.Format("INSERT INTO reparation(nom) VALUES('{0}')",
-                                                    bdd.DeleteInjectionSQL(rep.pNom));
+                                                    bdd.DeleteInjectionSQL(rep.Nom));
             bdd.OpenConnection();
             bdd.ExecuteNonQuery(requete);
             OracleDataReader odr = bdd.ExecuteSelect(maxID_request);
@@ -81,7 +81,7 @@ namespace AgendaBDDManager
                 maxID = int.Parse(odr.GetDecimal(0).ToString());
             }
             bdd.CloseConnection();
-            rep.pId = maxID;
+            rep.Id = maxID;
             REPARATIONS.Add(rep);
         }
         
@@ -94,24 +94,24 @@ namespace AgendaBDDManager
                                                 nom = '{0}'
                                             WHERE 
                                                 id = {8}",
-                                                    bdd.DeleteInjectionSQL(r.pNom),
-                                                    r.pId.ToString());
+                                                    bdd.DeleteInjectionSQL(r.Nom),
+                                                    r.Id.ToString());
             bdd.OpenConnection();
             bdd.ExecuteNonQuery(requete);
             bdd.CloseConnection();
-            REPARATIONS.Remove(REPARATIONS.Find(c => c.pId == r.pId));
+            REPARATIONS.Remove(REPARATIONS.Find(c => c.Id == r.Id));
             REPARATIONS.Add(r);
             
         }
 
         public static void DeleteReparation(Reparation r)
         {
-            string requete = string.Format("DELETE reparation WHERE id = {0} ", r.pId);
+            string requete = string.Format("DELETE reparation WHERE id = {0} ", r.Id);
             Connexion bdd = new Connexion();
             bdd.OpenConnection();
             bdd.ExecuteNonQuery(requete);
             bdd.CloseConnection();
-            REPARATIONS.Remove(REPARATIONS.Find(c => c.pId == r.pId));
+            REPARATIONS.Remove(REPARATIONS.Find(c => c.Id == r.Id));
         }
 
         #endregion
@@ -120,7 +120,7 @@ namespace AgendaBDDManager
         {
             foreach (Reparation r in getAll())
             {
-                sw.WriteLine(insertReparation, r.pId, r.pNom);
+                sw.WriteLine(insertReparation, r.Id, r.Nom);
             }
         }
 

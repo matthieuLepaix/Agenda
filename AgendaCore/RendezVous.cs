@@ -12,26 +12,26 @@ namespace AgendaCore
         /// <summary>
         /// L'identifiant en base de données
         /// </summary>
-        private int mId;
+        private int id;
 
         /// <summary>
         /// La date du durée.
         /// </summary>
-        private DateTime mDate;
+        private DateTime date;
 
         /// <summary>
         /// La durée des travaux à effectuer.
         /// </summary>
-        private DureeType mDuree;
+        private DureeType duree;
 
         /// <summary>
         /// Les travaux à effectuer.
         /// </summary>
-        private List<ReparationRDV> mTravaux = new List<ReparationRDV>();
+        private List<ReparationRDV> travaux = new List<ReparationRDV>();
 
-        private Vehicule mVehicule;
+        private Vehicule vehicule;
 
-        private Client mClient;
+        private Client client;
 
         #endregion
 
@@ -40,75 +40,75 @@ namespace AgendaCore
         /// <summary>
         /// L'identifiant du rendez-vous.
         /// </summary>
-        public int pId
+        public int Id
         {
             get
             {
-                return mId;
+                return id;
             }
             set
             {
-                mId = value;
+                id = value;
             }
         }
 
-        public DateTime pDate
+        public DateTime Date
         {
             get
             {
-                return mDate;
+                return date;
             }
             set
             {
-                mDate = value;
+                date = value;
             }
         }
 
-        public DureeType pDuree
+        public DureeType Duree
         {
             get
             {
-                return mDuree;
+                return duree;
             }
             set
             {
-                mDuree = value;
+                duree = value;
             }
         }
 
-        public IEnumerable<ReparationRDV> pTravaux
+        public IEnumerable<ReparationRDV> Travaux
         {
             get
             {
-                return mTravaux;
+                return travaux;
             }
             set
             {
-                mTravaux = value.ToList();
+                travaux = value.ToList();
             }
         }
 
-        public Vehicule pVehicule
+        public Vehicule Vehicule
         {
             get
             {
-                return mVehicule;
+                return vehicule;
             }
             set
             {
-                mVehicule = value;
+                vehicule = value;
             }
         }
 
-        public Client pClient
+        public Client Client
         {
             get
             {
-                return mClient;
+                return client;
             }
             set
             {
-                mClient = value;
+                client = value;
             }
         }
 
@@ -118,20 +118,20 @@ namespace AgendaCore
 
         public RendezVous(int id, DateTime date, DureeType duree, Vehicule vehicule, Client client)
         {
-            mId = id;
-            mDate = date;
-            mDuree = duree;
-            mVehicule = vehicule;
-            mClient = client;
+            this.id = id;
+            this.date = date;
+            this.duree = duree;
+            this.vehicule = vehicule;
+            this.client = client;
         }
 
         public RendezVous(DateTime date, DureeType duree, Vehicule vehicule, Client client)
         {
-            mId = -1;
-            mDate = date;
-            mDuree = duree;
-            mVehicule = vehicule;
-            mClient = client;
+            id = -1;
+            this.date = date;
+            this.duree = duree;
+            this.vehicule = vehicule;
+            this.client = client;
         }
 
         #endregion
@@ -145,20 +145,20 @@ namespace AgendaCore
 
         public bool Equals(RendezVous obj)
         {
-            return pId == obj.pId;
+            return Id == obj.Id;
         }
 
 
         public override string ToString()
         {
-            return string.Format("{0} {1}", mVehicule.pMarque , mVehicule.pModele);
+            return string.Format("{0} {1}", vehicule.Marque , vehicule.Modele);
         }
 
         public void addReparation(ReparationRDV reparation)
         {
             if (reparation != null)
             {
-                mTravaux.Add(reparation);
+                travaux.Add(reparation);
             }
         }
 
@@ -172,16 +172,16 @@ namespace AgendaCore
 
         public void RemoveAllWorks()
         {
-            if (mTravaux != null)
+            if (travaux != null)
             {
-                mTravaux.RemoveAll(x => true);
+                travaux.RemoveAll(x => true);
             }
         }
 
         public int getDuree()
         {
             int duree = 9;
-            switch (pDuree)
+            switch (Duree)
             {
                 case DureeType.UneDemiHeure:
                     duree = 0;
@@ -219,7 +219,7 @@ namespace AgendaCore
         #region Operations
         public override int GetHashCode()
         {
-            return pId;
+            return Id;
         }
         #endregion
 

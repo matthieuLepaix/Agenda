@@ -67,7 +67,7 @@ namespace Agenda.Factures
 
         public static void GenerateExcelFacture(Facture facture, bool imprimer)
         {
-            if (facture != null && facture.pRdv != null)
+            if (facture != null && facture.RendezVous != null)
             {
                 nbWorks = 0;
                 nbMO = 0;
@@ -82,26 +82,26 @@ namespace Agenda.Factures
                 // removed in a later procedure.
                 Excel._Worksheet workSheet = (Excel.Worksheet)excelApp.ActiveSheet;
 
-                workSheet.Cells[RowsIndex.NFacture, ColumnsIndex.NFacture] = facture.pId;
+                workSheet.Cells[RowsIndex.NFacture, ColumnsIndex.NFacture] = facture.Id;
 
-                workSheet.Cells[RowsIndex.NomPrenom, ColumnsIndex.NomPrenom] = facture.pRdv.pClient == null ? string.Empty : facture.pRdv.pClient.ToString();
-                workSheet.Cells[RowsIndex.Adresse, ColumnsIndex.Adresse] = string.IsNullOrEmpty(facture.pRdv.pClient == null ? string.Empty : facture.pRdv.pClient.pAdresse) ? string.Empty : facture.pRdv.pClient.pAdresse.ToUpperInvariant();
-                workSheet.Cells[RowsIndex.CodePostal, ColumnsIndex.CodePostal] = facture.pRdv.pClient == null ? string.Empty : facture.pRdv.pClient.pCodePostal;
-                workSheet.Cells[RowsIndex.Ville, ColumnsIndex.Ville] = string.IsNullOrEmpty(facture.pRdv.pClient.pVille) ? string.Empty : facture.pRdv.pClient.pVille.ToUpper();
+                workSheet.Cells[RowsIndex.NomPrenom, ColumnsIndex.NomPrenom] = facture.RendezVous.Client == null ? string.Empty : facture.RendezVous.Client.ToString();
+                workSheet.Cells[RowsIndex.Adresse, ColumnsIndex.Adresse] = string.IsNullOrEmpty(facture.RendezVous.Client == null ? string.Empty : facture.RendezVous.Client.Adresse) ? string.Empty : facture.RendezVous.Client.Adresse.ToUpperInvariant();
+                workSheet.Cells[RowsIndex.CodePostal, ColumnsIndex.CodePostal] = facture.RendezVous.Client == null ? string.Empty : facture.RendezVous.Client.CodePostal;
+                workSheet.Cells[RowsIndex.Ville, ColumnsIndex.Ville] = string.IsNullOrEmpty(facture.RendezVous.Client.Ville) ? string.Empty : facture.RendezVous.Client.Ville.ToUpper();
 
                 workSheet.Cells[RowsIndex.Date, ColumnsIndex.Date] = string.Format("{0:00}/{1:00}/{2}", DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year);
-                workSheet.Cells[RowsIndex.Vehicule, ColumnsIndex.Vehicule] = facture.pRdv.pVehicule == null ? string.Empty : string.Format("{0} {1}", facture.pRdv.pVehicule.pMarque, facture.pRdv.pVehicule.pModele);
-                workSheet.Cells[RowsIndex.Annee, ColumnsIndex.Annee] = facture.pRdv.pVehicule == null ? string.Empty : facture.pRdv.pVehicule.pAnnee.ToString();
-                workSheet.Cells[RowsIndex.KM, ColumnsIndex.KM] = facture.pRdv.pVehicule == null ? string.Empty : facture.pRdv.pVehicule.pKilometrage.ToString();
-                workSheet.Cells[RowsIndex.Immatriculation, ColumnsIndex.Immatriculation] = facture.pRdv.pVehicule == null ? string.Empty : facture.pRdv.pVehicule.pImmatriculation.ToString();
+                workSheet.Cells[RowsIndex.Vehicule, ColumnsIndex.Vehicule] = facture.RendezVous.Vehicule == null ? string.Empty : string.Format("{0} {1}", facture.RendezVous.Vehicule.Marque, facture.RendezVous.Vehicule.Modele);
+                workSheet.Cells[RowsIndex.Annee, ColumnsIndex.Annee] = facture.RendezVous.Vehicule == null ? string.Empty : facture.RendezVous.Vehicule.Annee.ToString();
+                workSheet.Cells[RowsIndex.KM, ColumnsIndex.KM] = facture.RendezVous.Vehicule == null ? string.Empty : facture.RendezVous.Vehicule.Kilometrage.ToString();
+                workSheet.Cells[RowsIndex.Immatriculation, ColumnsIndex.Immatriculation] = facture.RendezVous.Vehicule == null ? string.Empty : facture.RendezVous.Vehicule.Immatriculation.ToString();
 
-                facture.pRdv.pTravaux.ToList().ForEach(x => AddWork(workSheet, x));
+                facture.RendezVous.Travaux.ToList().ForEach(x => AddWork(workSheet, x));
                 TotalHT = montantHT;
-                facture.pMainOeuvres.ForEach(x => AddMO(workSheet, x));
-                workSheet.Cells[RowsIndex.TypeReglement, ColumnsIndex.TypeReglement] = Facture.getReglementFromEnum(facture.pReglement);
+                facture.MainOeuvres.ForEach(x => AddMO(workSheet, x));
+                workSheet.Cells[RowsIndex.TypeReglement, ColumnsIndex.TypeReglement] = Facture.getReglementFromEnum(facture.Reglement);
 
-                facture.pTotalPieceHT = montantHT;
-                facture.pTotalHT = TotalHT;
+                facture.TotalPieceHT = montantHT;
+                facture.TotalHT = TotalHT;
 
                 if (imprimer)
                 {
@@ -142,16 +142,16 @@ namespace Agenda.Factures
                 // removed in a later procedure.
                 Excel._Worksheet workSheet = (Excel.Worksheet)excelApp.ActiveSheet;
 
-                workSheet.Cells[RowsIndex.NomPrenom, ColumnsIndex.NomPrenom] = devis.Vehicule.pClient == null ? string.Empty : devis.Vehicule.pClient.ToString();
-                workSheet.Cells[RowsIndex.Adresse, ColumnsIndex.Adresse] = string.IsNullOrEmpty(devis.Vehicule.pClient == null ? string.Empty : devis.Vehicule.pClient.pAdresse) ? string.Empty : devis.Vehicule.pClient.pAdresse.ToUpperInvariant();
-                workSheet.Cells[RowsIndex.CodePostal, ColumnsIndex.CodePostal] = devis.Vehicule.pClient == null ? string.Empty : devis.Vehicule.pClient.pCodePostal;
-                workSheet.Cells[RowsIndex.Ville, ColumnsIndex.Ville] = string.IsNullOrEmpty(devis.Vehicule.pClient.pVille) ? string.Empty : devis.Vehicule.pClient.pVille.ToUpper();
+                workSheet.Cells[RowsIndex.NomPrenom, ColumnsIndex.NomPrenom] = devis.Vehicule.Client == null ? string.Empty : devis.Vehicule.Client.ToString();
+                workSheet.Cells[RowsIndex.Adresse, ColumnsIndex.Adresse] = string.IsNullOrEmpty(devis.Vehicule.Client == null ? string.Empty : devis.Vehicule.Client.Adresse) ? string.Empty : devis.Vehicule.Client.Adresse.ToUpperInvariant();
+                workSheet.Cells[RowsIndex.CodePostal, ColumnsIndex.CodePostal] = devis.Vehicule.Client == null ? string.Empty : devis.Vehicule.Client.CodePostal;
+                workSheet.Cells[RowsIndex.Ville, ColumnsIndex.Ville] = string.IsNullOrEmpty(devis.Vehicule.Client.Ville) ? string.Empty : devis.Vehicule.Client.Ville.ToUpper();
 
                 workSheet.Cells[RowsIndex.Date, ColumnsIndex.Date] = string.Format("{0:00}/{1:00}/{2}", DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year);
-                workSheet.Cells[RowsIndex.Vehicule, ColumnsIndex.Vehicule] = devis.Vehicule == null ? string.Empty : string.Format("{0} {1}", devis.Vehicule.pMarque, devis.Vehicule.pModele);
-                workSheet.Cells[RowsIndex.Annee, ColumnsIndex.Annee] = devis.Vehicule == null ? string.Empty : devis.Vehicule.pAnnee.ToString();
-                workSheet.Cells[RowsIndex.KM, ColumnsIndex.KM] = devis.Vehicule == null ? string.Empty : devis.Vehicule.pKilometrage.ToString();
-                workSheet.Cells[RowsIndex.Immatriculation, ColumnsIndex.Immatriculation] = devis.Vehicule == null ? string.Empty : devis.Vehicule.pImmatriculation.ToString();
+                workSheet.Cells[RowsIndex.Vehicule, ColumnsIndex.Vehicule] = devis.Vehicule == null ? string.Empty : string.Format("{0} {1}", devis.Vehicule.Marque, devis.Vehicule.Modele);
+                workSheet.Cells[RowsIndex.Annee, ColumnsIndex.Annee] = devis.Vehicule == null ? string.Empty : devis.Vehicule.Annee.ToString();
+                workSheet.Cells[RowsIndex.KM, ColumnsIndex.KM] = devis.Vehicule == null ? string.Empty : devis.Vehicule.Kilometrage.ToString();
+                workSheet.Cells[RowsIndex.Immatriculation, ColumnsIndex.Immatriculation] = devis.Vehicule == null ? string.Empty : devis.Vehicule.Immatriculation.ToString();
 
                 devis.Reparations.ForEach(x => AddWork(workSheet, x));
                 TotalHT = montantHT;
@@ -187,12 +187,12 @@ namespace Agenda.Factures
 
         private static void AddWork(Excel._Worksheet workSheet, ReparationRDV work)
         {
-            workSheet.Cells[RowsIndex.FirstWork + nbWorks, ColumnsIndex.Designation] = string.IsNullOrEmpty(work.pComments) ? work.pReparation.ToString() : string.Format("{0} - {1}", work.pReparation, work.pComments);
-            workSheet.Cells[RowsIndex.FirstWork + nbWorks, ColumnsIndex.References] = string.IsNullOrEmpty(work.pReference) ? string.Empty : work.pReference.Trim().ToUpper();
-            workSheet.Cells[RowsIndex.FirstWork + nbWorks, ColumnsIndex.Quantite] = work.pQuantite;
-            workSheet.Cells[RowsIndex.FirstWork + nbWorks, ColumnsIndex.PU] = work.pPrixU;
-            workSheet.Cells[RowsIndex.FirstWork + nbWorks, ColumnsIndex.MontantHT] = work.pPrixU * work.pQuantite;
-            montantHT += work.pPrixU * work.pQuantite;
+            workSheet.Cells[RowsIndex.FirstWork + nbWorks, ColumnsIndex.Designation] = string.IsNullOrEmpty(work.Comments) ? work.Reparation.ToString() : string.Format("{0} - {1}", work.Reparation, work.Comments);
+            workSheet.Cells[RowsIndex.FirstWork + nbWorks, ColumnsIndex.References] = string.IsNullOrEmpty(work.Reference) ? string.Empty : work.Reference.Trim().ToUpper();
+            workSheet.Cells[RowsIndex.FirstWork + nbWorks, ColumnsIndex.Quantite] = work.Quantite;
+            workSheet.Cells[RowsIndex.FirstWork + nbWorks, ColumnsIndex.PU] = work.PrixU;
+            workSheet.Cells[RowsIndex.FirstWork + nbWorks, ColumnsIndex.MontantHT] = work.PrixU * work.Quantite;
+            montantHT += work.PrixU * work.Quantite;
             nbWorks++;
         }
     }

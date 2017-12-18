@@ -11,7 +11,7 @@ namespace AgendaCore
 
         public static float TVA = 0.20f;
 
-        public enum Reglement
+        public enum Reglements
         {
             CB,
             Cheque,
@@ -19,17 +19,17 @@ namespace AgendaCore
             NA
         };
 
-        private int mId;
+        private int id;
         
-        private float mTotalPieceHT;
+        private float totalPieceHT;
 
-        private Reglement mReglement;
+        private Reglements reglement;
 
-        private List<float> mMainOeuvres;
+        private List<float> mainOeuvres;
 
-        private float mTotalHT;
+        private float totalHT;
 
-        private RendezVous mRdv;
+        private RendezVous rendezVous;
         
         #endregion
 
@@ -38,87 +38,87 @@ namespace AgendaCore
         /// <summary>
         /// L'identifiant du client.
         /// </summary>
-        public int pId
+        public int Id
         {
             get
             {
-                return mId;
+                return id;
             }
             set
             {
-                mId = value;
+                id = value;
             }
         }
 
         /// <summary>
         /// Le total HT des pièces
         /// </summary>
-        public float pTotalPieceHT
+        public float TotalPieceHT
         {
             get
             {
-                return mTotalPieceHT;
+                return totalPieceHT;
             }
             set
             {
-                mTotalPieceHT = value;
+                totalPieceHT = value;
             }
         }
 
         /// <summary>
         /// Le mode de réglement
         /// </summary>
-        public Reglement pReglement
+        public Reglements Reglement
         {
             get
             {
-                return mReglement;
+                return reglement;
             }
             set
             {
-                mReglement = value;
+                reglement = value;
             }
         }
 
         /// <summary>
         /// Le total HT des pièces
         /// </summary>
-        public float pTotalHT
+        public float TotalHT
         {
             get
             {
-                return mTotalHT;
+                return totalHT;
             }
             set
             {
-                mTotalHT = value;
+                totalHT = value;
             }
         }
 
         /// <summary>
         /// Le total HT des pièces
         /// </summary>
-        public List<float> pMainOeuvres
+        public List<float> MainOeuvres
         {
             get
             {
-                return mMainOeuvres;
+                return mainOeuvres;
             }
             set
             {
-                mMainOeuvres = value;
+                mainOeuvres = value;
             }
         }
 
-        public RendezVous pRdv
+        public RendezVous RendezVous
         {
             get
             {
-                return mRdv;
+                return rendezVous;
             }
             set
             {
-                mRdv = value;
+                rendezVous = value;
             }
         }
 
@@ -126,23 +126,23 @@ namespace AgendaCore
 
         #region constructors
 
-        public Facture(int id, float totP, Reglement reg, List<float> mo, float tot, RendezVous rdv)
+        public Facture(int id, float totP, Reglements reg, List<float> mo, float tot, RendezVous rdv)
         {
-            pId = id;
-            pTotalPieceHT = totP;
-            pReglement = reg;
-            pMainOeuvres = mo;
-            pTotalHT = tot;
-            pRdv = rdv;
+            Id = id;
+            TotalPieceHT = totP;
+            Reglement = reg;
+            MainOeuvres = mo;
+            TotalHT = tot;
+            RendezVous = rdv;
         }
 
-        public Facture(float totP, Reglement reg, List<float> mo, float tot, RendezVous rdv)
+        public Facture(float totP, Reglements reg, List<float> mo, float tot, RendezVous rdv)
         {
-            pTotalPieceHT = totP;
-            pReglement = reg;
-            pMainOeuvres = mo;
-            pTotalHT = tot;
-            pRdv = rdv;
+            TotalPieceHT = totP;
+            Reglement = reg;
+            MainOeuvres = mo;
+            TotalHT = tot;
+            RendezVous = rdv;
         }
 
         #endregion
@@ -151,7 +151,7 @@ namespace AgendaCore
 
         private bool Equals(Facture bill)
         {
-            return pId == bill.pId;
+            return Id == bill.Id;
         }
 
         public override bool Equals(object obj)
@@ -164,19 +164,19 @@ namespace AgendaCore
             return ok;
         }
 
-        public static string getReglementFromEnum(Reglement reg)
+        public static string getReglementFromEnum(Reglements reg)
         {
             string reglement = "";
 
             switch (reg)
             {
-                case Reglement.Especes:
+                case Reglements.Especes:
                     reglement = "Espèces";
                     break;
-                case Reglement.CB:
+                case Reglements.CB:
                     reglement = "Carte bancaire";
                     break;
-                case Reglement.Cheque:
+                case Reglements.Cheque:
                     reglement = "Chèque";
                     break;
                 default:
@@ -187,22 +187,22 @@ namespace AgendaCore
             return reglement;
         }
 
-        public static Reglement getReglementFromString(string reg)
+        public static Reglements getReglementFromString(string reg)
         {
-            Reglement reglement;
+            Reglements reglement;
             switch (reg)
             {
                 case "Espèces":
-                    reglement = Reglement.Especes;
+                    reglement = Reglements.Especes;
                     break;
                 case "Carte bancaire":
-                    reglement = Reglement.CB;
+                    reglement = Reglements.CB;
                     break;
                 case "Chèque":
-                    reglement = Reglement.Cheque;
+                    reglement = Reglements.Cheque;
                     break;
                 default:
-                    reglement = Reglement.NA;
+                    reglement = Reglements.NA;
                     break;
             }
 
@@ -211,7 +211,7 @@ namespace AgendaCore
 
         public override string ToString()
         {
-            return pId.ToString();
+            return Id.ToString();
         }
 
 
@@ -219,7 +219,7 @@ namespace AgendaCore
 
         public override int GetHashCode()
         {
-            return pId;
+            return Id;
         }
     }
 }

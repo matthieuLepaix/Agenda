@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AgendaCore;
-using Oracle.DataAccess.Client;
+using Oracle.ManagedDataAccess.Client;
 
 namespace AgendaBDDManager
 {
@@ -38,10 +38,10 @@ namespace AgendaBDDManager
             OracleDataReader odr = bdd.ExecuteSelect(requete);
             while (odr.Read())
             {
-                RendezVous rdv = RdvManager.RDVS.First(x => x.pId == Connexion.getIntFromOdr(1, odr));
+                RendezVous rdv = RdvManager.RDVS.First(x => x.Id == Connexion.getIntFromOdr(1, odr));
                 ReparationRDV rep = new ReparationRDV(Connexion.getIntFromOdr(0, odr),
-                                        RdvManager.RDVS.First(x => x.pId == Connexion.getIntFromOdr(1, odr)),
-                                        ReparationManager.REPARATIONS.First(x => x.pId == Connexion.getIntFromOdr(2, odr)),
+                                        RdvManager.RDVS.First(x => x.Id == Connexion.getIntFromOdr(1, odr)),
+                                        ReparationManager.REPARATIONS.First(x => x.Id == Connexion.getIntFromOdr(2, odr)),
                                         Connexion.getStringFromOdr(3, odr),
                                         Connexion.getIntFromOdr(4, odr),
                                         Connexion.getIntFromOdr(5, odr),
@@ -80,7 +80,7 @@ namespace AgendaBDDManager
         public static List<ReparationRDV> getReparationRDVByRDV(RendezVous rdv)
         {
             List<ReparationRDV> reps = new List<ReparationRDV>();
-            string requete = string.Format("SELECT id, rdv, reparation, reference, quantite, prixu, remise, comments FROM rdv_reparation WHERE rdv = {0}", rdv.pId.ToString());
+            string requete = string.Format("SELECT id, rdv, reparation, reference, quantite, prixu, remise, comments FROM rdv_reparation WHERE rdv = {0}", rdv.Id.ToString());
             Connexion bdd = new Connexion();
             bdd.OpenConnection();
             OracleDataReader odr = bdd.ExecuteSelect(requete);
@@ -103,7 +103,7 @@ namespace AgendaBDDManager
         {
             Connexion bdd = new Connexion();
             string requete = string.Format("INSERT INTO rdv_reparation(rdv, reparation, reference, quantite, prixu, remise, comments) VALUES({0}, {1},'{2}',{3},{4},{5},'{6}')",
-                                                    rep.pRdv.pId, rep.pReparation.pId, rep.pReference, rep.pQuantite, rep.pPrixU, rep.pRemise, bdd.DeleteInjectionSQL(rep.pComments));
+                                                    rep.RendezVous.Id, rep.Reparation.Id, rep.Reference, rep.Quantite, rep.PrixU, rep.Remise, bdd.DeleteInjectionSQL(rep.Comments));
             bdd.OpenConnection();
             bdd.ExecuteNonQuery(requete);
             bdd.CloseConnection();
@@ -124,14 +124,14 @@ namespace AgendaBDDManager
                                                 comments = '{6}'
                                             WHERE 
                                                 id = {7}",
-                                                    r.pRdv.pId,
-                                                    r.pReparation.pId,
-                                                    r.pReference,
-                                                    r.pQuantite,
-                                                    r.pPrixU,
-                                                    r.pRemise,
-                                                    bdd.DeleteInjectionSQL(r.pComments),
-                                                    r.pId.ToString());
+                                                    r.RendezVous.Id,
+                                                    r.Reparation.Id,
+                                                    r.Reference,
+                                                    r.Quantite,
+                                                    r.PrixU,
+                                                    r.Remise,
+                                                    bdd.DeleteInjectionSQL(r.Comments),
+                                                    r.Id.ToString());
             bdd.OpenConnection();
             bdd.ExecuteNonQuery(requete);
             bdd.CloseConnection();
@@ -139,7 +139,7 @@ namespace AgendaBDDManager
 
         public static void DeleteReparationRDV(ReparationRDV r)
         {
-            string requete = string.Format("DELETE rdv_reparation WHERE id = {0} ", r.pId);
+            string requete = string.Format("DELETE rdv_reparation WHERE id = {0} ", r.Id);
             Connexion bdd = new Connexion();
             bdd.OpenConnection();
             bdd.ExecuteNonQuery(requete);
@@ -148,7 +148,7 @@ namespace AgendaBDDManager
 
         public static void DeleteReparationRDVByRDV(RendezVous r)
         {
-            string requete = string.Format("DELETE rdv_reparation WHERE rdv = {0} ", r.pId);
+            string requete = string.Format("DELETE rdv_reparation WHERE rdv = {0} ", r.Id);
             Connexion bdd = new Connexion();
             bdd.OpenConnection();
             bdd.ExecuteNonQuery(requete);
@@ -162,13 +162,13 @@ namespace AgendaBDDManager
         {
             foreach (ReparationRDV rep in getAll())
             {
-                sw.WriteLine(insertReparationRDV, rep.pId, rep.pRdv.pId, rep.pReparation.pId, rep.pReference, rep.pQuantite, rep.pPrixU, rep.pRemise, rep.pComments);
+                sw.WriteLine(insertReparationRDV, rep.Id, rep.RendezVous.Id, rep.Reparation.Id, rep.Reference, rep.Quantite, rep.PrixU, rep.Remise, rep.Comments);
             }
         }
 
         internal static void SaveReparation(System.IO.StreamWriter sw, ReparationRDV rep)
         {
-            sw.WriteLine(insertReparationRDV_SANSID, rep.pRdv.pId, rep.pReparation.pId, rep.pReference, rep.pQuantite, rep.pPrixU, rep.pRemise, rep.pComments);
+            sw.WriteLine(insertReparationRDV_SANSID, rep.RendezVous.Id, rep.Reparation.Id, rep.Reference, rep.Quantite, rep.PrixU, rep.Remise, rep.Comments);
         }
     }
 }

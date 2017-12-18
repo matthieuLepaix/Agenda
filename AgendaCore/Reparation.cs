@@ -9,9 +9,9 @@ namespace AgendaCore
     {
         #region Attributes  
 
-        private int mId;
+        private int id;
         
-        private string mNom;
+        private string nom;
         
         #endregion
 
@@ -20,30 +20,30 @@ namespace AgendaCore
         /// <summary>
         /// L'identifiant du client.
         /// </summary>
-        public int pId
+        public int Id
         {
             get
             {
-                return mId;
+                return id;
             }
             set
             {
-                mId = value;
+                id = value;
             }
         }
 
         /// <summary>
         /// Le nom de la réparation
         /// </summary>
-        public string pNom
+        public string Nom
         {
             get
             {
-                return mNom;
+                return nom;
             }
             set
             {
-                mNom = value;
+                nom = value;
             }
         }
 
@@ -53,13 +53,13 @@ namespace AgendaCore
 
         public Reparation(int id, string nom)
         {
-            pId = id;
-            pNom = nom;
+            Id = id;
+            Nom = nom;
         }
 
         public Reparation(string nom)
         {
-            pNom = nom;
+            Nom = nom;
         }
 
         #endregion
@@ -68,7 +68,7 @@ namespace AgendaCore
 
         private bool Equals(Reparation rep)
         {
-            return pNom == rep.pNom;
+            return Nom == rep.Nom;
         }
 
         public override bool Equals(object obj)
@@ -83,7 +83,7 @@ namespace AgendaCore
 
         public override string ToString()
         {
-            return pNom;
+            return Nom;
         }
 
 

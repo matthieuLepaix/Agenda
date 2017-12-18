@@ -15,32 +15,32 @@ namespace AgendaCore
         /// <summary>
         /// L'identifiant en base de données
         /// </summary>
-        private int mId;
+        private int id;
 
         /// <summary>
         /// Le client à qui appartient le véhicule.
         /// </summary>
-        private Client mClient;
+        private Client client;
 
         /// <summary>
         /// L'immatriculation du véhicule.
         /// </summary>
-        private string mImmatriculation;
+        private string immatriculation;
 
         /// <summary>
         /// La marque du véhicule.
         /// </summary>
-        private string mMarque;
+        private string marque;
 
         /// <summary>
         /// Le modèle du véhicule.
         /// </summary>
-        private string mModele;
+        private string modele;
 
         /// <summary>
         /// Le kilométrage du véhicule.
         /// </summary>
-        private int mKilometrage;
+        private int kilometrage;
 
         /// <summary>
         /// L'année du véhicule.
@@ -50,7 +50,7 @@ namespace AgendaCore
         /// <summary>
         /// Les rendez-vous du client.
         /// </summary>
-        private List<RendezVous> mRendezVous = new List<RendezVous>();
+        private List<RendezVous> rendezVous = new List<RendezVous>();
 
         #endregion
 
@@ -59,97 +59,97 @@ namespace AgendaCore
         /// <summary>
         /// L'identifiant du Vehicule.
         /// </summary>
-        public int pId
+        public int Id
         {
             get
             {
-                return mId;
+                return id;
             }
             set
             {
-                mId = value;
+                id = value;
             }
         }
 
         /// <summary>
         /// Le client à qui appartient le véhicule
         /// </summary>
-        public Client pClient
+        public Client Client
         {
             get
             {
-                return mClient;
+                return client;
             }
             set
             {
-                mClient = value;
+                client = value;
             }
         }
 
         /// <summary>
         /// L'immatriculation du véhicule.
         /// </summary>
-        public string pImmatriculation
+        public string Immatriculation
         {
             get
             {
-                return mImmatriculation;
+                return immatriculation;
             }
             set
             {
-                mImmatriculation = value;
+                immatriculation = value;
             }
         }
 
         /// <summary>
         /// La marque du véhicule
         /// </summary>
-        public string pMarque
+        public string Marque
         {
             get
             {
-                return mMarque;
+                return marque;
             }
             set
             {
-                mMarque = value;
+                marque = value;
             }
         }
 
         /// <summary>
         /// Le modèle du véhicule
         /// </summary>
-        public string pModele
+        public string Modele
         {
             get
             {
-                return mModele;
+                return modele;
             }
             set
             {
-                mModele = value;
+                modele = value;
             }
         }
 
         /// <summary>
         /// Kilometrage du véhicule
         /// </summary>
-        public int pKilometrage
+        public int Kilometrage
         {
             get
             {
-                return mKilometrage;
+                return kilometrage;
             }
             set
             {
-                mKilometrage = value;
+                kilometrage = value;
             }
         }
 
         /// <summary>
         /// L'année du véhicule
         /// </summary>
-        public string pAnnee
+        public string Annee
         {
             get
             {
@@ -164,15 +164,15 @@ namespace AgendaCore
         /// <summary>
         /// La liste des rendez-vous
         /// </summary>
-        public IEnumerable<RendezVous> pRendezVous
+        public IEnumerable<RendezVous> RendezVous
         {
             get
             {
-                return mRendezVous;
+                return rendezVous;
             }
             set
             {
-                mRendezVous = value.ToList();
+                rendezVous = value.ToList();
             }
         }
 
@@ -188,13 +188,13 @@ namespace AgendaCore
         /// <param name="modele">Le modèle du véhicule</param>
         public Vehicule(int id, string marque, string modele, string immat, string annee, int km, Client client)
         {
-            mId = id;
-            mImmatriculation = CleanImmat(immat);
-            mMarque = marque;
-            mModele = modele;
-            pAnnee = annee;
-            pKilometrage = km;
-            mClient = client;
+            this.id = id;
+            immatriculation = CleanImmat(immat);
+            this.marque = marque;
+            this.modele = modele;
+            Annee = annee;
+            Kilometrage = km;
+            this.client = client;
         }
 
         private string CleanImmat(string immat)
@@ -210,13 +210,23 @@ namespace AgendaCore
         /// <param name="modele">Le modèle du véhicule</param>
         public Vehicule(string marque, string modele, string immat, string annee, int km, Client client)
         {
-            mId = -1;
-            mImmatriculation = CleanImmat(immat);
-            mMarque = marque;
-            mModele = modele;
-            pAnnee = annee;
-            pKilometrage = km;
-            mClient = client;
+            Id = -1;
+            Immatriculation = CleanImmat(immat);
+            Marque = marque;
+            Modele = modele;
+            Annee = annee;
+            Kilometrage = km;
+            Client = client;
+        }
+
+        public Vehicule()
+        {
+            Immatriculation = string.Empty;
+            Marque = string.Empty;
+            Modele = string.Empty;
+            Annee = string.Empty;
+            Kilometrage = 0;
+            Client = new Client();
         }
 
         #endregion
@@ -225,14 +235,14 @@ namespace AgendaCore
 
         public override string ToString()
         {
-            return string.Format("{0} {1} [{2}]", mMarque, mModele, mImmatriculation);
+            return string.Format("{0} {1} [{2}]", marque, modele, immatriculation);
         }
 
         public void AddRendezVous(RendezVous rdv)
         {
             if (rdv != null)
             {
-                mRendezVous.Add(rdv);
+                rendezVous.Add(rdv);
             }
         }
 
@@ -241,12 +251,12 @@ namespace AgendaCore
         #region Operations
         public override int GetHashCode()
         {
-            return pId;
+            return Id;
         }
 
         public override bool Equals(object obj)
         {
-            return obj is Vehicule && (obj as Vehicule).pId == this.pId;
+            return obj is Vehicule && (obj as Vehicule).Id == this.Id;
         }
         #endregion
     }

@@ -35,7 +35,7 @@ namespace Agenda.Gestion
             mOwner = owner;
             mOwner.Opacity = 0.3;
             mVehicule = vehicule;
-            old_immat.Text = mVehicule.pImmatriculation;
+            old_immat.Text = mVehicule.Immatriculation;
             Closed += new EventHandler(ChangeImmat_Closed);
         }
 
@@ -83,7 +83,7 @@ namespace Agenda.Gestion
                 string immat = new_immat.Text.Trim();
                 if (immat.Equals(new_immat2.Text.Trim()))
                 {
-                    mVehicule.pImmatriculation = immat;
+                    mVehicule.Immatriculation = immat;
                     VehiculeManager.UpdateVehicule(mVehicule);
                     if (mInfosClient != null)
                     {

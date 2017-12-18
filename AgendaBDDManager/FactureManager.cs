@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AgendaCore;
-using Oracle.DataAccess.Client;
+using Oracle.ManagedDataAccess.Client;
 
 namespace AgendaBDDManager
 {
@@ -53,10 +53,10 @@ namespace AgendaBDDManager
                 mos.Add(float.Parse(odr.GetDecimal(7).ToString()));
                 facture = new Facture(int.Parse(odr.GetDecimal(0).ToString()),
                                     float.Parse(odr.GetDecimal(1).ToString()),
-                                    odr.IsDBNull(2) ? Facture.Reglement.NA : Facture.getReglementFromString(odr.GetString(2)),
+                                    odr.IsDBNull(2) ? Facture.Reglements.NA : Facture.getReglementFromString(odr.GetString(2)),
                                     mos,
                                     float.Parse(odr.GetDecimal(8).ToString()),
-                                    RdvManager.RDVS.First(x => x.pId == Connexion.getIntFromOdr(9, odr))
+                                    RdvManager.RDVS.First(x => x.Id == Connexion.getIntFromOdr(9, odr))
                                     );
             }
             bdd.CloseConnection();
@@ -80,10 +80,10 @@ namespace AgendaBDDManager
                 mos.Add(float.Parse(odr.GetDecimal(7).ToString()));
                 facture = new Facture(int.Parse(odr.GetDecimal(0).ToString()),
                                     float.Parse(odr.GetDecimal(1).ToString()),
-                                    odr.IsDBNull(2) ? Facture.Reglement.NA : Facture.getReglementFromString(odr.GetString(2)),
+                                    odr.IsDBNull(2) ? Facture.Reglements.NA : Facture.getReglementFromString(odr.GetString(2)),
                                     mos,
                                     float.Parse(odr.GetDecimal(8).ToString()),
-                                    RdvManager.RDVS.First(x => x.pId == Connexion.getIntFromOdr(9, odr))
+                                    RdvManager.RDVS.First(x => x.Id == Connexion.getIntFromOdr(9, odr))
                                     );
             }
             bdd.CloseConnection();
@@ -107,10 +107,10 @@ namespace AgendaBDDManager
                 mos.Add(float.Parse(odr.GetDecimal(7).ToString()));
                 liste.Add(new Facture(int.Parse(odr.GetDecimal(0).ToString()),
                                     float.Parse(odr.GetDecimal(1).ToString()),
-                                    odr.IsDBNull(2) ? Facture.Reglement.NA : Facture.getReglementFromString(odr.GetString(2)),
+                                    odr.IsDBNull(2) ? Facture.Reglements.NA : Facture.getReglementFromString(odr.GetString(2)),
                                     mos,
                                     float.Parse(odr.GetDecimal(8).ToString()),
-                                    RdvManager.RDVS.First(x => x.pId == Connexion.getIntFromOdr(9, odr)))
+                                    RdvManager.RDVS.First(x => x.Id == Connexion.getIntFromOdr(9, odr)))
                                     );
             }
             bdd.CloseConnection();
@@ -118,7 +118,7 @@ namespace AgendaBDDManager
             return liste;
         }
 
-        public static void AddFacture(float totP, Facture.Reglement reg, List<float> mo, float tot, RendezVous rdv)
+        public static void AddFacture(float totP, Facture.Reglements reg, List<float> mo, float tot, RendezVous rdv)
         {
             Facture c = new Facture(totP, reg, mo, tot, rdv);
             AddFacture(c);
@@ -130,13 +130,13 @@ namespace AgendaBDDManager
             Connexion bdd = new Connexion();
             string requete = string.Format(@"INSERT INTO facture(totalpieceht,reglement,mo1,mo2,mo3,mo4,mo5,totalht,rdv) 
                                             VALUES({0},'{1}',{2},{3},{4},{5},{6},{7},{8})",
-                                                    facture.pTotalPieceHT, bdd.DeleteInjectionSQL(Facture.getReglementFromEnum(facture.pReglement)),
-                                                    facture.pMainOeuvres.Count > 0 ? facture.pMainOeuvres[0].ToString() : "0",
-                                                    facture.pMainOeuvres.Count > 1 ? facture.pMainOeuvres[1].ToString() : "0",
-                                                    facture.pMainOeuvres.Count > 2 ? facture.pMainOeuvres[2].ToString() : "0",
-                                                    facture.pMainOeuvres.Count > 3 ? facture.pMainOeuvres[3].ToString() : "0",
-                                                    facture.pMainOeuvres.Count > 4 ? facture.pMainOeuvres[4].ToString() : "0", 
-                                                    facture.pTotalHT, facture.pRdv.pId);
+                                                    facture.TotalPieceHT, bdd.DeleteInjectionSQL(Facture.getReglementFromEnum(facture.Reglement)),
+                                                    facture.MainOeuvres.Count > 0 ? facture.MainOeuvres[0].ToString() : "0",
+                                                    facture.MainOeuvres.Count > 1 ? facture.MainOeuvres[1].ToString() : "0",
+                                                    facture.MainOeuvres.Count > 2 ? facture.MainOeuvres[2].ToString() : "0",
+                                                    facture.MainOeuvres.Count > 3 ? facture.MainOeuvres[3].ToString() : "0",
+                                                    facture.MainOeuvres.Count > 4 ? facture.MainOeuvres[4].ToString() : "0", 
+                                                    facture.TotalHT, facture.RendezVous.Id);
             bdd.OpenConnection();
             bdd.ExecuteNonQuery(requete);
             OracleDataReader odr = bdd.ExecuteSelect(maxID_request);
@@ -146,7 +146,7 @@ namespace AgendaBDDManager
                 maxID = int.Parse(odr.GetDecimal(0).ToString());
             }
             bdd.CloseConnection();
-            facture.pId = maxID;
+            facture.Id = maxID;
             FACTURE.Add(facture);
         }
 
@@ -168,40 +168,40 @@ namespace AgendaBDDManager
                                                 rdv = {8}
                                             WHERE 
                                                 id = {9}",
-                                                    facture.pTotalPieceHT, bdd.DeleteInjectionSQL(Facture.getReglementFromEnum(facture.pReglement)),
-                                                    facture.pMainOeuvres.Count > 0 ? facture.pMainOeuvres[0].ToString() : "0",
-                                                    facture.pMainOeuvres.Count > 1 ? facture.pMainOeuvres[1].ToString() : "0",
-                                                    facture.pMainOeuvres.Count > 2 ? facture.pMainOeuvres[2].ToString() : "0",
-                                                    facture.pMainOeuvres.Count > 3 ? facture.pMainOeuvres[3].ToString() : "0",
-                                                    facture.pMainOeuvres.Count > 4 ? facture.pMainOeuvres[4].ToString() : "0", 
-                                                    facture.pTotalHT, facture.pRdv.pId,
-                                                    facture.pId.ToString());
+                                                    facture.TotalPieceHT, bdd.DeleteInjectionSQL(Facture.getReglementFromEnum(facture.Reglement)),
+                                                    facture.MainOeuvres.Count > 0 ? facture.MainOeuvres[0].ToString() : "0",
+                                                    facture.MainOeuvres.Count > 1 ? facture.MainOeuvres[1].ToString() : "0",
+                                                    facture.MainOeuvres.Count > 2 ? facture.MainOeuvres[2].ToString() : "0",
+                                                    facture.MainOeuvres.Count > 3 ? facture.MainOeuvres[3].ToString() : "0",
+                                                    facture.MainOeuvres.Count > 4 ? facture.MainOeuvres[4].ToString() : "0", 
+                                                    facture.TotalHT, facture.RendezVous.Id,
+                                                    facture.Id.ToString());
             bdd.OpenConnection();
             bdd.ExecuteNonQuery(requete);
             bdd.CloseConnection();
-            FACTURE.Remove(FACTURE.Find(c => c.pId == facture.pId));
+            FACTURE.Remove(FACTURE.Find(c => c.Id == facture.Id));
             FACTURE.Add(facture);
 
         }
 
         public static void DeleteFacture(Facture facture)
         {
-            string requete = string.Format("DELETE facture WHERE id = {0} ", facture.pId);
+            string requete = string.Format("DELETE facture WHERE id = {0} ", facture.Id);
             Connexion bdd = new Connexion();
             bdd.OpenConnection();
             bdd.ExecuteNonQuery(requete);
             bdd.CloseConnection();
-            FACTURE.Remove(FACTURE.Find(c => c.pId == facture.pId));
+            FACTURE.Remove(FACTURE.Find(c => c.Id == facture.Id));
         }
 
         public static void DeleteFactureByRDV(RendezVous rdv)
         {
-            string requete = string.Format("DELETE facture WHERE rdv = {0} ", rdv.pId);
+            string requete = string.Format("DELETE facture WHERE rdv = {0} ", rdv.Id);
             Connexion bdd = new Connexion();
             bdd.OpenConnection();
             bdd.ExecuteNonQuery(requete);
             bdd.CloseConnection();
-            FACTURE.Remove(FACTURE.Find(c => c.pRdv == rdv));
+            FACTURE.Remove(FACTURE.Find(c => c.RendezVous == rdv));
         }
 
         #endregion
@@ -216,13 +216,13 @@ namespace AgendaBDDManager
 
         public static void SaveFacture(System.IO.StreamWriter sw, Facture facture)
         {
-            sw.WriteLine(string.Format(insertFacture, facture.pId, facture.pTotalPieceHT, Facture.getReglementFromEnum(facture.pReglement),
-                                                    facture.pMainOeuvres.Count > 0 ? facture.pMainOeuvres[0].ToString() : "0",
-                                                    facture.pMainOeuvres.Count > 1 ? facture.pMainOeuvres[1].ToString() : "0",
-                                                    facture.pMainOeuvres.Count > 2 ? facture.pMainOeuvres[2].ToString() : "0",
-                                                    facture.pMainOeuvres.Count > 3 ? facture.pMainOeuvres[3].ToString() : "0",
-                                                    facture.pMainOeuvres.Count > 4 ? facture.pMainOeuvres[4].ToString() : "0",
-                                                    facture.pTotalHT, facture.pRdv.pId));
+            sw.WriteLine(string.Format(insertFacture, facture.Id, facture.TotalPieceHT, Facture.getReglementFromEnum(facture.Reglement),
+                                                    facture.MainOeuvres.Count > 0 ? facture.MainOeuvres[0].ToString() : "0",
+                                                    facture.MainOeuvres.Count > 1 ? facture.MainOeuvres[1].ToString() : "0",
+                                                    facture.MainOeuvres.Count > 2 ? facture.MainOeuvres[2].ToString() : "0",
+                                                    facture.MainOeuvres.Count > 3 ? facture.MainOeuvres[3].ToString() : "0",
+                                                    facture.MainOeuvres.Count > 4 ? facture.MainOeuvres[4].ToString() : "0",
+                                                    facture.TotalHT, facture.RendezVous.Id));
         }
     }
 }

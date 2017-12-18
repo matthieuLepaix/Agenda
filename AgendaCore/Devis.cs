@@ -7,7 +7,7 @@ namespace AgendaCore
 {
     public class Devis
     {
-        #region Attributes
+        #region Properties
 
         /// <summary>
         /// Le véhicule qui représente le client.
@@ -38,7 +38,7 @@ namespace AgendaCore
         /// <summary>
         /// Type de réglement
         /// </summary>
-        public Facture.Reglement Reglement;
+        public Facture.Reglements Reglement;
 
         /// <summary>
         /// Prix total TTC
@@ -49,7 +49,7 @@ namespace AgendaCore
 
         #region Constructors
 
-        public Devis(Vehicule v, List<ReparationRDV> r, List<float> mos, Facture.Reglement reg)
+        public Devis(Vehicule v, List<ReparationRDV> r, List<float> mos, Facture.Reglements reg)
         {
             Vehicule = v;
             Reparations.AddRange(r);
@@ -66,7 +66,7 @@ namespace AgendaCore
             PrixTotalPieces = 0;
             foreach(var r in Reparations)
             {
-                PrixTotalPieces += r.pPrixU * r.pQuantite;
+                PrixTotalPieces += r.PrixU * r.Quantite;
             }
             PrixTotalHT = PrixTotalPieces;
             foreach(var mo in Maindoeuvres)

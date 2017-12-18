@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Oracle.DataAccess.Client;
 using Microsoft.Win32;
 using System.IO;
 using System.Windows.Forms;
+using Oracle.ManagedDataAccess.Client;
 
 namespace AgendaBDDManager
 {
@@ -34,8 +34,7 @@ namespace AgendaBDDManager
 
         private string Oradb = @"Data Source=(DESCRIPTION=
                         (ADDRESS=(PROTOCOL=TCP)(HOST={ip})(PORT=1521))
-                        (CONNECT_DATA=(SERVICE_NAME={sid})));
-                        User Id={user};Password={pwd};";
+                        (CONNECT_DATA=(SERVICE_NAME={sid})));User Id={user};Password={pwd};";
         #endregion 
 
         #region Constructors

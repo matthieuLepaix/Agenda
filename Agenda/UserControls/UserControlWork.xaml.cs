@@ -43,13 +43,13 @@ namespace Agenda.UserControls
         }
 
         public UserControlWork(int i, ReparationRDV rep)
-            : this(i, rep.pRdv)
+            : this(i, rep.RendezVous)
         {
             mRep = rep;
-            Work.SelectedItem = rep.pReparation;
-            qte.Text = rep.pQuantite.ToString();
-            prix.Text = rep.pPrixU.ToString("n2");
-            Comment.Text = rep.pComments;
+            Work.SelectedItem = rep.Reparation;
+            qte.Text = rep.Quantite.ToString();
+            prix.Text = rep.PrixU.ToString("n2");
+            Comment.Text = rep.Comments;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
