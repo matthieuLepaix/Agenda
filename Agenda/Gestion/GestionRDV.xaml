@@ -9,7 +9,6 @@
         AllowsTransparency="True"
         WindowState="Normal"
         BorderThickness="0"
-        Closed="Window_Closed"
         Window.FontSize="15"
         Background="#E0ECFD"
         Width="Auto" Height="Auto" SizeToContent="WidthAndHeight"
@@ -33,14 +32,14 @@
             </DockPanel.InputBindings>
             <TextBlock Text="{Binding WindowTitle}" Margin="4" DockPanel.Dock="Left" HorizontalAlignment="Left" Foreground="WhiteSmoke" FontSize="15" FontWeight="Bold"></TextBlock>
             <WrapPanel DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="0,0,10,0">
-                <Border Name="Btn_MinimizePrincipale" BorderBrush="WhiteSmoke" BorderThickness="1,0,1,1" CornerRadius="0,0,0,5">
+                <Border BorderBrush="WhiteSmoke" BorderThickness="1,0,1,1" CornerRadius="0,0,0,5">
                     <Border.InputBindings>
                         <MouseBinding Gesture="LeftClick" Command="{Binding MinimizeCommand}"/>
                     </Border.InputBindings>
                     <TextBlock Margin="10,0,10,0" Foreground="WhiteSmoke" 
                                HorizontalAlignment="Right" FontSize="15" FontWeight="ExtraBold">_</TextBlock>
                 </Border>
-                <Border Name="Btn_ClosePrincipale" BorderBrush="WhiteSmoke" BorderThickness="1,0,1,1" CornerRadius="0,0,5,0" Margin="-1,0,0,0" Background="#FF5050">
+                <Border BorderBrush="WhiteSmoke" BorderThickness="1,0,1,1" CornerRadius="0,0,5,0" Margin="-1,0,0,0" Background="#FF5050">
                     <Border.InputBindings>
                         <MouseBinding Gesture="LeftClick" Command="{Binding CloseCommand}"/>
                     </Border.InputBindings>
@@ -50,13 +49,13 @@
             </WrapPanel>
         </DockPanel>
         <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center" Orientation="Horizontal" Margin="10">
-            <Button Content="Valider" Click="ButtonValider_Click"
+            <Button Content="Valider" Command="{Binding ValidateRendezVousCommand}"
                     Padding="30 10" Style="{StaticResource ResourceKey=Btn_Options}"
                     Margin="10" HorizontalAlignment="Center"/>
-            <Button Content="Facture" Click="ButtonFacture_Click"
+            <Button Content="Facture" Command="{Binding FactureCommand}"
                     Padding="30 10" Style="{StaticResource ResourceKey=Btn_Options}"
                     Margin="10" HorizontalAlignment="Center"/>
-            <Button Content="Annuler" Click="ButtonAnnuler_Click"
+            <Button Content="Annuler" Command="{Binding CancelCommand}"
                     Padding="30 10" Style="{StaticResource ResourceKey=Btn_Options}"
                     Margin="10" HorizontalAlignment="Center"/>
         </StackPanel>
@@ -64,37 +63,25 @@
             <StackPanel DockPanel.Dock="Top" Width="Auto">
                 <GroupBox Header="Jour - Horaire - Durée" Style="{StaticResource ResourceKey=GroupBoxBasic}">
                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal"  Width="Auto" Margin="5">
-                        <DatePicker Name="DatePickerRDV" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <DatePicker HorizontalAlignment="Left" VerticalAlignment="Center" SelectedDate="{Binding SelectedDate}"/>
                         <WrapPanel Margin="5 0 0 0" >
                             <TextBlock Text="Heure : " TextAlignment="Right" VerticalAlignment="Center" FontWeight="Bold"/>
-                            <ComboBox Style="{StaticResource ResourceKey=ComboBoxFlatStyle}" Name="HourRDV" Width="100" Height="28">
-                                <ComboBoxItem Content="08 Heures"/>
-                                <ComboBoxItem Content="09 Heures"/>
-                                <ComboBoxItem Content="10 Heures"/>
-                                <ComboBoxItem Content="11 Heures"/>
-                                <ComboBoxItem Content="12 Heures"/>
-                                <ComboBoxItem Content="13 Heures"/>
-                                <ComboBoxItem Content="14 Heures"/>
-                                <ComboBoxItem Content="15 Heures"/>
-                                <ComboBoxItem Content="16 Heures"/>
-                                <ComboBoxItem Content="17 Heures"/>
-                                <ComboBoxItem Content="18 Heures"/>
-                            </ComboBox>
+                            <ComboBox Style="{StaticResource ResourceKey=ComboBoxFlatStyle}" Width="100" Height="28" SelectedIndex="{Binding SelectedHour}" ItemsSource="{Binding Hours}"/>
                         </WrapPanel>
                         <WrapPanel Margin="5 0 0 0">
                             <TextBlock Text="Durée : " TextAlignment="Right" VerticalAlignment="Center" FontWeight="Bold"/>
-                            <ComboBox Style="{StaticResource ResourceKey=ComboBoxFlatStyle}" Name="DurationRDV" Width="100" Height="30"/>
+                            <ComboBox Style="{StaticResource ResourceKey=ComboBoxFlatStyle}" Width="100" Height="30" SelectedIndex="{Binding SelectedDuration}" ItemsSource="{Binding Durations}"/>
                         </WrapPanel>
                     </StackPanel>
                 </GroupBox>
             </StackPanel>
             <GroupBox Header="Travaux à effectuer" Margin="0 15 0 0" Style="{StaticResource ResourceKey=GroupBoxBasic}">
-                <ScrollViewer Name="sb_Works" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                <ScrollViewer Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
                               VerticalScrollBarVisibility="Visible">
                     <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Center" Margin="5">
-                        <StackPanel Name="AllWorks" >
-                            <Button Name="Btn_AddWork" Cursor="Hand" VerticalAlignment="Center"
-                                Margin="2" Height="30" Click="Add_Work" Style="{StaticResource ResourceKey=Btn_Add}"/>
+                        <StackPanel>
+                            <Button Cursor="Hand" VerticalAlignment="Center"
+                                Margin="2" Height="30" Command="{Binding AddWorkCommand}" Style="{StaticResource ResourceKey=Btn_Add}"/>
                         </StackPanel>
                     </StackPanel>
                 </ScrollViewer>
@@ -129,7 +116,7 @@
                           Style="{StaticResource ResourceKey=GroupBoxBasic}">
                             <ListView Height="100" Width="Auto" 
                               Margin="0" ItemsSource="{Binding Path=Client.Vehicules, Mode=TwoWay}" 
-                              SelectedItem="{Binding SelectedVehicule}"/>
+                              SelectedItem="{Binding Vehicule}"/>
                         </GroupBox>
                     </DockPanel>
                 </StackPanel>
@@ -216,9 +203,9 @@
                         </GroupBox>
                     </DockPanel>
                 </StackPanel>
-                <WrapPanel Name="ActionVehicule" HorizontalAlignment="Center" Visibility="Visible">
-                    <Button Name="AjouterVehicule" Style="{StaticResource ResourceKey=Btn_LittleWindow}" Content="Ajouter un véhicule" Click="ButtonVehicule_Click" Margin="10"/>
-                    <Button Name="ChangerVehicule" Style="{StaticResource ResourceKey=Btn_LittleWindow}" Content="Changer le véhicule" Click="ButtonVehicule_Click" Margin="10"/>
+                <WrapPanel HorizontalAlignment="Center" Visibility="{Binding IsNewClient, Converter={StaticResource ReverseBooleanToVisibilityConverter}}">
+                    <Button Style="{StaticResource ResourceKey=Btn_LittleWindow}" Content="Ajouter un véhicule" Command="{Binding AddVehiculeCommand}" Margin="10"/>
+                    <Button Style="{StaticResource ResourceKey=Btn_LittleWindow}" Content="Changer le véhicule" Click="{Binding UpdateVehiculeCommand}" Margin="10"/>
                 </WrapPanel>
             </StackPanel>
 

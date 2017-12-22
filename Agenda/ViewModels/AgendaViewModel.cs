@@ -519,7 +519,7 @@ namespace Agenda.ViewModels
                             break;
                     }
                     var date = SelectedDateForConverter.AddDays(dayToAdd).AddHours(hour);
-                    //Child = new GestionRDV(View, new RendezVous(date, DureeType.UneHeure, null, null));
+                    Child = new GestionRDV(this);//, new RendezVous(date, DureeType.UneHeure, null, null));
                 }
                 else
                 {
@@ -530,7 +530,7 @@ namespace Agenda.ViewModels
 
         private void AddRdv(object input)
         {
-            //new GestionRDV(Parent).Show();
+            new GestionRDV(this);
         }
 
         private void Clients(object input)

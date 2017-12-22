@@ -125,7 +125,7 @@ namespace Agenda.Gestion
         {
             if (ChangeVehicule.SelectedItem != null)
             {
-                mOwnerRDV.refreshVehicule(ChangeVehicule.SelectedItem as Vehicule);
+                //mOwnerRDV.refreshVehicule(ChangeVehicule.SelectedItem as Vehicule);
                 base.Close();
             }
             else
@@ -183,7 +183,7 @@ namespace Agenda.Gestion
                 //mOwnerClient.RefreshClients();
             }else if(mOwnerRDV != null)
             {
-                mOwnerRDV.refreshVehicule(v);
+                //mOwnerRDV.refreshVehicule(v);
             }
             base.Close();
         }
@@ -203,7 +203,7 @@ namespace Agenda.Gestion
             }
             else if (mOwnerRDV != null)
             {
-                mOwnerRDV.refreshVehicule(v);
+                //mOwnerRDV.refreshVehicule(v);
             }
             base.Close();
         }

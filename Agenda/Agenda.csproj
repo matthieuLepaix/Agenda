@@ -165,6 +165,7 @@
     <Compile Include="ViewModels\AddClientViewModel.cs" />
     <Compile Include="ViewModels\AgendaViewModel.cs" />
     <Compile Include="ViewModels\GestionClientsViewModel.cs" />
+    <Compile Include="ViewModels\GestionRendezVousViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ParamsViewModel.cs" />
     <Compile Include="ViewModels\RendezVousViewModel.cs" />
