@@ -310,12 +310,17 @@ namespace Agenda.ViewModels
             SelectedDate = DateTime.Now;
             SelectedHour = 0;
             SelectedDuration = 0;
+            IsNewClient = false;
 
             Open();
         }
 
         private void InitHoursAndDurations()
         {
+            if (Durations == null)
+                Durations = new ObservableCollection<string>();
+            else
+                Durations.Clear();
             Durations.Add("30 minutes");
             Durations.Add("1 heure");
             Durations.Add("2 heures");
@@ -327,6 +332,10 @@ namespace Agenda.ViewModels
             Durations.Add("8 heures");
             Durations.Add("Plus de 8 heures");
 
+            if (Hours == null)
+                Hours = new ObservableCollection<string>();
+            else
+                Hours.Clear();
             Hours.Add("08 heures");
             Hours.Add("09 heures");
             Hours.Add("10 heures");

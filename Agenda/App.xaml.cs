@@ -46,7 +46,7 @@ namespace Agenda
                 mainView.Show();
             }, TaskScheduler.FromCurrentSynchronizationContext());
 
-            Connexion.init();
+            //Connexion.init();
             mainView = new Agenda.MainWindow();
 
             startup.Start();

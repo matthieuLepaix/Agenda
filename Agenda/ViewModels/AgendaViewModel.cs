@@ -449,7 +449,7 @@ namespace Agenda.ViewModels
                 UserControlRendezVousList.Add(new UserControlRDV(this, x));
             });
             OnPropertyChanged("UserControlRendezVousList");
-            int nbRDV = RdvManager.CountRdvDay(DateTime.Now);
+            int nbRDV = 0;// RdvManager.CountRdvDay(DateTime.Now);
             WindowTitle = String.Format("Agenda - {0} - {1} Rendez-vous", DateTime.Now.ToShortDateString(), nbRDV);
         }
 

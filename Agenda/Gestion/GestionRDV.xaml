@@ -11,7 +11,8 @@
         BorderThickness="0"
         Window.FontSize="15"
         Background="#E0ECFD"
-        Width="Auto" Height="Auto" SizeToContent="WidthAndHeight"
+        Width="Auto" Height="Auto" 
+        SizeToContent="WidthAndHeight"
         >
 
     <i:Interaction.Triggers>
@@ -89,7 +90,7 @@
         </DockPanel>
         <DockPanel DockPanel.Dock="Left" Height="Auto" Width="Auto" Margin="10 5 0 0"
                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <StackPanel Height="Auto" Width="Auto"
+            <StackPanel DockPanel.Dock="Left" Height="Auto" Width="Auto"
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <WrapPanel Name="BtnNewClientPanel" HorizontalAlignment="Center">
                     <Button Name="BtnNewClient" 
@@ -97,9 +98,10 @@
                             Content="Nouveau Client"
                             Padding="30 10"
                             Margin="0 0 0 10"
-                            Command="{Binding NewClientCommand}" />
+                            Command="{Binding NewClientCommand}"
+                            Visibility="{Binding IsNewClient, Converter={StaticResource ReverseBooleanToVisibilityConverter}}"/>
                 </WrapPanel>
-                <StackPanel DockPanel.Dock="Left" Margin="5" Visibility="{Binding IsNewClient, Converter={StaticResource ReverseBooleanToVisibilityConverter}}">
+                <StackPanel Margin="5" Visibility="{Binding IsNewClient, Converter={StaticResource ReverseBooleanToVisibilityConverter}}">
                     <DockPanel Width="Auto" Height="Auto"
                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <GroupBox DockPanel.Dock="Top" Style="{StaticResource ResourceKey=GroupBoxForClientSearch}">
@@ -121,7 +123,7 @@
                     </DockPanel>
                 </StackPanel>
 
-                <StackPanel DockPanel.Dock="Left" Margin="5" Visibility="{Binding IsNewClient, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel Margin="5" Visibility="{Binding IsNewClient, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <DockPanel Width="Auto" Height="Auto"
                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <GroupBox DockPanel.Dock="Top" Header="Client" Style="{StaticResource ResourceKey=GroupBoxBasic}">
@@ -205,7 +207,7 @@
                 </StackPanel>
                 <WrapPanel HorizontalAlignment="Center" Visibility="{Binding IsNewClient, Converter={StaticResource ReverseBooleanToVisibilityConverter}}">
                     <Button Style="{StaticResource ResourceKey=Btn_LittleWindow}" Content="Ajouter un véhicule" Command="{Binding AddVehiculeCommand}" Margin="10"/>
-                    <Button Style="{StaticResource ResourceKey=Btn_LittleWindow}" Content="Changer le véhicule" Click="{Binding UpdateVehiculeCommand}" Margin="10"/>
+                    <Button Style="{StaticResource ResourceKey=Btn_LittleWindow}" Content="Changer le véhicule" Command="{Binding UpdateVehiculeCommand}" Margin="10"/>
                 </WrapPanel>
             </StackPanel>
 

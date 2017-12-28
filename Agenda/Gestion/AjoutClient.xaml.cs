@@ -27,23 +27,5 @@ namespace Agenda.Gestion
             InitializeComponent();
             DataContext = new AddClientViewModel(this, owner);
         }
-
-        #region WindowEvent
-        void myWindowHeadBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            DragMove();
-        }
-
-        void Btn_MinimizePrincipale_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            this.WindowState = System.Windows.WindowState.Minimized;
-        }
-
-        void Btn_ClosePrincipale_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        #endregion
     }
 }
