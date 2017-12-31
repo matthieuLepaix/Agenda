@@ -12,28 +12,14 @@ namespace Agenda.ViewModels
     public class AddClientViewModel : AbstractViewModel
     {
         #region Attributes
-        private Window parent;
         private GestionClientsViewModel clientsViewModel;
-        private string windowTitle;
         private Vehicule vehicule;
         private Command addCommand;
         private Command cancelCommand;
         #endregion
 
         #region Properties
-
-        public string WindowTitle
-        {
-            get
-            {
-                return windowTitle;
-            }
-            set
-            {
-                windowTitle = value;
-                OnPropertyChanged("WindowTitle");
-            }
-        }
+        
 
         public Vehicule Vehicule
         {

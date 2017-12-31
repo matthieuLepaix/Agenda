@@ -24,7 +24,7 @@ namespace Agenda.Gestion
 
         private GestionClients mOwnerClient = null;
 
-        private GestionRDV mOwnerRDV = null;
+        private GestionRendezVous mOwnerRDV = null;
 
         #endregion
 
@@ -49,18 +49,6 @@ namespace Agenda.Gestion
         {
             InitializeComponent();
             InitializeTitle();
-            if (owner is GestionClients)
-            {
-                mOwnerClient = owner as GestionClients;
-                mOwnerClient.IsEnabled = false;
-                mOwnerClient.Opacity = 0.3;
-            }
-            else if (owner is GestionRDV)
-            {
-                mOwnerRDV = owner as GestionRDV;
-                mOwnerRDV.IsEnabled = false;
-                mOwnerRDV.Opacity = 0.3;
-            }
             pClient = c;
             Closed += new EventHandler(GestionVehicule_Closed);
             if (change)
@@ -81,9 +69,6 @@ namespace Agenda.Gestion
         private void InitializeTitle()
         {
             WindowTitle.Text = string.Format("Véhicules de {0}", pClient);
-            Btn_ClosePrincipale.MouseDown += new MouseButtonEventHandler(Btn_ClosePrincipale_MouseDown);
-            Btn_MinimizePrincipale.MouseDown += new MouseButtonEventHandler(Btn_MinimizePrincipale_MouseDown);
-            myWindowHeadBar.MouseLeftButtonDown += new MouseButtonEventHandler(myWindowHeadBar_MouseLeftButtonDown);
         }
 
         void Btn_MinimizePrincipale_MouseDown(object sender, MouseButtonEventArgs e)

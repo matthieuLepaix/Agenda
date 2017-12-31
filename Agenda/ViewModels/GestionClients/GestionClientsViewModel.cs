@@ -47,12 +47,12 @@ namespace Agenda.ViewModels
                 if (!(string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value)))
                 {
                     searchClientValue = value.Trim();
-                    Clients = new ObservableCollection<Client>(ClientManager.CLIENTS.Where(c => c.Nom.ToUpper().StartsWith(searchClientValue.ToUpper())));
+                    Clients = new ObservableCollection<Client>(ClientManager.CLIENTS.Where(c => c.Nom.ToUpper().StartsWith(searchClientValue.ToUpper())).OrderBy(c => c.Nom));
                 }
                 else
                 {
                     searchClientValue = string.Empty;
-                    Clients = new ObservableCollection<Client>(ClientManager.CLIENTS);
+                    Clients = new ObservableCollection<Client>(ClientManager.CLIENTS.OrderBy(c => c.Nom));
                 }
                 OnPropertyChanged("Clients");
                 OnPropertyChanged("SearchClientValue");
@@ -228,6 +228,7 @@ namespace Agenda.ViewModels
                 {
                     ClientManager.DeleteClient(Client);
                     Client = null;
+                    SelectedVehicule = null;
                     SearchClientValue = string.Empty;
                 }
             }
@@ -250,7 +251,6 @@ namespace Agenda.ViewModels
                     VehiculeManager.DesaffecterClient(SelectedVehicule);
                     Client.RemoveVehicule(SelectedVehicule);
                     SelectedVehicule = null;
-                    
                 }
             }
             else
@@ -266,8 +266,8 @@ namespace Agenda.ViewModels
                 if (SelectedVehicule.Client != null)
                 {
                     RendezVous rdv = new RendezVous(DateTime.Now, DureeType.UneHeure, SelectedVehicule, SelectedVehicule.Client);
-                    //Close();
-                    //new GestionRDV(mOwner, rdv).Show();
+                    Close();
+                    Owner.Child = new GestionRendezVous((AgendaViewModel)Owner, rdv);
                 }
                 else
                 {
@@ -302,7 +302,7 @@ namespace Agenda.ViewModels
                     MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (result.Equals(MessageBoxResult.Yes))
                 {
-                    ClientManager.UpdateClient(SelectedVehicule.Client);
+                    ClientManager.UpdateClient(Client);
                     VehiculeManager.UpdateVehicule(SelectedVehicule);
                 }
             }

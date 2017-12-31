@@ -9,26 +9,24 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using AgendaCore;
-using Agenda.Gestion;
 using AgendaBDDManager;
+using Agenda.UserControls;
+using System.Windows.Threading;
 using Agenda.ViewModels;
 
-namespace Agenda.UserControls
+namespace Agenda.Gestion
 {
     /// <summary>
-    /// Logique d'interaction pour UserControlRDV.xaml
+    /// Logique d'interaction pour GestionRDV.xaml
     /// </summary>
-    public partial class UserControlRDV : UserControl
+    public partial class GestionRendezVous : Window
     {
-        public static bool IsMouseDownOnRdv;
-
-        public UserControlRDV(AgendaViewModel owner, RendezVous rdv)
+        public GestionRendezVous(AgendaViewModel owner, RendezVous rendezVous)
         {
             InitializeComponent();
-            DataContext = new UserControlRendezVousViewModel(owner.View, owner, rdv); 
+            DataContext = new GestionRendezVousViewModel(this, owner, rendezVous);
         }
     }
 }

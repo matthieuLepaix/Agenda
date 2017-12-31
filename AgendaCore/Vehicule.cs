@@ -189,7 +189,7 @@ namespace AgendaCore
         public Vehicule(int id, string marque, string modele, string immat, string annee, int km, Client client)
         {
             this.id = id;
-            immatriculation = CleanImmat(immat);
+            Immatriculation = CleanImmat(immat);
             this.marque = marque;
             this.modele = modele;
             Annee = annee;

@@ -78,12 +78,12 @@
                             <StackPanel DockPanel.Dock="Left" HorizontalAlignment="Left">
                                 <TextBlock Text="Nom" FontWeight="SemiBold"  TextAlignment="Left" 
                                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="80"/>
-                                <TextBox Width="200" Text="{Binding Path=SelectedVehicule.Client.Nom, Mode=TwoWay}"/>
+                                <TextBox Width="200" Text="{Binding Path=Client.Nom, Mode=TwoWay}"/>
                             </StackPanel>
                             <StackPanel DockPanel.Dock="Right" Margin="0" HorizontalAlignment="Right">
                                 <TextBlock Text="Prénom" FontWeight="SemiBold"  TextAlignment="Left" 
                                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="80"/>
-                                <TextBox Width="200" Text="{Binding Path=SelectedVehicule.Client.Prenom, Mode=TwoWay}"/>
+                                <TextBox Width="200" Text="{Binding Path=Client.Prenom, Mode=TwoWay}"/>
                             </StackPanel>
                         </DockPanel>
                         <DockPanel Margin="0 0 0 10">
@@ -93,33 +93,33 @@
                                     <StackPanel DockPanel.Dock="Right">
                                         <TextBox HorizontalAlignment="Stretch" 
                                              Margin="0 0 0 4" Width="Auto"
-                                                Text="{Binding Path=SelectedVehicule.Client.Adresse, Mode=TwoWay}" />
+                                                Text="{Binding Path=Client.Adresse, Mode=TwoWay}" />
                                     </StackPanel>
                                 </DockPanel>
                             </StackPanel>
                             <WrapPanel DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Left">
                                 <TextBlock Text="Code postal" FontWeight="SemiBold"  TextAlignment="Left" VerticalAlignment="Center" Width="100"/>
-                                <TextBox Width="50" Text="{Binding Path=SelectedVehicule.Client.CodePostal, Mode=TwoWay}" />
+                                <TextBox Width="50" Text="{Binding Path=Client.CodePostal, Mode=TwoWay}" />
                             </WrapPanel>
                             <WrapPanel DockPanel.Dock="Right" Margin="0" HorizontalAlignment="Right">
                                 <TextBlock Text="Ville" FontWeight="SemiBold"  TextAlignment="Left" VerticalAlignment="Center" Width="50"/>
-                                <TextBox Width="250" Text="{Binding Path=SelectedVehicule.Client.Ville, Mode=TwoWay}"/>
+                                <TextBox Width="250" Text="{Binding Path=Client.Ville, Mode=TwoWay}"/>
                             </WrapPanel>
                         </DockPanel>
                         <DockPanel Margin="0 0 0 10">
                             <DockPanel DockPanel.Dock="Top" Margin="0 0 0 10">
                                 <WrapPanel DockPanel.Dock="Left" HorizontalAlignment="Left">
                                     <TextBlock Text="Téléphone 1" FontWeight="SemiBold"  TextAlignment="Left" VerticalAlignment="Center" Width="100"/>
-                                    <TextBox Width="100" Text="{Binding Path=SelectedVehicule.Client.Telephone1, Mode=TwoWay}"/>
+                                    <TextBox Width="100" Text="{Binding Path=Client.Telephone1, Mode=TwoWay}"/>
                                 </WrapPanel>
                                 <WrapPanel DockPanel.Dock="Right" Margin="0" HorizontalAlignment="Right">
                                     <TextBlock Text="Téléphone 2" FontWeight="SemiBold"  TextAlignment="Left" VerticalAlignment="Center" Width="100"/>
-                                    <TextBox Width="100" Text="{Binding Path=SelectedVehicule.Client.Telephone2, Mode=TwoWay}"/>
+                                    <TextBox Width="100" Text="{Binding Path=Client.Telephone2, Mode=TwoWay}"/>
                                 </WrapPanel>
                             </DockPanel>
                             <DockPanel DockPanel.Dock="Bottom" Margin="0" HorizontalAlignment="Stretch">
                                 <TextBlock DockPanel.Dock="Left" Text="Email" FontWeight="SemiBold"  TextAlignment="Left" VerticalAlignment="Center" Width="100"/>
-                                <TextBox DockPanel.Dock="Right" Text="{Binding Path=SelectedVehicule.Client.Email, Mode=TwoWay}"
+                                <TextBox DockPanel.Dock="Right" Text="{Binding Path=Client.Email, Mode=TwoWay}"
                                  HorizontalAlignment="Stretch" Width="Auto"/>
                             </DockPanel>
                         </DockPanel>

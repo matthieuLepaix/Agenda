@@ -17,7 +17,6 @@ namespace Agenda.Utils
             var items = value as ObservableCollection<UserControlRDV>;
             if (parameter != null && items != null)
             {
-
                 var strParameter = parameter.ToString();
                 var day = strParameter[0];
                 var hour = int.Parse(strParameter.Substring(1));
@@ -46,8 +45,8 @@ namespace Agenda.Utils
                         break;
                 }
                 return items.Where(r =>
-                ((RendezVousViewModel)r.DataContext).RendezVous.Date.Day == AgendaViewModel.SelectedDateForConverter.AddDays(dayToAdd).Day
-                && ((RendezVousViewModel)r.DataContext).RendezVous.Date.Hour == hour).ToList();
+                ((UserControlRendezVousViewModel)r.DataContext).RendezVous.Date.Day == AgendaViewModel.SelectedDateForConverter.AddDays(dayToAdd).Day
+                && ((UserControlRendezVousViewModel)r.DataContext).RendezVous.Date.Hour == hour).ToList();
             }
             return null;
         }

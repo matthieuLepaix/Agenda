@@ -10,7 +10,7 @@ using System.Windows.Media;
 
 namespace Agenda.ViewModels
 {
-    public class RendezVousViewModel : AbstractViewModel
+    public class UserControlRendezVousViewModel : AbstractViewModel
     {
         #region Attributes
         private AgendaViewModel agendaVM;
@@ -86,7 +86,7 @@ namespace Agenda.ViewModels
         #endregion
 
         #region Constructors
-        public RendezVousViewModel(Window view, AgendaViewModel owner, RendezVous rdv)
+        public UserControlRendezVousViewModel(Window view, AgendaViewModel owner, RendezVous rdv)
             : base(view, owner)
         {
             AgendaVM = owner;
@@ -94,26 +94,31 @@ namespace Agenda.ViewModels
             IsSelected = false;
             DoubleClickCommand = new Command((x) =>
             {
-                AgendaVM.UserControlRendezVousList.ToList().ForEach(
-                    u => ((RendezVousViewModel)u.DataContext).IsSelected = false);
-                //TODO : mange child
-                //new GestionRDV(null, RendezVous);
+                UnselectAllRendezVous();
+                SelectRendezVous();
+                AgendaVM.Child = new GestionRendezVous(AgendaVM, RendezVous);
             });
             SingleClickCommand = new Command((z) =>
             {
-                AgendaVM.UserControlRendezVousList.ToList().ForEach(
-                    u => ((RendezVousViewModel)u.DataContext).IsSelected = false);
-                IsSelected = true;
-                AgendaVM.IsRdvSelected = true;
-                AgendaVM.SelectedRendezVous = RendezVous;
-
-                
+                UnselectAllRendezVous();
+                SelectRendezVous();
             });
         }
         #endregion
 
         #region Methods
 
+        private void UnselectAllRendezVous()
+        {
+            AgendaVM.SelectedRendezVous = null;
+        }
+
+        private void SelectRendezVous()
+        {
+            IsSelected = true;
+            AgendaVM.SelectedRendezVous = RendezVous;
+
+        }
 
 
         #endregion

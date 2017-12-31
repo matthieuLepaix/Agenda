@@ -189,12 +189,12 @@ namespace Agenda.ViewModels
 
         public void Open()
         {
-            View.Show();
             if (Owner != null)
             {
                 Owner.View.Opacity = 0.3;
                 Owner.View.IsEnabled = false;
             }
+            View.Show();
         }
         #endregion
 

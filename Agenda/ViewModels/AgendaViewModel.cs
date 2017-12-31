@@ -36,19 +36,6 @@ namespace Agenda.ViewModels
         private Command worksCommand;
         private Command refreshCommand;
 
-        // Pour gérer la modale
-        private Window modal;
-        private MainWindow parent;
-
-        //La partie détails de RDV
-        private string detailsClient;
-        private string detailsVehicule;
-        private string detailsDay;
-        private string detailsTime;
-        private string detailsWorks;
-
-        private bool isRdvSelected;
-
         private Command detailsDeleteCommand;
         private Command detailsFactureCommand;
 
@@ -58,6 +45,7 @@ namespace Agenda.ViewModels
         private RendezVous selectedRendezVous = null;
         private DateTime selectedDate;
         private Command doubleClickUserControlCommand;
+        private Command singleClickAgendaCommand;
 
 
         #endregion
@@ -213,81 +201,11 @@ namespace Agenda.ViewModels
             }
         }
 
-        public string DetailsClient
-        {
-            get
-            {
-                return detailsClient;
-            }
-            set
-            {
-                detailsClient = value;
-                OnPropertyChanged("DetailsClient");
-            }
-        }
-
-        public string DetailsVehicule
-        {
-            get
-            {
-                return detailsVehicule;
-            }
-            set
-            {
-                detailsVehicule = value;
-                OnPropertyChanged("DetailsVehicule");
-            }
-        }
-
-        public string DetailsDay
-        {
-            get
-            {
-                return detailsDay;
-            }
-            set
-            {
-                detailsDay = value;
-                OnPropertyChanged("DetailsDay");
-            }
-        }
-
-        public string DetailsTime
-        {
-            get
-            {
-                return detailsTime;
-            }
-            set
-            {
-                detailsTime = value;
-                OnPropertyChanged("DetailsTime");
-            }
-        }
-
-        public string DetailsWorks
-        {
-            get
-            {
-                return detailsWorks;
-            }
-            set
-            {
-                detailsWorks = value;
-                OnPropertyChanged("DetailsWorks");
-            }
-        }
-
         public bool IsRdvSelected
         {
             get
             {
-                return isRdvSelected;
-            }
-            set
-            {
-                isRdvSelected = value;
-                OnPropertyChanged("IsRdvSelected");
+                return SelectedRendezVous != null;
             }
         }
 
@@ -333,14 +251,10 @@ namespace Agenda.ViewModels
             set
             {
                 selectedRendezVous = value;
-                if (selectedRendezVous != null)
-                {
-                    SetDetailsRendezVous();
-                }
-                else
-                {
-                    ResetDetailsRendezVous();
-                }
+                if (selectedRendezVous == null && UserControlRendezVousList != null)
+                    UserControlRendezVousList.ToList().ForEach(
+                                        u => ((UserControlRendezVousViewModel)u.DataContext).IsSelected = false);
+                OnPropertyChanged("IsRdvSelected");
                 OnPropertyChanged("SelectedRendezVous");
             }
         }
@@ -361,6 +275,7 @@ namespace Agenda.ViewModels
                                          0, 0, 0, 0);
                 InitializeAgenda();
                 selectedDate = value;
+                SelectedRendezVous = null;
                 OnPropertyChanged("SelectedDate");
             }
         }
@@ -404,6 +319,19 @@ namespace Agenda.ViewModels
             }
         }
 
+        public Command SingleClickAgendaCommand
+        {
+            get
+            {
+                return singleClickAgendaCommand;
+            }
+            set
+            {
+                singleClickAgendaCommand = value;
+                OnPropertyChanged("SingleClickAgendaCommand");
+            }
+        }
+
         #endregion
 
         #region Constructors
@@ -437,6 +365,13 @@ namespace Agenda.ViewModels
         /// </summary>
         private void InitializeAgenda()
         {
+            RefreshRendezVousIntoAgenda();
+            int nbRDV = RdvManager.CountRdvDay(DateTime.Now);
+            WindowTitle = String.Format("Agenda - {0} - {1} Rendez-vous", DateTime.Now.ToShortDateString(), nbRDV);
+        }
+
+        public void RefreshRendezVousIntoAgenda()
+        {
             UserControlRendezVousList.Clear();
             RendezVousList.Clear();
 
@@ -449,8 +384,7 @@ namespace Agenda.ViewModels
                 UserControlRendezVousList.Add(new UserControlRDV(this, x));
             });
             OnPropertyChanged("UserControlRendezVousList");
-            int nbRDV = 0;// RdvManager.CountRdvDay(DateTime.Now);
-            WindowTitle = String.Format("Agenda - {0} - {1} Rendez-vous", DateTime.Now.ToShortDateString(), nbRDV);
+            
         }
 
         private void InitCommands()
@@ -485,10 +419,13 @@ namespace Agenda.ViewModels
             {
                 FactureSelectedRdv(x);
             });
+            SingleClickAgendaCommand = new Command((x) =>
+            {
+                SelectedRendezVous = null;
+            });
             DoubleClickUserControlCommand = new Command((x) =>
             {
-                UserControlRendezVousList.ToList().ForEach(
-                                    u => ((RendezVousViewModel)u.DataContext).IsSelected = false);
+                SelectedRendezVous = null;
                 if (x != null)
                 {
                     var strParameter = x.ToString();
@@ -519,33 +456,39 @@ namespace Agenda.ViewModels
                             break;
                     }
                     var date = SelectedDateForConverter.AddDays(dayToAdd).AddHours(hour);
-                    Child = new GestionRDV(this);//, new RendezVous(date, DureeType.UneHeure, null, null));
+                    Child = new GestionRendezVous(this, new RendezVous(date, DureeType.UneHeure, null, null));
                 }
                 else
                 {
-                    //(Modal = new GestionRDV(Parent)).Show();
+                    var now = DateTime.Now;
+                    Child = new GestionRendezVous(this, new RendezVous(now.AddHours(now.Hour * -1).AddHours(9), DureeType.UneHeure, null, null));
                 }
             });
         }
 
         private void AddRdv(object input)
         {
-            new GestionRDV(this);
+            SelectedRendezVous = null;
+            var now = DateTime.Now;
+            Child = new GestionRendezVous(this, new RendezVous(now.AddHours(now.Hour * -1).AddHours(9), DureeType.UneHeure, null, null));
         }
 
         private void Clients(object input)
         {
+            SelectedRendezVous = null;
             Child = new GestionClients(this);
         }
 
         private void Works(object input)
         {
+            SelectedRendezVous = null;
             //(Modal = new Travaux_Vehicule(Parent)).Show();
         }
 
         private void Refresh(object input)
         {
-            //Raffraichir();
+            SelectedRendezVous = null;
+            RefreshRendezVousIntoAgenda();
         }
 
         private void DeleteSelectedRdv(object input)
@@ -558,6 +501,8 @@ namespace Agenda.ViewModels
                     FactureManager.DeleteFactureByRDV(SelectedRendezVous);
                     ReparationRDVManager.DeleteReparationRDVByRDV(SelectedRendezVous);
                     RdvManager.DeleteRdv(SelectedRendezVous.Id);
+                    SelectedRendezVous = null;
+                    RefreshRendezVousIntoAgenda();
                 }
             }
         }
@@ -582,39 +527,6 @@ namespace Agenda.ViewModels
                 thSaver.Start(path);
             }
         }
-
-        /// <summary>
-        /// Permet de remettre à zéro les détails du RDV sélectionné
-        /// </summary>
-        public void ResetDetailsRendezVous()
-        {
-            DetailsClient = string.Empty;
-            DetailsVehicule = string.Empty;
-            DetailsDay = string.Empty;
-            DetailsTime = string.Empty;
-            DetailsWorks = string.Empty;
-            IsRdvSelected = false;
-        }
-
-        /// <summary>
-        /// Permet de remettre à zéro les détails du RDV sélectionné
-        /// </summary>
-        public void SetDetailsRendezVous()
-        {
-            DetailsClient = SelectedRendezVous.Vehicule.Client != null ? string.Format("M. ou Mme {0}", SelectedRendezVous.Vehicule.Client.Nom) : "Le véhicule n'appartient plus à ce propriétaire";
-            DetailsVehicule = SelectedRendezVous.Vehicule.ToString();
-            DetailsDay = string.Format("{0} {1} {2} {3}", Config.Configuration.Days[Config.Configuration.Calendrier.GetDayOfWeek(SelectedRendezVous.Date).ToString()], SelectedRendezVous.Date.Day,
-                                                                    Config.Configuration.Months[SelectedRendezVous.Date.Month], SelectedRendezVous.Date.Year);
-            DetailsTime = SelectedRendezVous.Date.ToLongTimeString();
-            if (SelectedRendezVous.Travaux.Count() > 0)
-            {
-                StringBuilder sb = new StringBuilder();
-                SelectedRendezVous.Travaux.ToList().ForEach(x => sb.Append("- ").AppendLine(x.Reparation.Nom));
-                DetailsWorks = sb.ToString();
-            }
-            IsRdvSelected = true;
-        }
-
 
         #endregion
 

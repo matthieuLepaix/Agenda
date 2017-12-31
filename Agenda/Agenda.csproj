@@ -118,9 +118,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Analysis\CoreAnalysis.cs" />
-    <Compile Include="Config\Configuration.cs" />
-    <Compile Include="Consultation\Travaux_Vehicule.xaml.cs">
-      <DependentUpon>Travaux_Vehicule.xaml</DependentUpon>
+    <Compile Include="Consultation\TravauxVehicule.xaml.cs">
+      <DependentUpon>TravauxVehicule.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BackgroundRendezVousConverter.cs" />
     <Compile Include="Converters\BasicConverters.cs" />
@@ -129,6 +128,7 @@
     <Compile Include="Converters\GestionClientsConverters.cs" />
     <Compile Include="Converters\ListRendezVousConverter.cs" />
     <Compile Include="Converters\TabSizeConverter.cs" />
+    <Compile Include="Converters\TravauxToUserControlConverter.cs" />
     <Compile Include="Factures\ExcelManager.cs" />
     <Compile Include="Gestion\AjoutClient.xaml.cs">
       <DependentUpon>AjoutClient.xaml</DependentUpon>
@@ -145,17 +145,8 @@
     <Compile Include="SplashScreen.xaml.cs">
       <DependentUpon>SplashScreen.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\UserControlInfosClient.xaml.cs">
-      <DependentUpon>UserControlInfosClient.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlNewClient.xaml.cs">
-      <DependentUpon>UserControlNewClient.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\UserControlRDV.xaml.cs">
       <DependentUpon>UserControlRDV.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlSelectionClient.xaml.cs">
-      <DependentUpon>UserControlSelectionClient.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserControlWork.xaml.cs">
       <DependentUpon>UserControlWork.xaml</DependentUpon>
@@ -163,15 +154,15 @@
     <Compile Include="Utils\Command.cs" />
     <Compile Include="ViewModels\AbstractViewModel.cs" />
     <Compile Include="ViewModels\ActiviteViewModel.cs" />
-    <Compile Include="ViewModels\AddClientViewModel.cs" />
+    <Compile Include="ViewModels\GestionClients\AddClientViewModel.cs" />
     <Compile Include="ViewModels\AgendaViewModel.cs" />
-    <Compile Include="ViewModels\Class1.cs" />
-    <Compile Include="ViewModels\GestionClientsViewModel.cs" />
+    <Compile Include="ViewModels\GestionVehiculeViewModel.cs" />
+    <Compile Include="ViewModels\GestionClients\GestionClientsViewModel.cs" />
     <Compile Include="ViewModels\GestionRendezVousViewModel.cs" />
-    <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ParamsViewModel.cs" />
-    <Compile Include="ViewModels\RendezVousViewModel.cs" />
-    <Page Include="Consultation\Travaux_Vehicule.xaml">
+    <Compile Include="ViewModels\UserControls\UserControlRendezVousViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\UserControlWorkViewModel.cs" />
+    <Page Include="Consultation\TravauxVehicule.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -187,7 +178,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Gestion\GestionRDV.xaml">
+    <Page Include="Gestion\GestionRendezVous.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -203,8 +194,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Gestion\GestionRDV.xaml.cs">
-      <DependentUpon>GestionRDV.xaml</DependentUpon>
+    <Compile Include="Gestion\GestionRendezVous.xaml.cs">
+      <DependentUpon>GestionRendezVous.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -214,19 +205,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\UserControlInfosClient.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\UserControlNewClient.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UserControls\UserControlRDV.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\UserControlSelectionClient.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

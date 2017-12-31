@@ -1,5 +1,4 @@
 ﻿using Agenda.Utils;
-using Agenda.Utils;
 using AgendaBDDManager;
 using AgendaCore;
 using System;

@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client.cs" />
+    <Compile Include="Config\Configuration.cs" />
     <Compile Include="DataAnalysis\ClientAnalysis.cs" />
     <Compile Include="DataAnalysis\FactureAnalysis.cs" />
     <Compile Include="DataAnalysis\RDVAnalysis.cs" />

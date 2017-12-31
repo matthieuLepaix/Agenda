@@ -27,28 +27,18 @@ namespace Agenda.Consultation
     /// <summary>
     /// Logique d'interaction pour Travaux_Vehicule.xaml
     /// </summary>
-    public partial class Travaux_Vehicule : System.Windows.Window
+    public partial class TravauxVehicule : System.Windows.Window
     {
         private List<RendezVous> mesRDVs = new List<RendezVous>();
-
-        private UserControlSelectionClient ucSelectClient;
 
         private MainWindow mOwner;
 
         private string pdfFilename { get; set; }
 
-        public Travaux_Vehicule(MainWindow owner)
+        public TravauxVehicule(MainWindow owner)
         {
             InitializeComponent();
-            mOwner = owner;
-            mOwner.IsEnabled = false;
-            mOwner.Opacity = 0.3;
             WindowTitle.Text = "Consultation des travaux effectués";
-            ucSelectClient = new UserControlSelectionClient(this);
-            ClientResearch.Children.Add(ucSelectClient);
-            Btn_ClosePrincipale.MouseDown += new MouseButtonEventHandler(Btn_ClosePrincipale_MouseDown);
-            Btn_MinimizePrincipale.MouseDown += new MouseButtonEventHandler(Btn_MinimizePrincipale_MouseDown);
-            myWindowHeadBar.MouseLeftButtonDown += new MouseButtonEventHandler(myWindowHeadBar_MouseLeftButtonDown);
         }
 
         private TextBlock getTextBlock(string chaine)

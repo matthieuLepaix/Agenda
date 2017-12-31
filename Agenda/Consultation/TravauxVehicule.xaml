@@ -1,4 +1,4 @@
-﻿<Window x:Class="Agenda.Consultation.Travaux_Vehicule"
+﻿<Window x:Class="Agenda.Consultation.TravauxVehicule"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Les travaux par véhicule"

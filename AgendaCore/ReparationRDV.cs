@@ -26,6 +26,8 @@ namespace AgendaCore
 
         private string comments;
 
+        private bool isActive;
+
         #endregion
 
         #region Properties
@@ -150,11 +152,25 @@ namespace AgendaCore
             }
         }
 
+        public bool IsActive
+        {
+            get
+            {
+                return isActive;
+            }
+            set
+            {
+                isActive = value;
+            }
+        }
+
         #endregion
 
         #region Constructors
 
-        public ReparationRDV(int id, RendezVous rdv, Reparation reparation, string refe, int qte, float pu, float rem, string comments)
+
+
+        public ReparationRDV(int id, RendezVous rdv, Reparation reparation, string refe, int qte, float pu, float rem, string comments, bool isActive=true)
         {
             Id = id;
             RendezVous = rdv;
@@ -164,9 +180,10 @@ namespace AgendaCore
             PrixU = pu;
             Remise = rem;
             Comments = comments;
+            IsActive = isActive;
         }
 
-        public ReparationRDV(RendezVous rdv, Reparation reparation, string refe, int qte, float pu, float rem, string comments)
+        public ReparationRDV(RendezVous rdv, Reparation reparation, string refe, int qte, float pu, float rem, string comments, bool isActive=true)
         {
             RendezVous = rdv;
             Reparation = reparation;
@@ -175,6 +192,11 @@ namespace AgendaCore
             PrixU = pu;
             Remise = rem;
             Comments = comments;
+            IsActive = isActive;
+        }
+        public ReparationRDV(RendezVous rdv)
+            :this (rdv, null, string.Empty, 1, 0f, 0f, string.Empty, true)
+        {
         }
 
         #endregion

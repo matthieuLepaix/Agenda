@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Agenda.Config;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -60,6 +61,10 @@ namespace AgendaCore
             }
             set
             {
+                value = 
+                    date != null && value != null && value.Hour == 0 ? 
+                        value.AddHours(date.Hour) 
+                        : value;
                 date = value;
             }
         }
@@ -76,7 +81,8 @@ namespace AgendaCore
             }
         }
 
-        public IEnumerable<ReparationRDV> Travaux
+
+        public List<ReparationRDV> Travaux
         {
             get
             {
@@ -109,6 +115,80 @@ namespace AgendaCore
             set
             {
                 client = value;
+            }
+        }
+
+        public int HourInCombobox
+        {
+            get
+            {
+                var hour = Date.Hour - 8;
+                return hour < 0 || hour > 10 ? 0 : hour;
+            }
+            set
+            {
+                var hour = value + 8;
+                Date = Date.AddHours(Date.Hour * -1).AddHours(hour > 18 ? 18 : hour);
+            }
+        }
+
+        public int DureeAsInteger
+        {
+            get
+            {
+                return (int)duree;
+            }
+            set
+            {
+                duree = (DureeType)value;
+            }
+        }
+
+        public string DetailsClient
+        {
+            get
+            {
+                return Vehicule.Client != null ? string.Format("M. ou Mme {0}", Vehicule.Client.Nom) : "Le véhicule n'appartient plus à ce propriétaire";
+            }
+        }
+
+        public string DetailsVehicule
+        {
+            get
+            {
+                return Vehicule.ToString();
+            }
+        }
+
+        public string DetailsDay
+        {
+            get
+            {
+                return string.Format("{0} {1} {2} {3}",
+                    Configuration.Days[Configuration.Calendrier.GetDayOfWeek(Date).ToString()],
+                    Date.Day, Configuration.Months[Date.Month], Date.Year); ;
+            }
+        }
+
+        public string DetailsTime
+        {
+            get
+            {
+                return Date.ToLongTimeString();
+            }
+        }
+
+
+        public string DetailsWorks
+        {
+            get
+            {
+                StringBuilder sb = new StringBuilder();
+                if (Travaux.Count() > 0)
+                {
+                    Travaux.ForEach(x => sb.Append("- ").AppendLine(x.Reparation.Nom));
+                }
+                return sb.ToString();
             }
         }
 
@@ -151,7 +231,7 @@ namespace AgendaCore
 
         public override string ToString()
         {
-            return string.Format("{0} {1}", vehicule.Marque , vehicule.Modele);
+            return string.Format("{0} {1}", vehicule.Marque, vehicule.Modele);
         }
 
         public void addReparation(ReparationRDV reparation)

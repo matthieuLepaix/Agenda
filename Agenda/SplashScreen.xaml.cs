@@ -21,6 +21,7 @@ namespace Agenda
         public SplashScreen()
         {
             InitializeComponent();
+            SoftwareTitle.Text = "Agenda " + DateTime.Now.Year; 
             MouseEnter += new MouseEventHandler(SplashScreen_MouseEnter);
         }
 

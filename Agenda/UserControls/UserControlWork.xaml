@@ -3,26 +3,32 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
-             Width="Auto" Height="Auto" d:DesignWidth="710"
+             mc:Ignorable="d"
+             Width="Auto" Height="Auto"
              FontSize="12">
-    <StackPanel Orientation="Horizontal">
-        <TextBlock Name="noWork" FontWeight="ExtraBold" VerticalAlignment="Top" FontSize="20" Text="-  "/>
+    <StackPanel Orientation="Horizontal" Margin="0,0,32,0">
+        <!--<TextBlock Name="noWork" FontWeight="ExtraBold" VerticalAlignment="Top" FontSize="20" Text="-  "/>-->
+        <CheckBox IsChecked="{Binding Path=Reparation.IsActive, Mode=TwoWay}" VerticalAlignment="Top" Margin="5"/>
         <ComboBox Style="{StaticResource ResourceKey=ComboBoxFlatStyle}" Name="Work" Width="200" Height="28" 
-                  VerticalAlignment="Top" Margin="0 0 5 0" IsEditable="True">
+                  VerticalAlignment="Top" Margin="0 0 5 0" IsEditable="True"
+                  ItemsSource="{Binding ReparationsList}"
+                  SelectedItem="{Binding Path=Reparation.Reparation, Mode=TwoWay}">
         </ComboBox>
         <WrapPanel Margin="0 0 10 0">
             <TextBlock Text="Qté" FontWeight="SemiBold"  TextAlignment="Left" VerticalAlignment="Center" Width="25"/>
-            <TextBox Name="qte" Width="40" Height="30" Text="1" TextAlignment="Right" VerticalContentAlignment="Center"/>
+            <TextBox Width="40" Height="30" TextAlignment="Right" VerticalContentAlignment="Center"
+                     Text="{Binding Path=Reparation.Quantite, Mode=TwoWay}"/>
         </WrapPanel>
         <WrapPanel Margin="0 0 10 0">
             <TextBlock Text="Prix" FontWeight="SemiBold"  TextAlignment="Left" VerticalAlignment="Center" Width="30"/>
-            <TextBox Name="prix" Text="0,00" Width="50" Height="30"  TextAlignment="Right" VerticalContentAlignment="Center"/>
+            <TextBox Width="50" Height="30"  TextAlignment="Right" VerticalContentAlignment="Center"
+                     Text="{Binding Path=Reparation.PrixU, Mode=TwoWay}"/>
             <TextBlock Text="€" TextAlignment="Left" VerticalAlignment="Center" FontSize="20"/>
         </WrapPanel>
-        <TextBox Name="Comment" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Width="270" Height="50"/>
-        <Button Name="Btn_Delete" Cursor="Hand" VerticalAlignment="Center" Height="30" Width="30" Margin="2" 
+        <TextBox AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Width="270" Height="50"
+                 Text="{Binding Path=Reparation.Comments, Mode=TwoWay}"/>
+        <!--<Button Name="Btn_Delete" Cursor="Hand" VerticalAlignment="Center" Height="30" Width="30" Margin="2" 
                 Style="{StaticResource ResourceKey=Btn_Delete}"
-                Click="Button_Click"/>
+                Command="{Binding DeleteCommand}"/>-->
     </StackPanel>
 </UserControl>
