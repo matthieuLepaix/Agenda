@@ -65,7 +65,7 @@ namespace Agenda.ViewModels
         #region Constructors
 
         public UserControlWorkViewModel(Window view, AbstractViewModel owner, ReparationRDV reparation)
-            : base(view, owner)
+            : base(view, owner, string.Empty)
         {
             ReparationsList = new ObservableCollection<Reparation>(ReparationManager.REPARATIONS);
             Reparation = reparation != null 

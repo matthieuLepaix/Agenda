@@ -88,7 +88,7 @@ namespace Agenda.ViewModels
         }
 
 
-        public ParamsViewModel(): base(null,null)
+        public ParamsViewModel(): base(null,null,"")
         {
             Add_JoursFeries = new Command(AddJF);
             Del_JoursFeries = new Command(DelJF);

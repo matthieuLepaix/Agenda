@@ -13,7 +13,7 @@ namespace AgendaCore
         /// <summary>
         /// Les véhicules du client.
         /// </summary>
-        private ObservableCollection<Vehicule> vehicules = new ObservableCollection<Vehicule>();
+        private List<Vehicule> vehicules = new List<Vehicule>();
 
         /// <summary>
         /// L'identifiant en base de données
@@ -66,7 +66,7 @@ namespace AgendaCore
         /// <summary>
         /// Les véhicules du client.
         /// </summary>
-        public ObservableCollection<Vehicule> Vehicules
+        public List<Vehicule> Vehicules
         {
             get
             {
@@ -231,15 +231,15 @@ namespace AgendaCore
         /// <param name="telephone2">Le second téléphone</param>
         public Client(string nom, string prenom, string telephone1, string telephone2, string email, string adresse, string codePostal, string ville)
         {
-            id = -1;
-            this.nom = nom;
-            this.prenom = prenom;
-            this.telephone1 = telephone1;
-            this.telephone2 = telephone2;
-            this.email = email;
-            this.adresse = adresse;
-            this.codePostal = codePostal;
-            this.ville = ville;
+            Id = -1;
+            Nom = nom;
+            Prenom = prenom;
+            Telephone1 = telephone1;
+            Telephone2 = telephone2;
+            Email = email;
+            Adresse = adresse;
+            CodePostal = codePostal;
+            Ville = ville;
         }
 
         /// <summary>
@@ -251,27 +251,28 @@ namespace AgendaCore
         /// <param name="telephone2">Le second téléphone</param>
         public Client(int id, string nom, string prenom, string telephone1, string telephone2, string email, string adresse, string codePostal, string ville)
         {
-            this.id = id;
-            this.nom = nom;
-            this.prenom = prenom;
-            this.telephone1 = telephone1;
-            this.telephone2 = telephone2;
-            this.email = email;
-            this.adresse = adresse;
-            this.codePostal = codePostal;
-            this.ville = ville;
+            Id = id;
+            Nom = nom;
+            Prenom = prenom;
+            Telephone1 = telephone1;
+            Telephone2 = telephone2;
+            Email = email;
+            Adresse = adresse;
+            CodePostal = codePostal;
+            Ville = ville;
         }
 
         public Client()
         {
-            this.nom = string.Empty;
-            this.prenom = string.Empty;
-            this.telephone1 = string.Empty;
-            this.telephone2 = string.Empty;
-            this.email = string.Empty;
-            this.adresse = string.Empty;
-            this.codePostal = string.Empty;
-            this.ville = string.Empty;
+            Id = -1;
+            Nom = string.Empty;
+            Prenom = string.Empty;
+            Telephone1 = string.Empty;
+            Telephone2 = string.Empty;
+            Email = string.Empty;
+            Adresse = string.Empty;
+            CodePostal = string.Empty;
+            Ville = string.Empty;
         }
 
         #endregion

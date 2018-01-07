@@ -18,6 +18,7 @@ namespace Agenda.ViewModels
     public class AgendaViewModel : AbstractViewModel
     {
         #region Attributes
+        private const string title = "Agenda 2018";
 
         private double maxHeight;
 
@@ -336,7 +337,7 @@ namespace Agenda.ViewModels
 
         #region Constructors
         public AgendaViewModel(Window view, AbstractViewModel owner)
-            : base(view, owner)
+            : base(view, owner, title)
         {
             try
             {
@@ -367,7 +368,7 @@ namespace Agenda.ViewModels
         {
             RefreshRendezVousIntoAgenda();
             int nbRDV = RdvManager.CountRdvDay(DateTime.Now);
-            WindowTitle = String.Format("Agenda - {0} - {1} Rendez-vous", DateTime.Now.ToShortDateString(), nbRDV);
+            WindowTitle = String.Format("Agenda - {0} - {1} Rendez-vous aujourd'hui", DateTime.Now.ToShortDateString(), nbRDV);
         }
 
         public void RefreshRendezVousIntoAgenda()
@@ -482,11 +483,12 @@ namespace Agenda.ViewModels
         private void Works(object input)
         {
             SelectedRendezVous = null;
-            //(Modal = new Travaux_Vehicule(Parent)).Show();
+            Child = new TravauxVehicule(this);
         }
 
         private void Refresh(object input)
         {
+            RdvManager.Initialize();
             SelectedRendezVous = null;
             RefreshRendezVousIntoAgenda();
         }

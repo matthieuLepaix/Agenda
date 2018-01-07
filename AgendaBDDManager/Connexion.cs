@@ -95,7 +95,7 @@ namespace AgendaBDDManager
         {
             ClientManager.initialize();
             VehiculeManager.initialize();
-            RdvManager.initialize();
+            RdvManager.Initialize();
             ReparationManager.initialize();
             ReparationRDVManager.initialize();
         }

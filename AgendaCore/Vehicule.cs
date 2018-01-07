@@ -93,7 +93,7 @@ namespace AgendaCore
         {
             get
             {
-                return immatriculation;
+                return immatriculation != null ? immatriculation.Trim() : immatriculation;
             }
             set
             {
@@ -108,7 +108,7 @@ namespace AgendaCore
         {
             get
             {
-                return marque;
+                return marque != null ? marque.Trim() : marque;
             }
             set
             {
@@ -123,7 +123,7 @@ namespace AgendaCore
         {
             get
             {
-                return modele;
+                return modele != null ? modele.Trim() : modele;
             }
             set
             {
@@ -221,6 +221,7 @@ namespace AgendaCore
 
         public Vehicule()
         {
+            Id = -1;
             Immatriculation = string.Empty;
             Marque = string.Empty;
             Modele = string.Empty;

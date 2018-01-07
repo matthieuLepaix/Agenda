@@ -4,6 +4,7 @@ DROP TABLE rendezvous;
 DROP TABLE reparation;
 DROP TABLE vehicule;
 DROP TABLE client;
+DROP TABLE jours_feries;
 
 
 CREATE TABLE client(
@@ -26,7 +27,7 @@ CREATE TABLE vehicule(
   modele VARCHAR2(512),
   annee varchar2(10),
   client INTEGER,
-  CONSTRAINT fk_vehicule_client FOREIGN KEY (client) REFERENCES   client(id)  
+  CONSTRAINT fk_vehicule_client FOREIGN KEY (client) REFERENCES client(id) ON DELETE SET NULL 
 );
 
 CREATE TABLE rendezvous(
@@ -35,8 +36,8 @@ CREATE TABLE rendezvous(
   duree NUMBER NOT NULL,
   client INTEGER,
   vehicule INTEGER,
-  CONSTRAINT fk_rdv_vehicule FOREIGN KEY (vehicule) REFERENCES   vehicule(id),
-  CONSTRAINT fk_rdv_client FOREIGN KEY (client) REFERENCES   client(id)
+  CONSTRAINT fk_rdv_vehicule FOREIGN KEY (vehicule) REFERENCES   vehicule(id) ON DELETE CASCADE,
+  CONSTRAINT fk_rdv_client FOREIGN KEY (client) REFERENCES   client(id) ON DELETE SET NULL
   
 );
 
@@ -54,8 +55,8 @@ CREATE TABLE rdv_reparation(
   prixu number(10,2),
   remise number(4,2),
   comments VARCHAR2(1024),
-  CONSTRAINT fk_rdvtravaux_rdv FOREIGN KEY (rdv) REFERENCES   rendezvous(id),
-  CONSTRAINT fk_rdvtravaux_reparation FOREIGN KEY (reparation) REFERENCES   reparation(id)
+  CONSTRAINT fk_rdvtravaux_rdv FOREIGN KEY (rdv) REFERENCES   rendezvous(id) ON DELETE CASCADE,
+  CONSTRAINT fk_rdvtravaux_reparation FOREIGN KEY (reparation) REFERENCES   reparation(id) ON DELETE SET NULL
   
 );
 
@@ -71,8 +72,7 @@ CREATE TABLE FACTURE
 	TOTALHT NUMBER(10,2), 
 	RDV NUMBER(38,0), 
 	 CONSTRAINT FACTURE_PK PRIMARY KEY (ID), 
-	 CONSTRAINT FK_FACT_RDV FOREIGN KEY (RDV)
-	  REFERENCES RENDEZVOUS (ID) ENABLE
+	 CONSTRAINT FK_FACT_RDV FOREIGN KEY (RDV) REFERENCES RENDEZVOUS (ID) ON DELETE CASCADE
 );
 
 CREATE TABLE JOURS_FERIES(
@@ -137,6 +137,11 @@ SELECT 'CREATE SEQUENCE seq_reparation MINVALUE 1 MAXVALUE 999999999 INCREMENT B
 SELECT 'CREATE SEQUENCE seq_facture MINVALUE 1 MAXVALUE 999999999 INCREMENT BY 1 START WITH '|| to_number(NVL(MAX(id),0)+1) ||' CACHE 20 ORDER  CYCLE'
     INTO v_sql
     FROM facture;
+  EXECUTE IMMEDIATE v_sql;
+
+SELECT 'CREATE SEQUENCE seq_jours_feries MINVALUE 1 MAXVALUE 999999999 INCREMENT BY 1 START WITH '|| to_number(NVL(MAX(id),0)+1) ||' CACHE 20 ORDER  CYCLE'
+    INTO v_sql
+    FROM jours_feries;
   EXECUTE IMMEDIATE v_sql;
 
 END createSequences;

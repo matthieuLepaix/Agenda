@@ -30,7 +30,7 @@ namespace AgendaBDDManager
 
         private static void MigrateRDV(StreamWriter sw)
         {
-            List<ReparationRDV> reps = RdvManager.getAllForOldVersion();
+            List<ReparationRDV> reps = RdvManager.GetAllForOldVersion();
             foreach (ReparationRDV rep in reps)
             {
                 RdvManager.SaveRDV(sw, rep.RendezVous);

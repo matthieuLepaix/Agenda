@@ -11,7 +11,7 @@ namespace Agenda.Analysis
     public class CoreAnalysis
     {
 
-        private static List<RendezVous> all = RdvManager.getAll();
+        private static List<RendezVous> all = RdvManager.GetAll();
 
         private static string[] Months = new string[13] { "", "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet",
                                                     "Août", "Septembre", "Octobre", "Novembre", "Décembre"};

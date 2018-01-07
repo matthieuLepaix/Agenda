@@ -64,7 +64,7 @@ namespace AgendaBDDManager
             if (odr.Read())
             {
                 rep = new ReparationRDV(Connexion.getIntFromOdr(0, odr),
-                                        RdvManager.getRDVById(Connexion.getIntFromOdr(1, odr)),
+                                        RdvManager.GetRDVById(Connexion.getIntFromOdr(1, odr)),
                                         ReparationManager.getReparationById(Connexion.getIntFromOdr(2, odr)),
                                         Connexion.getStringFromOdr(3, odr),
                                         Connexion.getIntFromOdr(4, odr),

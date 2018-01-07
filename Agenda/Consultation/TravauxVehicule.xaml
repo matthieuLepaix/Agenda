@@ -4,7 +4,6 @@
         Title="Les travaux par véhicule"
         WindowStyle="None"
         WindowState="Normal"
-        Closed="Window_Closed"
         WindowStartupLocation="CenterScreen"
         AllowsTransparency="True"
         FontSize="13"
@@ -12,14 +11,23 @@
         Background="#E0ECFD"
         >
     <DockPanel Background="#E0ECFD">
-        <DockPanel Name="myWindowHeadBar" DockPanel.Dock="Top" Background="#002860" Margin="0">
-            <TextBlock Name="WindowTitle" Margin="4" DockPanel.Dock="Left" HorizontalAlignment="Left" Foreground="WhiteSmoke" FontSize="15" FontWeight="Bold"></TextBlock>
+        <DockPanel DockPanel.Dock="Top" Background="#002860" Margin="0">
+            <DockPanel.InputBindings>
+                <MouseBinding Gesture="LeftClick" Command="{Binding DragCommand}"/>
+            </DockPanel.InputBindings>
+            <TextBlock Text="{Binding WindowTitle}" Margin="4" DockPanel.Dock="Left" HorizontalAlignment="Left" Foreground="WhiteSmoke" FontSize="15" FontWeight="Bold"></TextBlock>
             <WrapPanel DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="0,0,10,0">
                 <Border Name="Btn_MinimizePrincipale" BorderBrush="WhiteSmoke" BorderThickness="1,0,1,1" CornerRadius="0,0,0,5">
+                    <Border.InputBindings>
+                        <MouseBinding Gesture="LeftClick" Command="{Binding MinimizeCommand}"/>
+                    </Border.InputBindings>
                     <TextBlock Margin="10,0,10,0" Foreground="WhiteSmoke" 
                                HorizontalAlignment="Right" FontSize="15" FontWeight="ExtraBold">_</TextBlock>
                 </Border>
                 <Border Name="Btn_ClosePrincipale" BorderBrush="WhiteSmoke" BorderThickness="1,0,1,1" CornerRadius="0,0,5,0" Margin="-1,0,0,0" Background="#FF5050">
+                    <Border.InputBindings>
+                        <MouseBinding Gesture="LeftClick" Command="{Binding CloseCommand}"/>
+                    </Border.InputBindings>
                     <TextBlock  Margin="12,0,12,0" Foreground="WhiteSmoke" 
                            HorizontalAlignment="Right" FontSize="15" FontWeight="ExtraBold">X</TextBlock>
                 </Border>
@@ -28,26 +36,41 @@
         <DockPanel DockPanel.Dock="Left">
             <StackPanel DockPanel.Dock="Left" Margin="10">
                 <WrapPanel DockPanel.Dock="Top" Margin="0 15" HorizontalAlignment="Center">
-                    <TextBlock TextAlignment="Right" Foreground="Black" FontWeight="Bold">Immatriculation</TextBlock>
-                    <TextBox Name="rech_immat" Width="150" Margin="5 5" GotFocus="rech_immat_GotFocus"></TextBox>
-                    <Button Name="btn_recherche" Content="OK" Style="{StaticResource ResourceKey=Btn_LittleWindow}"
-                    Padding="10 2" Margin="0" 
-                    Click="btn_recherche_Click" />
+                    <TextBlock TextAlignment="Right" Foreground="Black" FontWeight="Bold" Text="Immatriculation"/>
+                    <TextBox Width="150" Margin="5 5" Text="{Binding Immatriculation}"/>
+                    <Button Content="OK" Style="{StaticResource ResourceKey=Btn_LittleWindow}"
+                    Padding="10 2" Margin="0" Command="{Binding LookingForHistoryCommand}" />
                 </WrapPanel>
-                <DockPanel Name="ClientResearch" Margin="0 20 0 0">
-
-                </DockPanel>
-                    <Button Name="btn_imprimer" Content="Imprimer l'historique des réparations" Style="{StaticResource ResourceKey=Btn_Options}"
-                        Padding="10 2" Margin="20" FontSize="20"
-                        Click="btn_imprimer_Click"/>
-            </StackPanel>
-                <DockPanel DockPanel.Dock="Right" >
-                    <ScrollViewer BorderBrush="Black" BorderThickness="10" Background="White">
-                        <StackPanel Name="Les_travaux" >
-
+                <DockPanel Width="Auto" Height="Auto"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <GroupBox DockPanel.Dock="Top" Style="{StaticResource ResourceKey=GroupBoxForClientSearch}">
+                        <GroupBox.Header>
+                            <TextBox Text="{Binding SearchClientValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="300" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
+                        </GroupBox.Header>
+                        <StackPanel Margin="0" HorizontalAlignment="Stretch" >
+                            <ListView Height="150" Width="Auto" Margin="0" 
+                                  ItemsSource="{Binding Clients, Mode=TwoWay}" 
+                                  SelectedItem="{Binding Path=Client}"/>
                         </StackPanel>
-                    </ScrollViewer>
+                    </GroupBox>
+                    <GroupBox DockPanel.Dock="Bottom" Header="Véhicules" VerticalAlignment="Center" Margin="0 15 0 0"
+                          Style="{StaticResource ResourceKey=GroupBoxBasic}">
+                        <ListView Height="100" Width="Auto" 
+                              Margin="0" ItemsSource="{Binding Path=Client.Vehicules, Mode=TwoWay}" 
+                              SelectedItem="{Binding Vehicule}"/>
+                    </GroupBox>
                 </DockPanel>
+                <Button Content="Imprimer l'historique des réparations" Style="{StaticResource ResourceKey=Btn_Options}"
+                        Padding="10 2" Margin="20" FontSize="20"
+                        Command="{Binding PrintCommand}"/>
+            </StackPanel>
+            <DockPanel DockPanel.Dock="Right" >
+                <ScrollViewer BorderBrush="Black" BorderThickness="10" Background="White">
+                    <StackPanel>
+                        <ItemsControl />
+                    </StackPanel>
+                </ScrollViewer>
+            </DockPanel>
         </DockPanel>
     </DockPanel>
 </Window>

@@ -133,9 +133,6 @@
     <Compile Include="Gestion\AjoutClient.xaml.cs">
       <DependentUpon>AjoutClient.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Gestion\ChangeImmat.xaml.cs">
-      <DependentUpon>ChangeImmat.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Gestion\GestionClient.xaml.cs">
       <DependentUpon>GestionClient.xaml</DependentUpon>
     </Compile>
@@ -160,13 +157,10 @@
     <Compile Include="ViewModels\GestionClients\GestionClientsViewModel.cs" />
     <Compile Include="ViewModels\GestionRendezVousViewModel.cs" />
     <Compile Include="ViewModels\ParamsViewModel.cs" />
+    <Compile Include="ViewModels\TravauxVehiculeViewModel.cs" />
     <Compile Include="ViewModels\UserControls\UserControlRendezVousViewModel.cs" />
     <Compile Include="ViewModels\UserControls\UserControlWorkViewModel.cs" />
     <Page Include="Consultation\TravauxVehicule.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Gestion\ChangeImmat.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

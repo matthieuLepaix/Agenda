@@ -1,4 +1,5 @@
-﻿using Agenda.UserControls;
+﻿using Agenda.Gestion;
+using Agenda.UserControls;
 using Agenda.Utils;
 using AgendaBDDManager;
 using AgendaCore;
@@ -15,6 +16,7 @@ namespace Agenda.ViewModels
     public class GestionRendezVousViewModel : AbstractViewModel
     {
         #region Attributes
+        private const string title = "Prise de rendez-vous";
         private bool isNewClient;
         private string searchClientValue;
 
@@ -32,10 +34,27 @@ namespace Agenda.ViewModels
         private Command cancelCommand;
         private Command addWorkCommand;
         private Command refreshWorkCommand;
+        private bool canChangeVehicule;
+
+        private RendezVous rendezVousOriginal;
+
 
         #endregion
 
         #region Properties
+
+        public bool CanChangeVehicule
+        {
+            get
+            {
+                return canChangeVehicule;
+            }
+            set
+            {
+                canChangeVehicule = value;
+                OnPropertyChanged("CanChangeVehicule");
+            }
+        }
 
         public bool IsNewClient
         {
@@ -242,19 +261,19 @@ namespace Agenda.ViewModels
         #region Constructors
 
         public GestionRendezVousViewModel(Window view, AgendaViewModel owner, RendezVous rendezVous)
-            : base(view, owner)
+            : base(view, owner, title)
         {
-            View = view;
-            Owner = owner;
-            WindowTitle = "Gestion d'un rendez-vous";
             InitHoursAndDurations();
             InitCommands();
-            RendezVous = rendezVous;
+            RendezVous = new RendezVous(rendezVous);
+            rendezVousOriginal = rendezVous;
 
             SearchClientValue = string.Empty;
             //Set the new client if it is an existing rendez vous. Just show the editable client's info.
             IsNewClient = RendezVous.Client != null && RendezVous.Vehicule != null;
-            
+            CanChangeVehicule = IsNewClient; // and then user cannot change the vehicule
+
+
             Open();
         }
 
@@ -298,10 +317,6 @@ namespace Agenda.ViewModels
             {
                 UpdateVehicule();
             });
-            AddVehiculeCommand = new Command((x) =>
-            {
-                AddVehicule();
-            });
             NewClientCommand = new Command((x) =>
             {
                 NewClient();
@@ -316,7 +331,6 @@ namespace Agenda.ViewModels
             });
             CancelCommand = new Command((x) =>
             {
-                RendezVous.Vehicule = null;
                 Close();
             });
             AddWorkCommand = new Command((x) =>
@@ -339,11 +353,12 @@ namespace Agenda.ViewModels
         {
             RendezVous.Vehicule = new Vehicule();
             IsNewClient = true;
+            OnPropertyChanged("RendezVous");
         }
 
         private void ValidateRendezVous()
         {
-            if (RendezVous.Client == null || RendezVous.Vehicule == null)
+            if (RendezVous.Vehicule == null)
             {
                 if (!IsNewClient)
                 {
@@ -356,19 +371,21 @@ namespace Agenda.ViewModels
                         "Attention", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
             }
-            else if (RendezVous.Travaux.Count == 0)
+            else if (RendezVous.Travaux.Where(t => t.IsActive && t.Reparation != null).Count() == 0)
             {
-                MessageBox.Show("Veuillez saisir les travaux à effectuer.", 
+                MessageBox.Show("Veuillez saisir les travaux à effectuer.",
                     "Attention", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
             else
             {
+                rendezVousOriginal = RendezVous;
                 CreateOrUpdateRDV();
             }
         }
 
         private void CreateOrUpdateRDV()
         {
+            RendezVous.Client = RendezVous.Vehicule.Client;
             try
             {
                 if (RendezVous.Id != -1)
@@ -380,7 +397,7 @@ namespace Agenda.ViewModels
                     RdvManager.AddRdv(RendezVous);
                 }
 
-                ClientManager.UpdateClient(RendezVous.Client);
+                ClientManager.UpdateClient(RendezVous.Vehicule.Client);
                 VehiculeManager.UpdateVehicule(RendezVous.Vehicule);
 
                 ((AgendaViewModel)Owner).RefreshRendezVousIntoAgenda();
@@ -421,7 +438,7 @@ namespace Agenda.ViewModels
         {
             if (RendezVous.Client != null)
             {
-                //(Child = new GestionVehicule(this, Client, false)).Show();
+                Child = new GestionVehicule(this);
             }
             else
             {
@@ -435,13 +452,19 @@ namespace Agenda.ViewModels
             {
                 if (RendezVous.Client.Vehicules.Count() > 1)
                 {
-                    //(Child = new GestionVehicule(this, Client, true)).Show();
+                    Child = new GestionVehicule(this);
                 }
                 else
                 {
                     MessageBox.Show("Inutile, le client ne possède qu'une voiture.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
+        }
+
+        public void ChangeVehicule(Vehicule Vehicule)
+        {
+            RendezVous.Vehicule = Vehicule;
+            OnPropertyChanged("RendezVous");
         }
 
         #endregion

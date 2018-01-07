@@ -65,7 +65,7 @@
             </DockPanel>
             <WrapPanel HorizontalAlignment="Center">
                 <Button Style="{StaticResource ResourceKey=Btn_LittleWindow}" Content="Ajouter un client" Command="{Binding AddClientCommand}" Margin="10"/>
-                <Button Style="{StaticResource ResourceKey=Btn_LittleWindow}" Content="Supprimer le client" Command="{Binding DelClientCommand}" Margin="10"/>
+                <!--<Button Style="{StaticResource ResourceKey=Btn_LittleWindow}" Content="Supprimer le client" Command="{Binding DelClientCommand}" Margin="10"/>-->
                 <Button Style="{StaticResource ResourceKey=Btn_LittleWindow}" Content="Supprimer le véhicule" Command="{Binding DelVehiculeCommand}" Margin="10"/>
             </WrapPanel>
         </StackPanel>

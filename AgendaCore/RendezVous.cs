@@ -61,9 +61,9 @@ namespace AgendaCore
             }
             set
             {
-                value = 
-                    date != null && value != null && value.Hour == 0 ? 
-                        value.AddHours(date.Hour) 
+                value =
+                    date != null && value != null && value.Hour == 0 ?
+                        value.AddHours(date.Hour)
                         : value;
                 date = value;
             }
@@ -148,7 +148,10 @@ namespace AgendaCore
         {
             get
             {
-                return Vehicule.Client != null ? string.Format("M. ou Mme {0}", Vehicule.Client.Nom) : "Le véhicule n'appartient plus à ce propriétaire";
+                if (Vehicule != null)
+                    return Vehicule.Client != null ? string.Format("M. ou Mme {0}", Vehicule.Client.Nom) : "Le véhicule n'appartient plus à ce propriétaire";
+                else
+                    return string.Empty;
             }
         }
 
@@ -156,7 +159,10 @@ namespace AgendaCore
         {
             get
             {
-                return Vehicule.ToString();
+                if (Vehicule != null)
+                    return Vehicule.ToString();
+                else
+                    return string.Empty;
             }
         }
 
@@ -195,6 +201,13 @@ namespace AgendaCore
         #endregion
 
         #region Constructors
+
+        public RendezVous(RendezVous rdv)
+            : this(rdv.Id, rdv.Date, rdv.Duree, rdv.Vehicule, rdv.Client)
+        {
+            addReparations(rdv.Travaux);
+            Travaux.ForEach(t => t.IsActive = true);
+        }
 
         public RendezVous(int id, DateTime date, DureeType duree, Vehicule vehicule, Client client)
         {

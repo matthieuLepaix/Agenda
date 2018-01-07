@@ -14,7 +14,7 @@ namespace Agenda.ViewModels
     public class GestionClientsViewModel : AbstractViewModel
     {
         #region Attributes
-        
+        private const string title = "Gestion des clients";
         private string searchClientValue;
         private ObservableCollection<Client> clients;
         private Client client;
@@ -179,7 +179,7 @@ namespace Agenda.ViewModels
         #region Constructors
 
         public GestionClientsViewModel(Window view, AgendaViewModel owner)
-            :base(view,owner)
+            :base(view,owner, title)
         {
             View = view;
             Owner = owner;
@@ -265,7 +265,7 @@ namespace Agenda.ViewModels
             {
                 if (SelectedVehicule.Client != null)
                 {
-                    RendezVous rdv = new RendezVous(DateTime.Now, DureeType.UneHeure, SelectedVehicule, SelectedVehicule.Client);
+                    var rdv = new RendezVous(DateTime.Now, DureeType.UneHeure, SelectedVehicule, SelectedVehicule.Client);
                     Close();
                     Owner.Child = new GestionRendezVous((AgendaViewModel)Owner, rdv);
                 }
@@ -286,7 +286,7 @@ namespace Agenda.ViewModels
         {
             if (Client != null)
             {
-                //(Child = new GestionVehicule(this, Client, false)).Show();
+                Child = new GestionVehicule(this);
             }
             else
             {

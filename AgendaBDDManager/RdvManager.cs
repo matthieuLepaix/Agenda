@@ -35,13 +35,13 @@ namespace AgendaBDDManager
 
         #region Methods
 
-        public static void initialize()
+        public static void Initialize()
         {
             RDVS.Clear();
-            RDVS.AddRange(getAll());
+            RDVS.AddRange(GetAll());
         }
 
-        public static List<ReparationRDV> getAllForOldVersion()
+        public static List<ReparationRDV> GetAllForOldVersion()
         {
             List<ReparationRDV> liste = new List<ReparationRDV>();
 
@@ -66,7 +66,7 @@ namespace AgendaBDDManager
             return liste;
         }
 
-        public static List<RendezVous> getAll()
+        public static List<RendezVous> GetAll()
         {
             List<RendezVous> liste = new List<RendezVous>();
 
@@ -91,7 +91,7 @@ namespace AgendaBDDManager
 
 
 
-        public static RendezVous getRDVById(int id)
+        public static RendezVous GetRDVById(int id)
         {
             RendezVous rdv = null;
             string requete = string.Format(@"SELECT r.id, r.date_rdv, r.duree,
@@ -133,7 +133,7 @@ namespace AgendaBDDManager
             return rdv;
         }
 
-        public static List<RendezVous> getRDVFromDateToDate(DateTime from, DateTime to)
+        public static List<RendezVous> GetRDVFromDateToDate(DateTime from, DateTime to)
         {
             List<RendezVous> liste = new List<RendezVous>();
             string requete = string.Format(@"SELECT r.id, r.date_rdv, r.duree,
@@ -424,7 +424,7 @@ namespace AgendaBDDManager
 
         public static void Sauvegarde(System.IO.StreamWriter sw)
         {
-            foreach (RendezVous r in getAll())
+            foreach (RendezVous r in GetAll())
             {
                 string date = string.Format("{0:00}/{1:00}/{2}", r.Date.Day, r.Date.Month, r.Date.Year);
                 string time = string.Format("{0:00}:{1:00}:00", r.Date.Hour, r.Date.Minute);

@@ -12,6 +12,7 @@ namespace Agenda.ViewModels
     public class AddClientViewModel : AbstractViewModel
     {
         #region Attributes
+        private const string title = "Enregistrement d'un nouveau client";
         private GestionClientsViewModel clientsViewModel;
         private Vehicule vehicule;
         private Command addCommand;
@@ -62,11 +63,10 @@ namespace Agenda.ViewModels
 
         #region Constructors
         public AddClientViewModel(Window view, GestionClientsViewModel owner)
-            : base(view, owner)
+            : base(view, owner, title)
         {
             View = view;
             clientsViewModel = owner;
-            WindowTitle = "Enregistrement d'un nouveau client";
             Vehicule = new Vehicule();
             AddCommand = new Command((x) =>
             {

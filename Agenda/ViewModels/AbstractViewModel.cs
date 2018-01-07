@@ -199,11 +199,11 @@ namespace Agenda.ViewModels
         #endregion
 
         #region Constructors
-        protected AbstractViewModel(Window view, AbstractViewModel owner)
+        protected AbstractViewModel(Window view, AbstractViewModel owner, string title)
         {
             View = view;
             Owner = owner;
-
+            WindowTitle = title;
             ActivatedCommand = new Command((x) =>
             {
                 Activated();

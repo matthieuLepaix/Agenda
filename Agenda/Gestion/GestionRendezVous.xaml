@@ -11,10 +11,9 @@
         BorderThickness="0"
         Window.FontSize="15"
         Background="#E0ECFD"
-        MinWidth="1155" MaxWidth="1155" Height="Auto" 
+        MinWidth="1250" MaxWidth="1250" Height="Auto" 
         SizeToContent="WidthAndHeight"
         >
-
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Activated" >
             <i:InvokeCommandAction Command="{Binding ActivatedCommand}" />
@@ -96,10 +95,6 @@
                     </DockPanel>
                 </StackPanel>
 
-                <WrapPanel HorizontalAlignment="Center" >
-                    <Button Style="{StaticResource ResourceKey=Btn_LittleWindow}" Content="Ajouter un véhicule" Command="{Binding AddVehiculeCommand}" Margin="10"/>
-                    <Button Style="{StaticResource ResourceKey=Btn_LittleWindow}" Content="Changer le véhicule" Command="{Binding UpdateVehiculeCommand}" Margin="10"/>
-                </WrapPanel>
             </StackPanel>
 
             <StackPanel Margin="5" Height="Auto" Width="Auto"
@@ -185,6 +180,11 @@
                         </StackPanel>
                     </GroupBox>
                 </DockPanel>
+
+                <WrapPanel HorizontalAlignment="Center" Visibility="{Binding CanChangeVehicule, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Button Style="{StaticResource ResourceKey=Btn_LittleWindow}" Content="Changer le véhicule" 
+                            Command="{Binding UpdateVehiculeCommand}" Margin="10"/>
+                </WrapPanel>
             </StackPanel>
 
         </DockPanel>
@@ -205,7 +205,7 @@
                 </GroupBox>
             </StackPanel>
             <GroupBox Header="Travaux à effectuer" Margin="0 15 0 0" Style="{StaticResource ResourceKey=GroupBoxBasic}">
-                <ScrollViewer Height="Auto" Width="750" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                <ScrollViewer Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
                               VerticalScrollBarVisibility="Visible" MaxHeight="320">
                     <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Center" Margin="5">
                         <StackPanel>

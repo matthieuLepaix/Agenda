@@ -87,7 +87,7 @@ namespace Agenda.ViewModels
 
         #region Constructors
         public UserControlRendezVousViewModel(Window view, AgendaViewModel owner, RendezVous rdv)
-            : base(view, owner)
+            : base(view, owner, string.Empty)
         {
             AgendaVM = owner;
             RendezVous = rdv;
