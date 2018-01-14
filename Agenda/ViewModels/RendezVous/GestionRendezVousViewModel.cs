@@ -378,6 +378,7 @@ namespace Agenda.ViewModels
             }
             else
             {
+                RendezVous.Travaux = RendezVous.Travaux.Where(t => t.IsActive && t.Reparation != null).ToList();
                 rendezVousOriginal = RendezVous;
                 CreateOrUpdateRDV();
             }

@@ -118,32 +118,32 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Analysis\CoreAnalysis.cs" />
-    <Compile Include="Consultation\TravauxVehicule.xaml.cs">
+    <Compile Include="Views\TravauxVehicule.xaml.cs">
       <DependentUpon>TravauxVehicule.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Converters\BackgroundRendezVousConverter.cs" />
-    <Compile Include="Converters\BasicConverters.cs" />
-    <Compile Include="Converters\DateTimeConverter.cs" />
-    <Compile Include="Converters\DayOfWeekConverter.cs" />
-    <Compile Include="Converters\GestionClientsConverters.cs" />
-    <Compile Include="Converters\ListRendezVousConverter.cs" />
-    <Compile Include="Converters\TabSizeConverter.cs" />
-    <Compile Include="Converters\TravauxToUserControlConverter.cs" />
-    <Compile Include="Factures\ExcelManager.cs" />
-    <Compile Include="Gestion\AjoutClient.xaml.cs">
+    <Compile Include="Utils\Converters\BackgroundRendezVousConverter.cs" />
+    <Compile Include="Utils\Converters\BasicConverters.cs" />
+    <Compile Include="Utils\Converters\DateTimeConverter.cs" />
+    <Compile Include="Utils\Converters\DayOfWeekConverter.cs" />
+    <Compile Include="Utils\Converters\GestionClientsConverters.cs" />
+    <Compile Include="Utils\Converters\ListRendezVousConverter.cs" />
+    <Compile Include="Utils\Converters\TabSizeConverter.cs" />
+    <Compile Include="Utils\Converters\TravauxToUserControlConverter.cs" />
+    <Compile Include="Utils\Factures\ExcelManager.cs" />
+    <Compile Include="Views\AjoutClient.xaml.cs">
       <DependentUpon>AjoutClient.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Gestion\GestionClient.xaml.cs">
+    <Compile Include="Views\GestionClient.xaml.cs">
       <DependentUpon>GestionClient.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Gestion\GestionVehicule.xaml.cs">
+    <Compile Include="Views\GestionVehicule.xaml.cs">
       <DependentUpon>GestionVehicule.xaml</DependentUpon>
     </Compile>
     <Compile Include="SplashScreen.xaml.cs">
       <DependentUpon>SplashScreen.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\UserControlRDV.xaml.cs">
-      <DependentUpon>UserControlRDV.xaml</DependentUpon>
+    <Compile Include="UserControls\UserControlRendezVous.xaml.cs">
+      <DependentUpon>UserControlRendezVous.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserControlWork.xaml.cs">
       <DependentUpon>UserControlWork.xaml</DependentUpon>
@@ -151,36 +151,36 @@
     <Compile Include="Utils\Command.cs" />
     <Compile Include="ViewModels\AbstractViewModel.cs" />
     <Compile Include="ViewModels\ActiviteViewModel.cs" />
-    <Compile Include="ViewModels\GestionClients\AddClientViewModel.cs" />
-    <Compile Include="ViewModels\AgendaViewModel.cs" />
-    <Compile Include="ViewModels\GestionVehiculeViewModel.cs" />
-    <Compile Include="ViewModels\GestionClients\GestionClientsViewModel.cs" />
-    <Compile Include="ViewModels\GestionRendezVousViewModel.cs" />
+    <Compile Include="ViewModels\Clients\AddClientViewModel.cs" />
+    <Compile Include="ViewModels\Agenda\AgendaViewModel.cs" />
+    <Compile Include="ViewModels\Vehicules\GestionVehiculeViewModel.cs" />
+    <Compile Include="ViewModels\Clients\GestionClientsViewModel.cs" />
+    <Compile Include="ViewModels\RendezVous\GestionRendezVousViewModel.cs" />
     <Compile Include="ViewModels\ParamsViewModel.cs" />
-    <Compile Include="ViewModels\TravauxVehiculeViewModel.cs" />
+    <Compile Include="ViewModels\Travaux\TravauxVehiculeViewModel.cs" />
     <Compile Include="ViewModels\UserControls\UserControlRendezVousViewModel.cs" />
     <Compile Include="ViewModels\UserControls\UserControlWorkViewModel.cs" />
-    <Page Include="Consultation\TravauxVehicule.xaml">
+    <Page Include="Views\TravauxVehicule.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Gestion\AjoutClient.xaml">
+    <Page Include="Views\AjoutClient.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Gestion\GestionClient.xaml">
+    <Page Include="Views\GestionClient.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Gestion\GestionRendezVous.xaml">
+    <Page Include="Views\GestionRendezVous.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Gestion\GestionVehicule.xaml">
+    <Page Include="Views\GestionVehicule.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -188,10 +188,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Gestion\GestionRendezVous.xaml.cs">
+    <Compile Include="Views\GestionRendezVous.xaml.cs">
       <DependentUpon>GestionRendezVous.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
@@ -199,7 +199,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\UserControlRDV.xaml">
+    <Page Include="UserControls\UserControlRendezVous.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -229,8 +229,8 @@
     <None Include="app.manifest">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Factures\modele_devis.xlsx" />
-    <None Include="Factures\modele_facture.xlsx" />
+    <None Include="Utils\Factures\modele_devis.xlsx" />
+    <None Include="Utils\Factures\modele_facture.xlsx" />
     <Content Include="modele_facture.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

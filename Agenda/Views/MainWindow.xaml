@@ -139,13 +139,13 @@
                                 </ScrollViewer>
                                 <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="0"
                                            Visibility="{Binding IsRdvSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                    <Image Name="Btn_FactureRDV" Source="images/facture.png" Height="40" 
-                                           Cursor="Hand" Margin="15 0 10 0">
+                                    <Image Name="Btn_FactureRDV" Source="../images/facture.png" Height="40" 
+                                           Cursor="Hand" Margin="15 0 10 0" Visibility="Collapsed">
                                         <Image.InputBindings>
                                             <MouseBinding Gesture="LeftClick" Command="{Binding DetailsFactureCommand}"/>
                                         </Image.InputBindings>
                                     </Image>
-                                    <Image Name="Btn_DeleteRDV" Source="images/DeleteRed.png" Height="35" 
+                                    <Image Name="Btn_DeleteRDV" Source="../images/DeleteRed.png" Height="35" 
                                            Cursor="Hand" Margin="15 0 10 0">
                                         <Image.InputBindings>
                                             <MouseBinding Gesture="LeftClick" Command="{Binding DetailsDeleteCommand}"/>

@@ -20,7 +20,7 @@ namespace Agenda.ViewModels
         #endregion
 
         #region Properties
-        
+
 
         public Vehicule Vehicule
         {
@@ -89,8 +89,9 @@ namespace Agenda.ViewModels
                 {
                     ClientManager.AddClient(Vehicule.Client);
                     VehiculeManager.AddVehicule(Vehicule);
-                    ((GestionClientsViewModel)Owner).SearchClientValue = string.Empty;
-                    Close();
+                    ((GestionClientsViewModel)Owner).SearchClientValue = Vehicule.Client.Nom;
+                    ((GestionClientsViewModel)Owner).Client = Vehicule.Client;
+                    ((GestionClientsViewModel)Owner).SelectedVehicule = Vehicule;
                 }
                 else
                 {
@@ -100,14 +101,22 @@ namespace Agenda.ViewModels
                     {
                         ClientManager.AddClient(Vehicule.Client);
                         ((GestionClientsViewModel)Owner).SearchClientValue = string.Empty;
-                        Close();
+                    }
+                    else
+                    {
+                        return;
                     }
                 }
             }
             else
             {
-                MessageBox.Show("Les informations concernant le client sont incorrectes.", "Attention", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                MessageBox.Show("Les informations concernant le client sont incorrectes.", "Attention", 
+                    MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
             }
+
+            
+            Close();
         }
 
         private void Cancel(Window w)

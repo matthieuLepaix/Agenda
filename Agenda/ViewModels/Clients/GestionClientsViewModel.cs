@@ -212,6 +212,14 @@ namespace Agenda.ViewModels
             Open();
         }
 
+        public void RefreshClientAfterChange()
+        {
+            //Refresh the client's vehicules list
+            var tmp = Client;
+            Client = null;
+            Client = tmp;
+        }
+
 
         #endregion
 
@@ -251,6 +259,7 @@ namespace Agenda.ViewModels
                     VehiculeManager.DesaffecterClient(SelectedVehicule);
                     Client.RemoveVehicule(SelectedVehicule);
                     SelectedVehicule = null;
+                    RefreshClientAfterChange();
                 }
             }
             else

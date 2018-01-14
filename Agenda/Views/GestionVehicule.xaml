@@ -69,15 +69,15 @@
                     </WrapPanel>
                     <WrapPanel Margin="0 0 0 10">
                         <TextBlock Text="Immatriculation" FontWeight="SemiBold"  TextAlignment="Right" VerticalAlignment="Center" Width="130"/>
-                        <TextBox Width="200" Margin="10 0 0 0" Text="{Binding Path=Vehicule.Immatriculation}"/>
+                        <TextBox Width="200" Margin="10 0 0 0" Text="{Binding Path=Vehicule.Immatriculation}" MaxLength="20"/>
                     </WrapPanel>
                     <WrapPanel Margin="0 0 0 10">
                         <TextBlock Text="Année" FontWeight="SemiBold"  TextAlignment="Right" VerticalAlignment="Center" Width="130"/>
-                        <TextBox Width="200" Margin="10 0 0 0" Text="{Binding Path=Vehicule.Annee}"/>
+                        <TextBox Width="200" Margin="10 0 0 0" Text="{Binding Path=Vehicule.Annee}" MaxLength="10"/>
                     </WrapPanel>
                     <WrapPanel Margin="0 0 0 10">
                         <TextBlock Text="Kilométrage" FontWeight="SemiBold"  TextAlignment="Right" VerticalAlignment="Center" Width="130"/>
-                        <TextBox Width="200" Margin="10 0 0 0" Text="{Binding Path=Vehicule.Kilometrage}"/>
+                        <TextBox Width="200" Margin="10 0 0 0" Text="{Binding Path=Vehicule.Kilometrage}" MaxLength="10"/>
                     </WrapPanel>
                 </StackPanel>
 

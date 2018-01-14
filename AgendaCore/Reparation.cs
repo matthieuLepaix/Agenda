@@ -66,6 +66,11 @@ namespace AgendaCore
 
         #region Methods
 
+        public override int GetHashCode()
+        {
+            return Id;
+        }
+
         private bool Equals(Reparation rep)
         {
             return Nom == rep.Nom;

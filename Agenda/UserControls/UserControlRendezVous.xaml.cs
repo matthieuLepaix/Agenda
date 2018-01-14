@@ -21,11 +21,11 @@ namespace Agenda.UserControls
     /// <summary>
     /// Logique d'interaction pour UserControlRDV.xaml
     /// </summary>
-    public partial class UserControlRDV : UserControl
+    public partial class UserControlRendezVous : UserControl
     {
         public static bool IsMouseDownOnRdv;
 
-        public UserControlRDV(AgendaViewModel owner, RendezVous rdv)
+        public UserControlRendezVous(AgendaViewModel owner, RendezVous rdv)
         {
             InitializeComponent();
             DataContext = new UserControlRendezVousViewModel(owner.View, owner, rdv); 

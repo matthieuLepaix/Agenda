@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Agenda.ViewModels
 {
@@ -42,7 +43,7 @@ namespace Agenda.ViewModels
 
         //Agenda
         private ObservableCollection<RendezVous> rendezVousList = new ObservableCollection<RendezVous>();
-        private ObservableCollection<UserControlRDV> userControlRendezVousList = new ObservableCollection<UserControlRDV>();
+        private ObservableCollection<UserControlRendezVous> userControlRendezVousList = new ObservableCollection<UserControlRendezVous>();
         private RendezVous selectedRendezVous = null;
         private DateTime selectedDate;
         private Command doubleClickUserControlCommand;
@@ -294,7 +295,7 @@ namespace Agenda.ViewModels
             }
         }
 
-        public ObservableCollection<UserControlRDV> UserControlRendezVousList
+        public ObservableCollection<UserControlRendezVous> UserControlRendezVousList
         {
             get
             {
@@ -348,7 +349,7 @@ namespace Agenda.ViewModels
                 ClientsTextButton = "Clients";
                 WorksTextButton = "Travaux";
                 SaveTextButton = "Sauvegarder";
-                RefreshImgPath = "images/refresh.png";
+                RefreshImgPath = "../images/refresh.png";
                 SelectedDate = DateTime.Now;
             }
             catch (Exception e)
@@ -382,43 +383,43 @@ namespace Agenda.ViewModels
             rdvList.ForEach(x =>
             {
                 RendezVousList.Add(x);
-                UserControlRendezVousList.Add(new UserControlRDV(this, x));
+                UserControlRendezVousList.Add(new UserControlRendezVous(this, x));
             });
             OnPropertyChanged("UserControlRendezVousList");
-            
+
         }
 
         private void InitCommands()
         {
             AddRdvCommand = new Command((x) =>
             {
-                AddRdv(x);
+                AddRdv();
             });
             ClientsCommand = new Command((x) =>
             {
-                Clients(x);
+                Clients();
             });
             WorksCommand = new Command((x) =>
             {
-                Works(x);
+                Works();
             });
             RefreshCommand = new Command((x) =>
             {
-                Refresh(x);
+                Refresh();
             });
             SaveCommand = new Command((x) =>
             {
-                Save(x);
+                Save();
             });
 
             DetailsDeleteCommand = new Command((x) =>
             {
-                DeleteSelectedRdv(x);
+                DeleteSelectedRdv();
             });
 
             DetailsFactureCommand = new Command((x) =>
             {
-                FactureSelectedRdv(x);
+                //FactureSelectedRdv();
             });
             SingleClickAgendaCommand = new Command((x) =>
             {
@@ -467,33 +468,33 @@ namespace Agenda.ViewModels
             });
         }
 
-        private void AddRdv(object input)
+        private void AddRdv()
         {
             SelectedRendezVous = null;
             var now = DateTime.Now;
             Child = new GestionRendezVous(this, new RendezVous(now.AddHours(now.Hour * -1).AddHours(9), DureeType.UneHeure, null, null));
         }
 
-        private void Clients(object input)
+        private void Clients()
         {
             SelectedRendezVous = null;
             Child = new GestionClients(this);
         }
 
-        private void Works(object input)
+        private void Works()
         {
             SelectedRendezVous = null;
             Child = new TravauxVehicule(this);
         }
 
-        private void Refresh(object input)
+        private void Refresh()
         {
-            RdvManager.Initialize();
+            Connexion.init();
             SelectedRendezVous = null;
             RefreshRendezVousIntoAgenda();
         }
 
-        private void DeleteSelectedRdv(object input)
+        private void DeleteSelectedRdv()
         {
             if (SelectedRendezVous != null)
             {
@@ -509,17 +510,12 @@ namespace Agenda.ViewModels
             }
         }
 
-        private void FactureSelectedRdv(object input)
-        {
-
-        }
-
         /// <summary>
         /// Permet d'effectuer une sauvegarde de la BDD
         /// 
         /// </summary>
         /// <param name="input"></param>
-        private void Save(object input)
+        private void Save()
         {
             System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
             if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)

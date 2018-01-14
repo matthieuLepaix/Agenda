@@ -143,14 +143,24 @@ namespace Agenda.ViewModels
                     ClientManager.UpdateClient(Client);
                     VehiculeManager.UpdateVehicule(Vehicule);
                     ClientManager.UpdateClient(Client);
-                    Close();
+                }else
+                {
+                    return;
                 }
             }
             else
             {
                 VehiculeManager.AddVehicule(Vehicule);
-                Close();
             }
+
+            if (!IsVehiculeChange)
+            {
+                ((GestionClientsViewModel)Owner).RefreshClientAfterChange();
+                ((GestionClientsViewModel)Owner).SelectedVehicule = Vehicule;
+            }
+
+            Close();
+
         }
         private void FormatImmat()
         {

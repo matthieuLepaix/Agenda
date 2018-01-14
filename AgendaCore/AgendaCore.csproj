@@ -52,6 +52,7 @@
     <Compile Include="Facture.cs" />
     <Compile Include="JoursFeries.cs" />
     <Compile Include="Reparation.cs" />
+    <Compile Include="ReparationForViewer.cs" />
     <Compile Include="ReparationRDV.cs" />
     <Compile Include="Test.cs" />
     <Compile Include="RendezVous.cs" />

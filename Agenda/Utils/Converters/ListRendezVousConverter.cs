@@ -14,7 +14,7 @@ namespace Agenda.Utils
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var items = value as ObservableCollection<UserControlRDV>;
+            var items = value as ObservableCollection<UserControlRendezVous>;
             if (parameter != null && items != null)
             {
                 var strParameter = parameter.ToString();

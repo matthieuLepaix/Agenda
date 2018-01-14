@@ -50,12 +50,12 @@
                                     <StackPanel DockPanel.Dock="Left" HorizontalAlignment="Left">
                                         <TextBlock Text="Nom" FontWeight="SemiBold"  TextAlignment="Left" 
                                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="80"/>
-                                        <TextBox Width="200" Text="{Binding Path=Vehicule.Client.Nom, Mode=TwoWay}"/>
+                                        <TextBox Width="200" Text="{Binding Path=Vehicule.Client.Nom, Mode=TwoWay}" MaxLength="128"/>
                                     </StackPanel>
                                     <StackPanel DockPanel.Dock="Right" Margin="0" HorizontalAlignment="Right">
                                         <TextBlock Text="Prénom" FontWeight="SemiBold"  TextAlignment="Left" 
                                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="80"/>
-                                        <TextBox Width="200" Text="{Binding Path=Vehicule.Client.Prenom, Mode=TwoWay}"/>
+                                        <TextBox Width="200" Text="{Binding Path=Vehicule.Client.Prenom, Mode=TwoWay}" MaxLength="128"/>
                                     </StackPanel>
                                 </DockPanel>
                                 <DockPanel Margin="0 0 0 10">
@@ -71,7 +71,7 @@
                                     </StackPanel>
                                     <WrapPanel DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Left">
                                         <TextBlock Text="Code postal" FontWeight="SemiBold"  TextAlignment="Left" VerticalAlignment="Center" Width="100"/>
-                                        <TextBox Width="50" Text="{Binding Path=Vehicule.Client.CodePostal, Mode=TwoWay}" />
+                                        <TextBox Width="50" Text="{Binding Path=Vehicule.Client.CodePostal, Mode=TwoWay}" MaxLength="5"/>
                                     </WrapPanel>
                                     <WrapPanel DockPanel.Dock="Right" Margin="0" HorizontalAlignment="Right">
                                         <TextBlock Text="Ville" FontWeight="SemiBold"  TextAlignment="Left" VerticalAlignment="Center" Width="50"/>
@@ -82,11 +82,11 @@
                                     <DockPanel DockPanel.Dock="Top" Margin="0 0 0 10">
                                         <WrapPanel DockPanel.Dock="Left" HorizontalAlignment="Left">
                                             <TextBlock Text="Téléphone 1" FontWeight="SemiBold"  TextAlignment="Left" VerticalAlignment="Center" Width="100"/>
-                                            <TextBox Width="100" Text="{Binding Path=Vehicule.Client.Telephone1, Mode=TwoWay}"/>
+                                            <TextBox Width="100" Text="{Binding Path=Vehicule.Client.Telephone1, Mode=TwoWay}" MaxLength="10"/>
                                         </WrapPanel>
                                         <WrapPanel DockPanel.Dock="Right" Margin="0" HorizontalAlignment="Right">
                                             <TextBlock Text="Téléphone 2" FontWeight="SemiBold"  TextAlignment="Left" VerticalAlignment="Center" Width="100"/>
-                                            <TextBox Width="100" Text="{Binding Path=Vehicule.Client.Telephone2, Mode=TwoWay}"/>
+                                            <TextBox Width="100" Text="{Binding Path=Vehicule.Client.Telephone2, Mode=TwoWay}" MaxLength="10"/>
                                         </WrapPanel>
                                     </DockPanel>
                                     <DockPanel DockPanel.Dock="Bottom" Margin="0" HorizontalAlignment="Stretch">
@@ -109,15 +109,15 @@
                                 </WrapPanel>
                                 <WrapPanel Margin="0 0 0 10">
                                     <TextBlock Text="Immatriculation" FontWeight="SemiBold"  TextAlignment="Left" VerticalAlignment="Center" Width="130"/>
-                                    <TextBox Width="200" Text="{Binding Path=Vehicule.Immatriculation, Mode=TwoWay}"/>
+                                    <TextBox Width="200" Text="{Binding Path=Vehicule.Immatriculation, Mode=TwoWay}" MaxLength="20"/>
                                 </WrapPanel>
                                 <WrapPanel Margin="0 0 0 10">
                                     <TextBlock Text="Année" FontWeight="SemiBold"  TextAlignment="Left" VerticalAlignment="Center" Width="130"/>
-                                    <TextBox Width="200" Text="{Binding Path=Vehicule.Annee, Mode=TwoWay}"/>
+                                    <TextBox Width="200" Text="{Binding Path=Vehicule.Annee, Mode=TwoWay}" MaxLength="10"/>
                                 </WrapPanel>
                                 <WrapPanel Margin="0 0 0 10">
                                     <TextBlock Text="Kilométrage" FontWeight="SemiBold"  TextAlignment="Left" VerticalAlignment="Center" Width="130"/>
-                                    <TextBox Width="200" Text="{Binding Path=Vehicule.Kilometrage, Mode=TwoWay}"/>
+                                    <TextBox Width="200" Text="{Binding Path=Vehicule.Kilometrage, Mode=TwoWay}" MaxLength="10"/>
                                 </WrapPanel>
                             </StackPanel>
                         </GroupBox>

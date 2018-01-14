@@ -1,4 +1,5 @@
-﻿using AgendaBDDManager;
+﻿using Agenda.Utils;
+using AgendaBDDManager;
 using AgendaCore;
 using PdfSharp;
 using PdfSharp.Drawing;
@@ -19,11 +20,13 @@ namespace Agenda.ViewModels
     {
         #region Attributes
         private string immatriculation;
-        private ObservableCollection<RendezVous> rendezVousList;
+        private ObservableCollection<ReparationRDV> worksSelected;
         private ObservableCollection<Client> clients;
         private Vehicule vehicule;
         private Client client;
         private string searchClientValue;
+        private Command lookingForHistoryCommand;
+        private Command printCommand;
         #endregion
 
         #region Properties
@@ -94,8 +97,10 @@ namespace Agenda.ViewModels
                 vehicule = value;
                 if (vehicule != null)
                 {
-                    RendezVousList = new ObservableCollection<RendezVous>(RdvManager.RDVS.FindAll(
-                            r => r.Vehicule.Immatriculation == vehicule.Immatriculation));
+                    var rdvs = RdvManager.RDVS.FindAll(r => r.Vehicule.Immatriculation == vehicule.Immatriculation);
+                    var tmp = new List<ReparationRDV>();
+                    rdvs.ForEach(r => tmp.AddRange(r.Travaux));
+                    WorksSelected = new ObservableCollection<ReparationRDV>(tmp);
                 }
                 OnPropertyChanged("Vehicule");
             }
@@ -110,48 +115,87 @@ namespace Agenda.ViewModels
             {
                 immatriculation = Regex.Replace(value, "[^a-zA-Z0-9]", string.Empty);
                 OnPropertyChanged("Immatriculation");
-                var vehicules = VehiculeManager.VEHICULES.FindAll(x => x.Immatriculation == Immatriculation);
-                if (vehicules.Count > 0)
-                {
-                    var vehicule = vehicules.First();
-                    RendezVousList = new ObservableCollection<RendezVous>(RdvManager.RDVS.FindAll(
-                        r => r.Vehicule.Immatriculation == vehicule.Immatriculation));
-                }else
-                {
-                    //Aucune correspondance
-                }
             }
         }
 
-        public ObservableCollection<RendezVous> RendezVousList
+
+        public Command LookingForHistoryCommand
         {
             get
             {
-                return rendezVousList;
+                return lookingForHistoryCommand;
             }
             set
             {
-                rendezVousList = value;
-                OnPropertyChanged("RendezVousList");
+                lookingForHistoryCommand = value;
+                OnPropertyChanged("LookingForHistoryCommand");
+            }
+
+        }
+
+        public ObservableCollection<ReparationRDV> WorksSelected
+        {
+            get
+            {
+                return worksSelected;
+            }
+            set
+            {
+                worksSelected = value;
+                OnPropertyChanged("WorksSelected");
+            }
+        }
+
+
+        public Command PrintCommand
+        {
+            get
+            {
+                return printCommand;
+            }
+            set
+            {
+                printCommand = value;
+                OnPropertyChanged("PrintCommand");
             }
         }
         #endregion
 
         #region Constructors
-        public TravauxVehiculeViewModel(Window view, AbstractViewModel owner, string title) 
+        public TravauxVehiculeViewModel(Window view, AbstractViewModel owner, string title)
             : base(view, owner, title)
         {
-            Clients = new ObservableCollection<Client>(ClientManager.CLIENTS);
+            Clients = new ObservableCollection<Client>(ClientManager.CLIENTS.OrderBy(c => c.Nom));
+            LookingForHistoryCommand = new Command((x) =>
+            {
+                var vehicules = VehiculeManager.VEHICULES.FindAll(v => v.Immatriculation == Immatriculation);
+                if (vehicules.Count > 0)
+                {
+                    var v = vehicules.First();
+                    SearchClientValue = v.Client.Nom;
+                    Vehicule = v;
+                    Client = Vehicule.Client;
+                }
+                else
+                {
+                    MessageBox.Show("Aucun véhicule immatriculé : " + Immatriculation, "Attention", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
+            });
+            PrintCommand = new Command((x) =>
+            {
+                Print();
+            });
             Open();
         }
         #endregion
 
         #region Methods
-        
+
 
         private void Print()
         {
-            if (RendezVousList.Count > 0)
+            if (WorksSelected != null && WorksSelected.Count > 0)
             {
                 try
                 {
@@ -165,8 +209,8 @@ namespace Agenda.ViewModels
                     pdf.Info.Title = "My First PDF";
                     PdfPage page = pdf.AddPage();
                     page.Size = PageSize.A4;
-                    pageWidth = page.Width.Point;
-                    pageHeight = page.Height.Point;
+                    pageWidth = page.Width.Point - 5;
+                    pageHeight = page.Height.Point - 5;
                     page.Orientation = PageOrientation.Portrait;
                     XGraphics graph = XGraphics.FromPdfPage(page);
                     XFont fontParagraph = new XFont("Verdana", 12, XFontStyle.Regular);
@@ -174,43 +218,34 @@ namespace Agenda.ViewModels
                     XFont fontHeader = new XFont("Verdana", 12, XFontStyle.Regular);
                     XTextFormatter tf = new XTextFormatter(graph);
 
-                    tf.DrawString("Rendez-vous de " + RendezVousList.ElementAt(0).Client, fontTitle, XBrushes.DarkRed, new XRect(margin, currentLine, pageWidth, pageHeight), XStringFormats.TopLeft);
+                    tf.DrawString("Rendez-vous de " + WorksSelected.ElementAt(0).RendezVous.Client, fontTitle, XBrushes.DarkRed, new XRect(margin, currentLine, pageWidth, pageHeight), XStringFormats.TopLeft);
                     currentLine += 40;
                     graph.DrawLine(XPens.Black, new XPoint(margin, currentLine), new XPoint(pageWidth - margin, currentLine));
                     currentLine += lineHeight;
                     tf.DrawString("Liste des Rendez-vous :", fontTitle, XBrushes.DarkRed, new XRect(margin, currentLine, pageWidth, pageHeight), XStringFormats.TopLeft);
                     currentLine += lineHeight + 10;
-                    foreach (RendezVous rdv in RendezVousList)
+                    foreach (ReparationRDV rep in WorksSelected)
                     {
+                        var rdv = rep.RendezVous;
                         string infosRdv = string.Format("{0} - {1} {2} {3} {4} {5}km", rdv.Date.ToShortDateString(), rdv.Vehicule.Marque,
                                                                         rdv.Vehicule.Modele, rdv.Vehicule.Immatriculation,
                                                                         rdv.Vehicule.Annee, rdv.Vehicule.Kilometrage);
                         tf.DrawString(infosRdv, fontParagraph, XBrushes.Black, new XRect(margin * 8, currentLine, pageWidth, pageHeight), XStringFormats.TopLeft);
                         currentLine += lineHeight + 10;
-                        string trvx = "Liste des travaux effectués :\n";
-                        tf.DrawString(trvx, fontParagraph, XBrushes.Black, new XRect(margin * 8, currentLine, pageWidth - margin * 20, pageHeight), XStringFormats.TopLeft);
-                        currentLine += lineHeight;
-                        foreach (ReparationRDV rep in rdv.Travaux)
-                        {
-                            if (currentLine > 750)
-                            {
-                                page = pdf.AddPage();
-                                graph = XGraphics.FromPdfPage(page);
-                                tf = new XTextFormatter(graph);
-                                currentLine = margin;
-                            }
-                            string chaine = "Travaux effectués:\n\n\t- {0} {1}\n\t-qté:{2}\n\t-prix: {3}€";
-                            if (rep.Comments != null && rep.Comments.Trim().Length > 0)
-                            {
-                                chaine = "Travaux effectués:\n\n\t- {0}\n\t-qté:{1}\n\t-prix: {2}€\n\t-remarques :\n{3}";
-                            }
-                            chaine = string.Format(chaine, rep.Reparation, rep.Quantite, rep.PrixU, rep.Comments.Replace("\n", "\n\t"));
-                            chaine.Replace("\t", "          ");
-                            int nbReturns = rep.Comments.Split('\n').Length;
-                            tf.DrawString(chaine, fontParagraph, XBrushes.Black, new XRect(margin * 10, currentLine, pageWidth - margin * 10, pageHeight), XStringFormats.TopLeft);
-                            currentLine += lineHeight * (5 + nbReturns);
 
+                        if (currentLine > 750)
+                        {
+                            page = pdf.AddPage();
+                            graph = XGraphics.FromPdfPage(page);
+                            tf = new XTextFormatter(graph);
+                            currentLine = margin;
                         }
+                        var chaine = "{0} :\n\n{1}\n\n{2}€";
+                        chaine = string.Format(chaine, rep.Reparation, rep.Comments.Replace("\n", "\n\t"), rep.PrixU);
+                        chaine.Replace("\t", "          ");
+                        int nbReturns = rep.Comments.Split('\n').Length;
+                        tf.DrawString(chaine, fontParagraph, XBrushes.Black, new XRect(margin * 10, currentLine, pageWidth - margin * 10, pageHeight), XStringFormats.TopLeft);
+                        currentLine += lineHeight * (5 + nbReturns);
 
                         graph.DrawLine(XPens.Black, new XPoint(margin * 6, currentLine), new XPoint(pageWidth - margin * 6, currentLine));
                         currentLine += lineHeight;
@@ -223,7 +258,7 @@ namespace Agenda.ViewModels
                         }
 
                     }
-                    var pdfFilename = string.Format("RDV_{0}_{1}_{2}_{3}.pdf", RendezVousList.ElementAt(0).Client.Nom, DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year).Replace('/', '_').Replace('\\', '_');
+                    var pdfFilename = string.Format("RDV_{0}_{1}_{2}_{3}.pdf", WorksSelected.ElementAt(0).RendezVous.Client.Nom, DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year).Replace('/', '_').Replace('\\', '_');
                     pdf.Save(pdfFilename);
                     Process.Start(pdfFilename);
                     pdf.Dispose();
@@ -238,37 +273,6 @@ namespace Agenda.ViewModels
                 MessageBox.Show(View, "Aucun rendez-vous n'est sélectionné.", "Information", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.None);
             }
         }
-        /// <summary>
-        /// Permet de formater un rendez-vous pour l'affichage.
-        /// </summary>
-        /// <param name="rdv">Le rendez-vous à formater</param>
-        private void displayRDV(RendezVous rdv)
-        {
-            //string mTravauxTitle = string.Format("{0} - M. ou MMe {1} {2}", rdv.Date.ToShortDateString(), rdv.Client != null ? rdv.Client.Prenom : "", rdv.Client != null ? rdv.Client.Nom : "");
-            //string mTravauxInfos = string.Format("\t{0} {1} {2} {3} {4}km", rdv.Vehicule.Marque,
-            //                                                rdv.Vehicule.Modele, rdv.Vehicule.Immatriculation,
-            //                                                rdv.Vehicule.Annee, rdv.Vehicule.Kilometrage);
-            //TextBlock tDate = getTextBlock(mTravauxInfos);
-            //TextBlock tTitle = getTextBlock(mTravauxTitle);
-            //tTitle.FontStyle = FontStyles.Italic;
-            //tTitle.FontWeight = FontWeights.Bold;
-            //Les_travaux.Children.Add(tTitle);
-            //Les_travaux.Children.Add(tDate);
-            //foreach (ReparationRDV rep in rdv.Travaux)
-            //{
-            //    string chaine = "Travaux effectués:\n\t- {0} {1}\n\t-qté:{2}\n\t-prix: {3}€";
-            //    if (rep.Comments != null && rep.Comments.Trim().Length > 0)
-            //    {
-            //        chaine = "Travaux effectués:\n\t- {0}\n\t-qté:{1}\n\t-prix: {2}€\n\t-remarques : {3}";
-            //    }
-            //    chaine = string.Format(chaine, rep.Reparation, rep.Quantite, rep.PrixU, rep.Comments.Replace("\n", "\n\t"));
-            //    mTravauxInfos += "\n" + chaine;
-            //    TextBlock tTravaux = getTextBlock(chaine);
-            //    Les_travaux.Children.Add(tTravaux);
-            //    mTravauxInfos += "\n\n\n";
-            //}
-        }
-
         #endregion
 
     }

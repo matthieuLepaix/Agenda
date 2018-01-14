@@ -64,12 +64,16 @@
                         Padding="10 2" Margin="20" FontSize="20"
                         Command="{Binding PrintCommand}"/>
             </StackPanel>
-            <DockPanel DockPanel.Dock="Right" >
-                <ScrollViewer BorderBrush="Black" BorderThickness="10" Background="White">
-                    <StackPanel>
-                        <ItemsControl />
-                    </StackPanel>
-                </ScrollViewer>
+            <DockPanel DockPanel.Dock="Right" Width="505" Margin="50">
+                <DataGrid ItemsSource="{Binding WorksSelected}" AutoGenerateColumns="False" >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Path=RendezVous.DateShort}" Header="Date" Width="80" />
+                        <DataGridTextColumn Binding="{Binding Path=Reparation.Nom}" Header="Prestation" Width="120" />
+                        <DataGridTextColumn Binding="{Binding Path=Comments}" Header="Commentaires" Width="200" />
+                        <DataGridTextColumn Binding="{Binding Path=Quantite}" Header="Qté" Width="50" />
+                        <DataGridTextColumn Binding="{Binding Path=PrixU}" Header="PU HT" Width="47" />
+                    </DataGrid.Columns>
+                </DataGrid>
             </DockPanel>
         </DockPanel>
     </DockPanel>

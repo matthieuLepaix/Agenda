@@ -183,6 +183,14 @@ namespace AgendaCore
                 return Date.ToLongTimeString();
             }
         }
+        public string DateShort
+        {
+            get
+            {
+                return Date.ToShortDateString();
+            }
+        }
+
 
 
         public string DetailsWorks
