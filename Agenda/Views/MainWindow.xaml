@@ -26,6 +26,8 @@
             <utils:ReverseBooleanToVisibilityConverter x:Key="ReverseBooleanToVisibilityConverter"/>
             <utils:ListRendezVousConverter x:Key="ListRendezVousConverter"/>
             <utils:DayOfWeekConverter x:Key="DayOfWeekConverter"/>
+            <utils:DayOffToBoolConverter x:Key="DayOffToBoolConverter"/>
+            <utils:DayOffToColorConverter x:Key="DayOffToColorConverter"/>
         </ResourceDictionary>
     </Window.Resources>
     <DockPanel Background="#0064ef">
@@ -257,104 +259,131 @@
                                            TextAlignment="Center"
                                            FontSize="13" FontWeight="Bold"
                                            VerticalAlignment="Center"
-                                           Foreground="Black"/>
+                                           Foreground="Black"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=L}"/>
                                 <TextBlock Grid.Row="0" Grid.Column="2"
                                            Text="{Binding SelectedDate, Converter={StaticResource DayOfWeekConverter}, ConverterParameter=1}"
                                            TextAlignment="Center"
                                            FontSize="13" FontWeight="Bold"
                                            VerticalAlignment="Center"
-                                           Foreground="Black"/>
+                                           Foreground="Black"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=M}"/>
                                 <TextBlock Grid.Row="0" Grid.Column="3"
                                            Text="{Binding SelectedDate, Converter={StaticResource DayOfWeekConverter}, ConverterParameter=2}"
                                            TextAlignment="Center"
                                            FontSize="13" FontWeight="Bold"
                                            VerticalAlignment="Center"
-                                           Foreground="Black"/>
+                                           Foreground="Black"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=m}"/>
                                 <TextBlock Grid.Row="0" Grid.Column="4"
                                            Text="{Binding SelectedDate, Converter={StaticResource DayOfWeekConverter}, ConverterParameter=3}"
                                            TextAlignment="Center"
                                            FontSize="13" FontWeight="Bold"
                                            VerticalAlignment="Center"
-                                           Foreground="Black"/>
+                                           Foreground="Black"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=J}"/>
                                 <TextBlock Grid.Row="0" Grid.Column="5"
                                            Text="{Binding SelectedDate, Converter={StaticResource DayOfWeekConverter}, ConverterParameter=4}"
                                            TextAlignment="Center"
                                            FontSize="13" FontWeight="Bold"
                                            VerticalAlignment="Center"
-                                           Foreground="Black"/>
+                                           Foreground="Black"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=V}"/>
 
 
-                                <StackPanel Grid.Row="1" Grid.Column="1" Background="Transparent">
+                                <StackPanel Grid.Row="1" Grid.Column="1" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=L}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=L}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="L8"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=L8}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="2" Grid.Column="1" Background="Transparent">
+                                <StackPanel Grid.Row="2" Grid.Column="1" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=L}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=L}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="L9"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=L9}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="3" Grid.Column="1" Background="Transparent">
+                                <StackPanel Grid.Row="3" Grid.Column="1" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=L}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=L}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="L10"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=L10}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="4" Grid.Column="1" Background="Transparent">
+                                <StackPanel Grid.Row="4" Grid.Column="1" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=L}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=L}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="L11"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=L11}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="5" Grid.Column="1" Background="Transparent">
+                                <StackPanel Grid.Row="5" Grid.Column="1" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=L}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=L}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="L12"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=L12}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="6" Grid.Column="1" Background="Transparent">
+                                <StackPanel Grid.Row="6" Grid.Column="1"
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=L}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=L}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="L13"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=L13}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="7" Grid.Column="1" Background="Transparent">
+                                <StackPanel Grid.Row="7" Grid.Column="1" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=L}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=L}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="L14"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=L14}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="8" Grid.Column="1" Background="Transparent">
+                                <StackPanel Grid.Row="8" Grid.Column="1" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=L}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=L}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="L15"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=L15}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="9" Grid.Column="1" Background="Transparent">
+                                <StackPanel Grid.Row="9" Grid.Column="1" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=L}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=L}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="L16"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=L16}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="10" Grid.Column="1" Background="Transparent">
+                                <StackPanel Grid.Row="10" Grid.Column="1" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=L}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=L}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="L17"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=L17}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="11" Grid.Column="1" Background="Transparent">
+                                <StackPanel Grid.Row="11" Grid.Column="1" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=L}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=L}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="L18"/>
@@ -362,77 +391,99 @@
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=L18}" />
                                 </StackPanel>
 
-                                <StackPanel Grid.Row="1" Grid.Column="2" Background="Transparent">
+                                <StackPanel Grid.Row="1" Grid.Column="2" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=M}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=M}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="M8"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=M8}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="2" Grid.Column="2" Background="Transparent">
+                                <StackPanel Grid.Row="2" Grid.Column="2" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=M}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=M}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="M9"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=M9}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="3" Grid.Column="2" Background="Transparent">
+                                <StackPanel Grid.Row="3" Grid.Column="2" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=M}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=M}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="M10"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=M10}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="4" Grid.Column="2" Background="Transparent">
+                                <StackPanel Grid.Row="4" Grid.Column="2" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=M}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=M}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="M11"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=M11}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="5" Grid.Column="2" Background="Transparent">
+                                <StackPanel Grid.Row="5" Grid.Column="2" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=M}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=M}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="M12"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=M12}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="6" Grid.Column="2" Background="Transparent">
+                                <StackPanel Grid.Row="6" Grid.Column="2" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=M}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=M}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="M13"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=M13}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="7" Grid.Column="2" Background="Transparent">
+                                <StackPanel Grid.Row="7" Grid.Column="2" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=M}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=M}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="M14"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=M14}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="8" Grid.Column="2" Background="Transparent">
+                                <StackPanel Grid.Row="8" Grid.Column="2" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=M}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=M}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="M15"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=M15}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="9" Grid.Column="2" Background="Transparent">
+                                <StackPanel Grid.Row="9" Grid.Column="2" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=M}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=M}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="M16"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=M16}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="10" Grid.Column="2" Background="Transparent">
+                                <StackPanel Grid.Row="10" Grid.Column="2" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=M}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=M}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="M17"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=M17}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="11" Grid.Column="2" Background="Transparent">
+                                <StackPanel Grid.Row="11" Grid.Column="2" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=M}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=M}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="M18"/>
@@ -440,42 +491,54 @@
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=M18}" />
                                 </StackPanel>
 
-                                <StackPanel Grid.Row="1" Grid.Column="3" Background="Transparent">
+                                <StackPanel Grid.Row="1" Grid.Column="3" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=m}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=m}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="m8"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=m8}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="2" Grid.Column="3" Background="Transparent">
+                                <StackPanel Grid.Row="2" Grid.Column="3" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=m}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=m}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="m9"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=m9}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="3" Grid.Column="3" Background="Transparent">
+                                <StackPanel Grid.Row="3" Grid.Column="3" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=m}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=m}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="m10"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=m10}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="4" Grid.Column="3" Background="Transparent">
+                                <StackPanel Grid.Row="4" Grid.Column="3" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=m}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=m}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="m11"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=m11}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="5" Grid.Column="3" Background="Transparent">
+                                <StackPanel Grid.Row="5" Grid.Column="3" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=m}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=m}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="m12"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=m12}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="6" Grid.Column="3" Background="Transparent">
+                                <StackPanel Grid.Row="6" Grid.Column="3" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=m}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=m}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="m13"/>
@@ -489,28 +552,36 @@
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=m14}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="8" Grid.Column="3" Background="Transparent">
+                                <StackPanel Grid.Row="8" Grid.Column="3" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=m}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=m}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="m15"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=m15}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="9" Grid.Column="3" Background="Transparent">
+                                <StackPanel Grid.Row="9" Grid.Column="3" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=m}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=m}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="m16"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=m16}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="10" Grid.Column="3" Background="Transparent">
+                                <StackPanel Grid.Row="10" Grid.Column="3" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=m}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=m}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="m17"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=m17}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="11" Grid.Column="3" Background="Transparent">
+                                <StackPanel Grid.Row="11" Grid.Column="3" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=m}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=m}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="m18"/>
@@ -518,155 +589,199 @@
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=m18}" />
                                 </StackPanel>
 
-                                <StackPanel Grid.Row="1" Grid.Column="4" Background="Transparent">
+                                <StackPanel Grid.Row="1" Grid.Column="4" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=J}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=J}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="J8"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=J8}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="2" Grid.Column="4" Background="Transparent">
+                                <StackPanel Grid.Row="2" Grid.Column="4" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=J}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=J}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="J9"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=J9}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="3" Grid.Column="4" Background="Transparent">
+                                <StackPanel Grid.Row="3" Grid.Column="4" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=J}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=J}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="J10"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=J10}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="4" Grid.Column="4" Background="Transparent">
+                                <StackPanel Grid.Row="4" Grid.Column="4" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=J}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=J}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="J11"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=J11}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="5" Grid.Column="4" Background="Transparent">
+                                <StackPanel Grid.Row="5" Grid.Column="4" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=J}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=J}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="J12"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=J12}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="6" Grid.Column="4" Background="Transparent">
+                                <StackPanel Grid.Row="6" Grid.Column="4" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=J}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=J}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="J13"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=J13}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="7" Grid.Column="4" Background="Transparent">
+                                <StackPanel Grid.Row="7" Grid.Column="4" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=J}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=J}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="J14"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=J14}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="8" Grid.Column="4" Background="Transparent">
+                                <StackPanel Grid.Row="8" Grid.Column="4" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=J}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=J}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="J15"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=J15}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="9" Grid.Column="4" Background="Transparent">
+                                <StackPanel Grid.Row="9" Grid.Column="4" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=J}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=J}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="J16"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=J16}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="10" Grid.Column="4" Background="Transparent">
+                                <StackPanel Grid.Row="10" Grid.Column="4" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=J}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=J}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="J17"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=J17}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="11" Grid.Column="4" Background="Transparent">
+                                <StackPanel Grid.Row="11" Grid.Column="4" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=J}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=J}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="J18"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=J18}" />
                                 </StackPanel>
-                                
-                                <StackPanel Grid.Row="1" Grid.Column="5" Background="Transparent">
+
+                                <StackPanel Grid.Row="1" Grid.Column="5" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=V}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=V}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="V8"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=V8}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="2" Grid.Column="5" Background="Transparent">
+                                <StackPanel Grid.Row="2" Grid.Column="5" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=V}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=V}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="V9"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=V9}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="3" Grid.Column="5" Background="Transparent">
+                                <StackPanel Grid.Row="3" Grid.Column="5" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=V}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=V}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="V10"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=V10}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="4" Grid.Column="5" Background="Transparent">
+                                <StackPanel Grid.Row="4" Grid.Column="5" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=V}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=V}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="V11"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=V11}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="5" Grid.Column="5" Background="Transparent">
+                                <StackPanel Grid.Row="5" Grid.Column="5" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=V}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=V}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="V12"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=V12}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="6" Grid.Column="5" Background="Transparent">
+                                <StackPanel Grid.Row="6" Grid.Column="5" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=V}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=V}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="V13"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=V13}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="7" Grid.Column="5" Background="Transparent">
+                                <StackPanel Grid.Row="7" Grid.Column="5" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=V}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=V}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="V14"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=V14}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="8" Grid.Column="5" Background="Transparent">
+                                <StackPanel Grid.Row="8" Grid.Column="5" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=V}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=V}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="V15"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=V15}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="9" Grid.Column="5" Background="Transparent">
+                                <StackPanel Grid.Row="9" Grid.Column="5" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=V}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=V}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="V16"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=V16}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="10" Grid.Column="5" Background="Transparent">
+                                <StackPanel Grid.Row="10" Grid.Column="5" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=V}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=V}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="V17"/>
                                     </StackPanel.InputBindings>
                                     <ItemsControl ItemsSource="{Binding UserControlRendezVousList, Converter={StaticResource ListRendezVousConverter}, ConverterParameter=V17}" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="11" Grid.Column="5" Background="Transparent">
+                                <StackPanel Grid.Row="11" Grid.Column="5" 
+                                            IsEnabled="{Binding DayOffList, Converter={StaticResource DayOffToBoolConverter}, ConverterParameter=V}"
+                                            Background="{Binding DayOffList, Converter={StaticResource DayOffToColorConverter}, ConverterParameter=V}">
                                     <StackPanel.InputBindings>
                                         <MouseBinding Gesture="RightClick" Command="{Binding SingleClickAgendaCommand}"/>
                                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DoubleClickUserControlCommand}" CommandParameter="V18"/>

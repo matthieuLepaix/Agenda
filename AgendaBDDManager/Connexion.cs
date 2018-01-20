@@ -98,6 +98,7 @@ namespace AgendaBDDManager
             RdvManager.Initialize();
             ReparationManager.initialize();
             ReparationRDVManager.initialize();
+            JoursFeriesManager.initialize();
         }
 
         /// <summary>

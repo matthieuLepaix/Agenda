@@ -49,6 +49,9 @@ namespace Agenda.ViewModels
         private Command doubleClickUserControlCommand;
         private Command singleClickAgendaCommand;
 
+        //Jours Fériés
+        private ObservableCollection<JoursFeries> dayOffList;
+
 
         #endregion
 
@@ -279,6 +282,7 @@ namespace Agenda.ViewModels
                 selectedDate = value;
                 SelectedRendezVous = null;
                 OnPropertyChanged("SelectedDate");
+                OnPropertyChanged("DayOffList");
             }
         }
 
@@ -334,6 +338,20 @@ namespace Agenda.ViewModels
             }
         }
 
+
+        public ObservableCollection<JoursFeries> DayOffList
+        {
+            get
+            {
+                return dayOffList;
+            }
+            set
+            {
+                dayOffList = value;
+                OnPropertyChanged("DayOffList");
+            }
+        }
+
         #endregion
 
         #region Constructors
@@ -345,6 +363,7 @@ namespace Agenda.ViewModels
                 MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
                 InitCommands();
                 Config.Configuration.InitializeDays();
+                DayOffList = new ObservableCollection<JoursFeries>(JoursFeriesManager.JOURS_FERIES);
                 AddRdvTextButton = "Ajouter RDV";
                 ClientsTextButton = "Clients";
                 WorksTextButton = "Travaux";

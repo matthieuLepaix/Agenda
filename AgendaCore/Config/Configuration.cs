@@ -54,7 +54,5 @@ namespace Agenda.Config
             Days.Add("Saturday", "Samedi");
             Days.Add("Sunday", "Dimanche");
         }
-
-
     }
 }

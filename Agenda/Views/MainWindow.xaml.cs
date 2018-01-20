@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using Agenda.ViewModels;
+using System.Windows.Media;
 
 namespace Agenda
 {

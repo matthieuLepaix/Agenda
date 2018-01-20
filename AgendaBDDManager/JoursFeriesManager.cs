@@ -11,6 +11,14 @@ namespace AgendaBDDManager
     {
         private static string maxID_request = "SELECT MAX(id) FROM JOURS_FERIES";
         public static List<JoursFeries> JOURS_FERIES = new List<JoursFeries>();
+
+
+        public static void initialize()
+        {
+            JOURS_FERIES.Clear();
+            JOURS_FERIES.AddRange(getAll());
+        }
+
         public static List<JoursFeries> getAll()
         {
             List<JoursFeries> liste = new List<JoursFeries>();

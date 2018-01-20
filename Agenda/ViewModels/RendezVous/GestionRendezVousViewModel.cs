@@ -358,7 +358,12 @@ namespace Agenda.ViewModels
 
         private void ValidateRendezVous()
         {
-            if (RendezVous.Vehicule == null)
+            if (JoursFeriesManager.JOURS_FERIES.Any(d => d.Jour.ToShortDateString() == RendezVous.Date.ToShortDateString()))
+            {
+                MessageBox.Show("Le jour choisi est un jour férié.",
+                "Attention", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+            else if (RendezVous.Vehicule == null)
             {
                 if (!IsNewClient)
                 {
